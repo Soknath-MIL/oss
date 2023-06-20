@@ -1,0 +1,135 @@
+{
+  "project_info": {
+    "project_number": "415242114196",
+    "firebase_url": "https://moeve-app-c296d-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "moeve-app-c296d",
+    "storage_bucket": "moeve-app-c296d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415242114196:android:435ffb26068b4c9a2f5081",
+        "android_client_info": {
+          "package_name": "com.example.oss_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415242114196-ln1i5h1dbdoc41gj2cbpl6psmq95o7io.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.oss_app",
+            "certificate_hash": "59d55629958b5594bca767868377db36f30dfd7c"
+          }
+        },
+        {
+          "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.screenLimit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415242114196:android:bacf54f4dd2b1cc72f5081",
+        "android_client_info": {
+          "package_name": "com.example.phone_auth_handler_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415242114196-tmsch4labptdsunh19k2i8m5mefvr8io.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.phone_auth_handler_demo",
+            "certificate_hash": "59d55629958b5594bca767868377db36f30dfd7c"
+          }
+        },
+        {
+          "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.screenLimit"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415242114196:android:314f970012e63c452f5081",
+        "android_client_info": {
+          "package_name": "com.example.screen_limit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.screenLimit"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

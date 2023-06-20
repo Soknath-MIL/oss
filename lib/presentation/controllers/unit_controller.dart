@@ -1,0 +1,41 @@
+import 'package:appwrite/appwrite.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:oss/constants/constants.dart';
+
+import '../../data/services/appwrite_service.dart';
+
+class UnitController extends GetxController with StateMixin {
+  final Account account = Account(Appwrite.instance.client);
+  final Databases database = Databases(Appwrite.instance.client);
+  final unitList = [].obs;
+
+  Future<void> getAllUnit() async {
+    try {
+      change(null, status: RxStatus.loading());
+
+      var allUnitList = await database.listDocuments(
+        databaseId: Constants.databseId,
+        collectionId: Constants.unitId,
+        queries: [
+          Query.equal("show", true),
+        ],
+      ); // add group ID filter
+      debugPrint('unitData ${allUnitList.documents[0].data.toString()}');
+      unitList.value = allUnitList.documents;
+      unitList.refresh();
+
+      // if done, change status to success
+      change(null, status: RxStatus.success());
+    } catch (e) {
+      debugPrint('error ${e.toString()}');
+      // Get.toNamed('/login');
+    }
+  }
+
+  @override
+  void onInit() {
+    getAllUnit();
+    super.onInit();
+  }
+}
