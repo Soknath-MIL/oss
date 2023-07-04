@@ -3,7 +3,9 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  file_selector_linux
   flutter_secure_storage_linux
+  thai_id_card_numbers
   url_launcher_linux
   window_to_front
 )

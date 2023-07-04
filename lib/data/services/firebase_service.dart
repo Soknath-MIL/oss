@@ -37,20 +37,40 @@ class FirebaseService {
   }
 
   Future<String?> signInWithPhoneNumber(String phoneNumber) async {
-    await _firebaseAuth.verifyPhoneNumber(
-      phoneNumber: phoneNumber,
-      verificationCompleted: (PhoneAuthCredential credential) async {
-        await _firebaseAuth.signInWithCredential(credential);
-      },
-      verificationFailed: (FirebaseAuthException e) {
-        debugPrint(e.message);
-      },
-      codeSent: (String verificationId, int? resendToken) {
-        debugPrint('code sent');
-        Get.toNamed('/verify-otp', arguments: [phoneNumber, verificationId]);
-      },
-      codeAutoRetrievalTimeout: (String verificationId) {},
-    );
+    try {
+      await _firebaseAuth.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await _firebaseAuth.signInWithCredential(credential);
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          Get.snackbar(
+            "ข้อผิดพลาด",
+            "ส่ง ล้มเหลว",
+            colorText: Colors.white,
+            icon: const Icon(Icons.cancel),
+            duration: const Duration(seconds: 1),
+            snackPosition: SnackPosition.BOTTOM,
+          );
+          debugPrint(e.message);
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          Get.toNamed('/verify-otp', arguments: [phoneNumber, verificationId]);
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      return null;
+    } catch (e) {
+      Get.snackbar(
+        "ข้อผิดพลาด",
+        "ส่ง ล้มเหลว",
+        colorText: Colors.white,
+        icon: const Icon(Icons.cancel),
+        duration: const Duration(seconds: 1),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      debugPrint(e.toString());
+    }
     return null;
   }
 

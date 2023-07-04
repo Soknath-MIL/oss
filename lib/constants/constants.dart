@@ -47,7 +47,8 @@ class Constants {
     "progress": "กำลังดำเนินการ",
     "done": "เสร็จสิ้นเอกสาร",
     "complete": "เสร็จสิ้น",
-    "confirm": "ยืนยัน"
+    "confirm": "ยืนยัน",
+    "reject": "ปฏิเสธ"
   };
   static const taxPaymentStatus = {
     "new": "ยังไม่จ่าย",

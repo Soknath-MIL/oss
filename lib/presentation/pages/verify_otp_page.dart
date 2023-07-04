@@ -36,27 +36,35 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Constants.primaryColor,
-      body: GestureDetector(
-        onTap: () {},
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: ListView(
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: const Alignment(1, 1),
+            colors: <Color>[
+              const Color(0xff29991F),
+              Colors.grey.shade500,
+            ],
+            tileMode: TileMode.clamp,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
             children: <Widget>[
-              const SizedBox(height: 30),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 3,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: Image.asset(Constants.otpGifImage),
-                ),
+              const SizedBox(
+                height: 80,
               ),
+              Image.asset('assets/logo.png'),
               const SizedBox(height: 8),
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8.0),
                 child: Text(
                   'การยืนยันหมายเลขโทรศัพท์',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -65,19 +73,19 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                     const EdgeInsets.symmetric(horizontal: 30.0, vertical: 8),
                 child: RichText(
                   text: TextSpan(
-                    text: "ใส่รหัสที่ส่ง",
+                    text: "ใส่รหัสที่ส่ง ",
                     children: [
                       TextSpan(
                         text: widget.phoneNumber,
                         style: const TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
                       ),
                     ],
-                    style: const TextStyle(
-                      color: Colors.black54,
+                    style: TextStyle(
+                      color: Colors.grey.shade200,
                       fontSize: 15,
                     ),
                   ),
@@ -107,7 +115,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                     animationType: AnimationType.fade,
                     validator: (v) {
                       if (v!.length < 3) {
-                        return "I'm from validator";
+                        return "ความยาวไม่ถูก";
                       } else {
                         return null;
                       }
@@ -185,7 +193,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                     child: const Text(
                       "ส่งซ้ำ",
                       style: TextStyle(
-                        color: Color(0xFF91D3B3),
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                       ),
@@ -200,47 +208,37 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 margin:
                     const EdgeInsets.symmetric(vertical: 16.0, horizontal: 30),
                 decoration: BoxDecoration(
-                    color: Colors.green.shade300,
-                    borderRadius: BorderRadius.circular(5),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.green.shade200,
-                          offset: const Offset(1, -2),
-                          blurRadius: 5),
-                      BoxShadow(
-                          color: Colors.green.shade200,
-                          offset: const Offset(-1, 2),
-                          blurRadius: 5)
-                    ]),
-                child: ButtonTheme(
-                  height: 50,
-                  child: TextButton(
-                    onPressed: () {
-                      formKey.currentState!.validate();
-                      // conditions for validating
-                      if (currentText.length != 6) {
-                        errorController!.add(ErrorAnimationType
-                            .shake); // Triggering error shake animation
-                        setState(() => hasError = true);
-                      } else {
-                        _loginController.signInWithCredential(
-                            widget.verificationId, currentText);
-                        setState(
-                          () {
-                            hasError = false;
-                            snackBar("OTP ถูกต้อง");
-                          },
-                        );
-                      }
-                    },
-                    child: Center(
-                      child: Text(
-                        "ตรวจสอบ".toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  color: Colors.green.shade300,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: TextButton(
+                  onPressed: () {
+                    formKey.currentState!.validate();
+                    // conditions for validating
+                    if (currentText.length != 6) {
+                      errorController!.add(ErrorAnimationType
+                          .shake); // Triggering error shake animation
+                      setState(() {
+                        hasError = true;
+                        snackBar("OTP ไม่ถูกต้อง");
+                      });
+                    } else {
+                      _loginController.signInWithCredential(
+                          widget.verificationId, currentText);
+                      setState(
+                        () {
+                          hasError = false;
+                        },
+                      );
+                    }
+                  },
+                  child: Center(
+                    child: Text(
+                      "ตรวจสอบ".toUpperCase(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -254,19 +252,13 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen> {
                 children: <Widget>[
                   Flexible(
                     child: TextButton(
-                      child: const Text("Clear"),
+                      child: const Text(
+                        "CLEAR",
+                        style: TextStyle(
+                            color: Colors.white, fontWeight: FontWeight.w700),
+                      ),
                       onPressed: () {
                         textEditingController.clear();
-                      },
-                    ),
-                  ),
-                  Flexible(
-                    child: TextButton(
-                      child: const Text("Set Text"),
-                      onPressed: () {
-                        setState(() {
-                          textEditingController.text = "123456";
-                        });
                       },
                     ),
                   ),

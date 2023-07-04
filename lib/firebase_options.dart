@@ -56,7 +56,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o',
-    appId: '1:415242114196:android:435ffb26068b4c9a2f5081',
+    appId: '1:415242114196:android:9f5d897e234fbe162f5081',
     messagingSenderId: '415242114196',
     projectId: 'moeve-app-c296d',
     databaseURL: 'https://moeve-app-c296d-default-rtdb.asia-southeast1.firebasedatabase.app',
@@ -65,25 +65,25 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDL5HdWIHw4aEwfTFIZA1DL46GRu7SNHCk',
-    appId: '1:415242114196:ios:444be64d1d5d1d762f5081',
+    appId: '1:415242114196:ios:8e4fd044e6bd64472f5081',
     messagingSenderId: '415242114196',
     projectId: 'moeve-app-c296d',
     databaseURL: 'https://moeve-app-c296d-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'moeve-app-c296d.appspot.com',
-    androidClientId: '415242114196-tmsch4labptdsunh19k2i8m5mefvr8io.apps.googleusercontent.com',
-    iosClientId: '415242114196-gn5qgh0sbco0v10mgpp3auhu04lbokpu.apps.googleusercontent.com',
-    iosBundleId: 'com.example.ossApp',
+    androidClientId: '415242114196-1npkk3ep2bvp58aiico7jnq3qok5bdfl.apps.googleusercontent.com',
+    iosClientId: '415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com',
+    iosBundleId: 'com.moevedigital.ossuserapp',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
     apiKey: 'AIzaSyDL5HdWIHw4aEwfTFIZA1DL46GRu7SNHCk',
-    appId: '1:415242114196:ios:444be64d1d5d1d762f5081',
+    appId: '1:415242114196:ios:8e4fd044e6bd64472f5081',
     messagingSenderId: '415242114196',
     projectId: 'moeve-app-c296d',
     databaseURL: 'https://moeve-app-c296d-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'moeve-app-c296d.appspot.com',
-    androidClientId: '415242114196-tmsch4labptdsunh19k2i8m5mefvr8io.apps.googleusercontent.com',
-    iosClientId: '415242114196-gn5qgh0sbco0v10mgpp3auhu04lbokpu.apps.googleusercontent.com',
-    iosBundleId: 'com.example.ossApp',
+    androidClientId: '415242114196-1npkk3ep2bvp58aiico7jnq3qok5bdfl.apps.googleusercontent.com',
+    iosClientId: '415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com',
+    iosBundleId: 'com.moevedigital.ossuserapp',
   );
 }

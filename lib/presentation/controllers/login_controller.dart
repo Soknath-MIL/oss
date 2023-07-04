@@ -21,6 +21,14 @@ class LoginController extends GetxController {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithCredential(credential);
+      Get.snackbar(
+        "สำเร็จ",
+        "OTP ถูกต้อง",
+        colorText: Colors.white,
+        icon: const Icon(Icons.check_circle),
+        duration: const Duration(seconds: 1),
+        snackPosition: SnackPosition.BOTTOM,
+      );
       // validate account
       var user = await AppwriteService().tryLogin();
       await EasyLoading.show(
@@ -36,7 +44,6 @@ class LoginController extends GetxController {
         "ไม่พบผู้ใช้",
         "โปรดเพิ่มข้อมูลเพิ่มเติม",
         colorText: Colors.white,
-        backgroundColor: Colors.lightBlue,
         icon: const Icon(Icons.cancel),
         duration: const Duration(seconds: 1),
         snackPosition: SnackPosition.BOTTOM,
@@ -44,16 +51,19 @@ class LoginController extends GetxController {
       Get.toNamed('validate-account', arguments: [phoneNumber]);
     } on FirebaseAuthException catch (e) {
       // Handle authentication failed error
+      Get.snackbar(
+        "ข้อผิดพลาด",
+        "OTP ไม่ถูกต้อง",
+        colorText: Colors.white,
+        icon: const Icon(Icons.cancel),
+        duration: const Duration(seconds: 1),
+        snackPosition: SnackPosition.BOTTOM,
+      );
       print(e.message);
     }
   }
 
-  void signInWithPhoneNumber(String number) async {
-    await EasyLoading.show(
-      status: 'กำลังโหลด...',
-      maskType: EasyLoadingMaskType.black,
-    );
+  Future<void> signInWithPhoneNumber(String number) async {
     await _firebaseService.signInWithPhoneNumber(number);
-    await EasyLoading.dismiss();
   }
 }

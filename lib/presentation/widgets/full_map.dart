@@ -90,7 +90,7 @@ class FullMapState extends State<FullMap> {
 
     mapboxMap.annotations.createPointAnnotationManager().then((value) async {
       pointAnnotationManager = value;
-      final ByteData bytes = await rootBundle.load('assets/images/info.png');
+      final ByteData bytes = await rootBundle.load('assets/images/appeal.png');
       final Uint8List list = bytes.buffer.asUint8List();
       createOneAnnotation(list);
     });

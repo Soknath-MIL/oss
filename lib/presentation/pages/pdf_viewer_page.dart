@@ -1,21 +1,24 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfViewerPage extends StatefulWidget {
   final File file;
   final String url;
+  final String title;
 
   const PdfViewerPage({
     Key? key,
     required this.file,
     required this.url,
+    required this.title,
   }) : super(key: key);
 
   @override
@@ -28,68 +31,46 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
     final name = basename(widget.file.path);
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(widget.title),
         actions: [
           IconButton(
             onPressed: () async {
               var saveSuccess = await saveFile(widget.url, "$name.pdf");
-              debugPrint('saveSucess ${saveSuccess.toString()}');
-              // ignore: use_build_context_synchronously
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(
-                    'บันทึกสำเร็จในโฟลเดอร์ "pdf_download" ที่เก็บข้อมูลภายในได้สำเร็จ',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              );
             },
             icon: const Icon(Icons.download_rounded),
           ),
         ],
       ),
-      body: PDFView(
-        filePath: widget.file.path,
+      body: const PDF().cachedFromUrl(
+        widget.url,
       ),
     );
   }
 
   Future<bool> saveFile(String url, String fileName) async {
-    try {
-      if (await _requestPermission(Permission.storage)) {
-        debugPrint('New path1');
-        Directory? directory;
-        directory = await getExternalStorageDirectory();
-        String newPath = "";
-        List<String> paths = directory!.path.split("/");
-        for (int x = 1; x < paths.length; x++) {
-          String folder = paths[x];
-          if (folder != "Android") {
-            newPath += "/$folder";
-          } else {
-            break;
-          }
-        }
-        debugPrint('New path2');
-        newPath = "$newPath/PDF_Download";
-        directory = Directory(newPath);
+    if (await _requestPermission(Permission.storage)) {
+      Directory? dir = await DownloadsPathProvider.downloadsDirectory;
 
-        File saveFile = File("${directory.path}/$fileName");
-        if (kDebugMode) {
-          print(saveFile.path);
-        }
-        if (!await directory.exists()) {
-          await directory.create(recursive: true);
-        }
-        if (await directory.exists()) {
-          await Dio().download(
-            url,
-            saveFile.path,
-          );
-        }
+      File saveFile = File("${dir?.path}/$fileName");
+      if (kDebugMode) {
+        print(saveFile.path);
       }
+      if (await dir?.exists() != null) {
+        await Dio().download(
+          url,
+          saveFile.path,
+        );
+      }
+      Get.snackbar(
+        "สำเร็จ",
+        "บันทึกสำเร็จในโฟลเดอร์ pdf_download ที่เก็บข้อมูลภายในได้สำเร็จ",
+        duration: const Duration(seconds: 1),
+        colorText: Colors.grey,
+        icon: const Icon(Icons.check_circle),
+        snackPosition: SnackPosition.BOTTOM,
+      );
       return true;
-    } catch (e) {
+    } else {
       return false;
     }
   }
@@ -99,11 +80,22 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       return true;
     } else {
       var result = await permission.request();
-      debugPrint('reasult ${result.toString()}');
+      debugPrint(
+          'reasult ${result.toString()}, ${PermissionStatus.permanentlyDenied}');
+      // ignore: unrelated_type_equality_checks
       if (result == PermissionStatus.granted) {
         return true;
       }
+      // ignore: unrelated_type_equality_checks
       if (result == PermissionStatus.permanentlyDenied) {
+        Get.snackbar(
+          "ล้มเหลว",
+          "ข้อผิดพลาดการอนุญาต",
+          duration: const Duration(seconds: 1),
+          colorText: Colors.white,
+          icon: const Icon(Icons.check_circle),
+          snackPosition: SnackPosition.BOTTOM,
+        );
         openAppSettings();
       }
     }

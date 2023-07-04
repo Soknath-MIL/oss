@@ -1,0 +1,112 @@
+Date : 2023-06-25 10:34:13
+Directory : /Users/soknathmil/Documents/test-apps/oss_app/lib
+Total : 76 files,  13486 codes, 481 comments, 820 blanks, all 14787 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Dart     |         76 |     13,486 |        481 |        820 |     14,787 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                    | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                       |         76 |     13,486 |        481 |        820 |     14,787 |
+| . (Files)                                                                                               |          2 |        113 |         13 |         11 |        137 |
+| constants                                                                                               |          1 |        142 |          0 |          5 |        147 |
+| data                                                                                                    |          3 |        647 |         42 |         65 |        754 |
+| data/models                                                                                             |          1 |         14 |          0 |          3 |         17 |
+| data/services                                                                                           |          2 |        633 |         42 |         62 |        737 |
+| presentation                                                                                            |         67 |     12,258 |        426 |        728 |     13,412 |
+| presentation/controllers                                                                                |         16 |        580 |         36 |        103 |        719 |
+| presentation/models                                                                                     |          2 |         60 |          0 |          6 |         66 |
+| presentation/pages                                                                                      |         36 |     10,085 |        361 |        467 |     10,913 |
+| presentation/widgets                                                                                    |         13 |      1,533 |         29 |        152 |      1,714 |
+| routes                                                                                                  |          1 |        273 |          0 |          4 |        277 |
+| utils                                                                                                   |          2 |         53 |          0 |          7 |         60 |
++---------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/constants/constants.dart                              | Dart     |        142 |          0 |          5 |        147 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/data/models/message.dart                              | Dart     |         14 |          0 |          3 |         17 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/data/services/appwrite_service.dart                   | Dart     |        556 |         40 |         55 |        651 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/data/services/firebase_service.dart                   | Dart     |         77 |          2 |          7 |         86 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/firebase_options.dart                                 | Dart     |         72 |         12 |          6 |         90 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/main.dart                                             | Dart     |         41 |          1 |          5 |         47 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/appeal_list_controller.dart  | Dart     |         34 |          3 |          6 |         43 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/config_controller.dart       | Dart     |         29 |          3 |          7 |         39 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/contact_us_controller.dart   | Dart     |         29 |          2 |          7 |         38 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/doc_type_controller.dart     | Dart     |         39 |          3 |          9 |         51 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/emergency_controller.dart    | Dart     |         28 |          1 |          5 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/journal_controller.dart      | Dart     |         27 |          2 |          5 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/login_controller.dart        | Dart     |         51 |          2 |          7 |         60 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/message_controller.dart      | Dart     |         41 |          1 |          8 |         50 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/mngt_controller.dart         | Dart     |         28 |          1 |          5 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/news_controller.dart         | Dart     |         27 |          2 |          5 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/notification_controller.dart | Dart     |         67 |          4 |          7 |         78 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/open_access_controller.dart  | Dart     |         27 |          2 |          5 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/pois_controller.dart         | Dart     |         59 |          3 |          7 |         69 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/request_controller.dart      | Dart     |         32 |          2 |          6 |         40 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/unit_controller.dart         | Dart     |         33 |          2 |          7 |         42 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/controllers/vision_controller.dart       | Dart     |         29 |          3 |          7 |         39 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/models/map_marker_model.dart             | Dart     |         48 |          0 |          4 |         52 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/models/push_notification.dart            | Dart     |         12 |          0 |          2 |         14 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/appeal_list_page.dart              | Dart     |         16 |          0 |          4 |         20 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/appeal_page.dart                   | Dart     |        316 |         29 |         18 |        363 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/complete_form_page.dart            | Dart     |        342 |         14 |          7 |        363 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/contact_us_page.dart               | Dart     |        121 |          1 |          6 |        128 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/edit_profile_page.dart             | Dart     |        165 |         59 |          9 |        233 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/emergency_page.dart                | Dart     |        101 |          0 |         12 |        113 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/ems_request_page.dart              | Dart     |        666 |          9 |         21 |        696 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/general_request_form.dart          | Dart     |        633 |          6 |         21 |        660 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/home_page.dart                     | Dart     |        851 |         12 |         31 |        894 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/journal_page.dart                  | Dart     |        172 |          4 |         15 |        191 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/login_page.dart                    | Dart     |         52 |          0 |          4 |         56 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/main_page.dart                     | Dart     |        256 |         15 |         37 |        308 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/map_view_page.dart                 | Dart     |        300 |          2 |         15 |        317 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/message_page.dart                  | Dart     |        135 |          9 |         17 |        161 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/news_detail_page.dart              | Dart     |         68 |          0 |          5 |         73 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/news_page.dart                     | Dart     |        139 |          2 |         11 |        152 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/notification_detail_page.dart      | Dart     |         70 |          4 |          5 |         79 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/notification_page.dart             | Dart     |        190 |          8 |         12 |        210 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/open_access_page.dart              | Dart     |        170 |          4 |         15 |        189 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/open_business_request_form.dart    | Dart     |      1,145 |         27 |         26 |      1,198 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/payment_detail_page.dart           | Dart     |        348 |         11 |         14 |        373 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/pdf_viewer_page.dart               | Dart     |        103 |          1 |          9 |        113 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/pois_page.dart                     | Dart     |         24 |          0 |          4 |         28 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/profile_page.dart                  | Dart     |        504 |         27 |         16 |        547 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/qr_scanner_page.dart               | Dart     |        120 |          7 |         12 |        139 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/request_detail_page.dart           | Dart     |        600 |          0 |         13 |        613 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/request_page.dart                  | Dart     |        140 |          2 |         11 |        153 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/splash_screen.dart                 | Dart     |         38 |          0 |          6 |         44 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/staff_list_page.dart               | Dart     |         57 |          1 |         10 |         68 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/tax_payment_page.dart              | Dart     |        462 |          9 |          9 |        480 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/trash_request_form.dart            | Dart     |      1,085 |         82 |         25 |      1,192 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/unit_chat_page.dart                | Dart     |        144 |          2 |         13 |        159 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/validate_account.dart              | Dart     |         89 |          3 |          7 |         99 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/verify_otp_page.dart               | Dart     |        280 |         11 |         14 |        305 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/vision_detail_page.dart            | Dart     |         72 |          0 |          5 |         77 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/pages/vision_page.dart                   | Dart     |        111 |          0 |          8 |        119 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/appeal_list.dart                 | Dart     |        125 |          2 |         12 |        139 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/bottom_pin.dart                  | Dart     |        144 |          8 |         12 |        164 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/form_process.dart                | Dart     |        212 |          3 |         23 |        238 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/full_map.dart                    | Dart     |        127 |          0 |         22 |        149 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/horizonMenu.dart                 | Dart     |         59 |          1 |          6 |         66 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/material_design_indicator.dart   | Dart     |         38 |          1 |         10 |         49 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/notification_badge.dart          | Dart     |         25 |          0 |          4 |         29 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/poi_destination.dart             | Dart     |        140 |          2 |          8 |        150 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/process_timeline.dart            | Dart     |        224 |          3 |         23 |        250 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/profile_card.dart                | Dart     |         77 |          1 |          6 |         84 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/request_list.dart                | Dart     |        121 |          4 |         12 |        137 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/tab_view.dart                    | Dart     |        121 |          1 |          7 |        129 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/presentation/widgets/vetical_tab_view.dart            | Dart     |        120 |          3 |          7 |        130 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/routes/routes.dart                                    | Dart     |        273 |          0 |          4 |        277 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/utils/general_utils.dart                              | Dart     |         30 |          0 |          4 |         34 |
+| /Users/soknathmil/Documents/test-apps/oss_app/lib/utils/map_utils.dart                                  | Dart     |         23 |          0 |          3 |         26 |
+| Total                                                                                                   |          |     13,486 |        481 |        820 |     14,787 |
++---------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

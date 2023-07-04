@@ -72,10 +72,11 @@ class _OpenAccessPageState extends State<OpenAccessPage> {
                     ),
                     margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
                     padding: const EdgeInsets.all(10),
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
@@ -85,21 +86,21 @@ class _OpenAccessPageState extends State<OpenAccessPage> {
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Set the desired border radius
                                 child: Image.asset(
-                                  "assets/images/food.png", // Replace with your image URL
+                                  "assets/images/docs.png", // Replace with your image URL
                                   fit: BoxFit.contain,
                                 ),
                               ),
                             ),
-                            Text(
-                              _JournalConroller.openAccessList[i].data["title"],
-                            ),
+                            Text(formatted),
                           ],
                         ),
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(formatted),
+                            Text(
+                              _JournalConroller.openAccessList[i].data["title"],
+                            ),
                             GestureDetector(
                               onTap: () async {
                                 var url = jsonDecode(_JournalConroller
@@ -113,7 +114,12 @@ class _OpenAccessPageState extends State<OpenAccessPage> {
                                 final file = await loadPdfFromNetwork(url);
                                 await EasyLoading.dismiss();
                                 // ignore: use_build_context_synchronously
-                                openPdf(context, file, url);
+                                openPdf(
+                                    context,
+                                    file,
+                                    url,
+                                    _JournalConroller
+                                        .openAccessList[i].data["title"]);
                               },
                               child: const Icon(
                                 Icons.download,
@@ -165,13 +171,11 @@ class _OpenAccessPageState extends State<OpenAccessPage> {
     return _storeFile(url, bytes);
   }
 
-  void openPdf(BuildContext context, File file, String url) =>
+  void openPdf(BuildContext context, File file, String url, String title) =>
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => PdfViewerPage(
-            file: file,
-            url: url,
-          ),
+          builder: (context) =>
+              PdfViewerPage(file: file, url: url, title: title),
         ),
       );
 

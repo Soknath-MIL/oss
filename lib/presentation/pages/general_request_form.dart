@@ -580,8 +580,10 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
       var accunt = await AppwriteService().getAccount();
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
+      var lastTotal = await AppwriteService().countGeneral();
       AppwriteService().createRequest({
-        "docSeq": 'คำร้องทั่วไป',
+        "docSeq": 'G${lastTotal?.total}',
+        "name": 'คำร้องทั่วไป',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
         "status": "new",

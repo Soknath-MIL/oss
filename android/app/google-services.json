@@ -40,10 +40,10 @@
               "client_type": 3
             },
             {
-              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_id": "415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.screenLimit"
+                "bundle_id": "com.moevedigital.ossuserapp"
               }
             }
           ]
@@ -84,10 +84,10 @@
               "client_type": 3
             },
             {
-              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_id": "415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.screenLimit"
+                "bundle_id": "com.moevedigital.ossuserapp"
               }
             }
           ]
@@ -120,10 +120,82 @@
               "client_type": 3
             },
             {
-              "client_id": "415242114196-b1bg8h297tevjq4h8ro4dqmjuroqdf0d.apps.googleusercontent.com",
+              "client_id": "415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.screenLimit"
+                "bundle_id": "com.moevedigital.ossuserapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415242114196:android:fe7142a768bf60012f5081",
+        "android_client_info": {
+          "package_name": "com.moevedigital.ossadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moevedigital.ossuserapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:415242114196:android:9f5d897e234fbe162f5081",
+        "android_client_info": {
+          "package_name": "com.moevedigital.ossuserapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOhS5YJVA6oQabPl9Kbf86BfAlK9hMQ8o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "415242114196-nhnn9nf6rgsij55hhl57j4u0ukfl7b3i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "415242114196-0rgvp60p5l2fudidn2emj3755e1v8r78.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.moevedigital.ossuserapp"
               }
             }
           ]

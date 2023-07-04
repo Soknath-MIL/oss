@@ -47,9 +47,15 @@ class _MessageScreenState extends State<MessageScreen> {
             // Build the widget tree with the initial state
             return Scaffold(
               body: Chat(
+                emptyState: const Center(child: Text('ไม่พบข้อความ')),
                 theme: DefaultChatTheme(
-                    inputBackgroundColor: Colors.grey.shade700,
-                    inputTextColor: Colors.grey.shade200),
+                  sendingIcon: const Icon(
+                    Icons.send_rounded,
+                    color: Colors.green,
+                  ),
+                  inputBackgroundColor: Colors.grey.shade100,
+                  inputTextColor: Colors.green,
+                ),
                 messages: _messages,
                 // onAttachmentPressed: _handleAttachmentPressed,
                 // onMessageTap: _handleMessageTap,

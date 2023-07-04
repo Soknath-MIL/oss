@@ -1,4 +1,4 @@
-package com.example.oss_app
+package com.moevedigital.ossuserapp
 
 import io.flutter.embedding.android.FlutterActivity
 

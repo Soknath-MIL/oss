@@ -31,11 +31,10 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (data['status'] == "new") {
-      processIndex = 1;
-    }
     if (data['workStatus'] == "complete") {
       processIndex = 3;
+    } else if (data['status'] == "new") {
+      processIndex = 1;
     } else {
       processIndex = 2;
     }

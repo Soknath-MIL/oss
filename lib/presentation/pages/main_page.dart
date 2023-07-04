@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:oss/data/services/appwrite_service.dart';
 import 'package:oss/presentation/pages/home_page.dart';
 import 'package:oss/presentation/pages/notification_page.dart';
@@ -15,6 +16,7 @@ import 'package:oss/presentation/pages/unit_chat_page.dart';
 import 'package:overlay_support/overlay_support.dart';
 
 import '../../constants/constants.dart';
+import '../controllers/config_controller.dart';
 import '../controllers/message_controller.dart';
 import '../models/push_notification.dart';
 import '../widgets/appeal_list.dart';
@@ -42,6 +44,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   final GlobalKey<ConvexAppBarState> _appBarKey =
       GlobalKey<ConvexAppBarState>();
   final MessageConroller _messageConroller = Get.put(MessageConroller());
+  final ConfigController configController = Get.put(ConfigController());
   int currentIndex = 0;
   int unreadMessage = 0;
   String notiCount = "";
@@ -70,32 +73,64 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         _appBarKey.currentState?.animateTo(index);
       })
     ];
-    return Scaffold(
-      body: pages[currentIndex],
-      bottomNavigationBar: ConvexAppBar.badge(
-        {
-          1: unreadMessage != 0 ? '$unreadMessage' : '',
-          3: notiCount,
-        },
-        key: _appBarKey,
-        badgeMargin: const EdgeInsets.only(bottom: 30, left: 30),
-        style: TabStyle.react,
-        backgroundColor: Colors.green,
-        items: const [
-          TabItem(icon: Icons.home, title: "หน้าแรก"),
-          TabItem(icon: Icons.chat_bubble_rounded, title: "คุยกับเรา"),
-          TabItem(icon: Icons.campaign_rounded, title: "แจ้งเหตุ"),
-          TabItem(icon: Icons.notifications, title: "แจ้งเตือน"),
-          TabItem(icon: Icons.list, title: "อื่นๆ"),
-        ],
-        initialActiveIndex: currentIndex,
-        onTap: (int i) {
-          setState(() {
-            currentIndex = i;
-          });
-        },
-      ),
-    );
+    return configController.obx((state) {
+      var maintenance = configController.configList.where((item) {
+        return item.data["name"] == 'maintenance';
+      }).toList();
+
+      if (maintenance[0].data["value"].split("|")[0] == 'true') {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Iconsax.setting_4,
+                  size: 40,
+                  color: Colors.green,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  maintenance[0].data["value"].split("|")[1] ??
+                      "ภายใต้การบำรุงรักษา",
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ],
+            ),
+          ),
+        );
+      }
+      return Scaffold(
+        body: pages[currentIndex],
+        bottomNavigationBar: ConvexAppBar.badge(
+          {
+            1: unreadMessage != 0 ? '$unreadMessage' : '',
+            3: notiCount,
+          },
+          height: 55,
+          key: _appBarKey,
+          badgeMargin: const EdgeInsets.only(bottom: 30, left: 30),
+          style: TabStyle.react,
+          backgroundColor: Colors.green,
+          items: const [
+            TabItem(icon: Iconsax.category, title: "หน้าแรก"),
+            TabItem(icon: Iconsax.message, title: "คุยกับเรา"),
+            TabItem(icon: Iconsax.info_circle, title: "แจ้งเหตุ"),
+            TabItem(icon: Iconsax.notification, title: "แจ้งเตือน"),
+            TabItem(icon: Iconsax.textalign_left, title: "อื่นๆ"),
+          ],
+          initialActiveIndex: currentIndex,
+          onTap: (int i) {
+            setState(() {
+              currentIndex = i;
+            });
+          },
+        ),
+      );
+    });
   }
 
   // For handling notification when the app is in terminated state

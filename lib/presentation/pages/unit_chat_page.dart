@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:math' as math;
 
 import 'package:appwrite/appwrite.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_shimmer/flutter_shimmer.dart';
@@ -34,8 +32,6 @@ class _UnitSelectionPageState extends State<UnitSelectionPage> {
   Widget build(BuildContext context) {
     return unitController.obx(
       (state) {
-        debugPrint(
-            'image url ${jsonDecode(unitController.unitList[0].data["image"])[0]["url"]}');
         return SafeArea(
           child: ListView.builder(
               itemCount: unitController.unitList.length,
@@ -50,68 +46,86 @@ class _UnitSelectionPageState extends State<UnitSelectionPage> {
                   child: Container(
                     margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
                     padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      color: Color(
-                        (math.Random().nextDouble() * 0xFFFFFF).toInt(),
-                      ).withOpacity(0.5),
+                      color: Color.fromRGBO(231, 231, 231, 1),
                     ),
                     height: 100,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        CachedNetworkImage(
-                          imageUrl: jsonDecode(
+                        CircleAvatar(
+                          radius: 48, // Image radius
+                          backgroundImage: NetworkImage(jsonDecode(
                                   unitController.unitList[i].data["image"])[0]
-                              ["url"],
+                              ["url"]),
                         ),
-                        (messageData[unitController.unitList[i].data["\$id"]] !=
-                                    null &&
-                                messageData[unitController
-                                        .unitList[i].data["\$id"]] !=
-                                    0)
-                            ? Badge(
-                                label: Text(
-                                  messageData[unitController
-                                          .unitList[i].data["\$id"]]
-                                      .toString(),
-                                ),
-                                child: Container(
-                                  constraints:
-                                      const BoxConstraints(maxWidth: 300.0),
-                                  child: Chip(
-                                    elevation: 2,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'ชิทแชท',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                            (messageData[unitController
+                                            .unitList[i].data["\$id"]] !=
+                                        null &&
+                                    messageData[unitController
+                                            .unitList[i].data["\$id"]] !=
+                                        0)
+                                ? Badge(
                                     label: Text(
-                                      'chit·chat ${unitController.unitList[i].data["name_t"]}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        color: Colors.grey[800],
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: 12,
+                                      messageData[unitController
+                                              .unitList[i].data["\$id"]]
+                                          .toString(),
+                                    ),
+                                    child: Container(
+                                      constraints:
+                                          const BoxConstraints(maxWidth: 300.0),
+                                      child: Chip(
+                                        backgroundColor: const Color.fromRGBO(
+                                            41, 153, 20, 1),
+                                        elevation: 2,
+                                        label: Text(
+                                          '${unitController.unitList[i].data["name_t"]}',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w300,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 300.0),
+                                    child: Chip(
+                                      backgroundColor: const Color.fromRGBO(
+                                        41,
+                                        153,
+                                        20,
+                                        1,
+                                      ),
+                                      elevation: 2,
+                                      label: Text(
+                                        '${unitController.unitList[i].data["name_t"]}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: 14,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : Container(
-                                constraints:
-                                    const BoxConstraints(maxWidth: 300.0),
-                                child: Chip(
-                                  elevation: 2,
-                                  label: Text(
-                                    'chit·chat ${unitController.unitList[i].data["name_t"]}',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.grey[800],
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ),
-                              ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

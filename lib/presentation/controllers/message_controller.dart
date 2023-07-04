@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:oss/constants/constants.dart';
 
@@ -17,6 +18,10 @@ class MessageConroller extends GetxController with StateMixin {
   final accountData = {}.obs;
 
   Future<void> getUserId() async {
+    await EasyLoading.show(
+      status: 'ตรวจสอบผู้ใช้...',
+      maskType: EasyLoadingMaskType.black,
+    );
     try {
       change(null, status: RxStatus.loading());
 
@@ -34,8 +39,6 @@ class MessageConroller extends GetxController with StateMixin {
       unreadMessage.value = userDetail.data["unreadMessage"] != null
           ? jsonDecode(userDetail.data["unreadMessage"])
           : {};
-      debugPrint(
-          'account ${accountObject.$id.toString()} ${userDetail.data.toString()}');
       user$Id.value = userDetail.$id.toString();
       accountData.value = userDetail.toMap();
 
@@ -43,7 +46,10 @@ class MessageConroller extends GetxController with StateMixin {
       change(null, status: RxStatus.success());
     } catch (e) {
       debugPrint('check user error ${e.toString()}');
-      Get.offAndToNamed('/login');
+      EasyLoading.dismiss();
+      return Get.offAndToNamed('/login');
     }
+
+    EasyLoading.dismiss();
   }
 }

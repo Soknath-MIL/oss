@@ -4,7 +4,6 @@ import 'package:appwrite/appwrite.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_shimmer/flutter_shimmer.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -76,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final CarouselController controller = CarouselController();
   List<String> boardList = [];
   final NewsController newsController = Get.put(NewsController());
+  final MessageConroller messageController = Get.put(MessageConroller());
   final DocTypesController docTypesController = Get.put(DocTypesController());
   final UnitController unitsController = Get.put(UnitController());
   final AppealListController appealListController =
@@ -142,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'บริการร้องเรียนยอดนิยม',
+                      'บริการยอดนิยม',
                       style: TextStyle(color: Colors.green),
                     ),
                     HorizonMenu(data: dataMenu),
@@ -186,6 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               appealData.length,
                               (index) => GestureDetector(
                                 onTap: () async {
+                                  await messageController.getUserId();
                                   // check if flow of current appeal exist
                                   var docExist = await AppwriteService()
                                       .checkDocMaster(
@@ -612,12 +613,7 @@ class _HorizonMenuState extends State<HorizonMenu> {
                 return;
               }
               if (widget.data[index]["id"] == 'request') {
-                await EasyLoading.show(
-                  status: 'ตรวจสอบผู้ใช้...',
-                  maskType: EasyLoadingMaskType.black,
-                );
                 await messageController.getUserId();
-                await EasyLoading.dismiss();
                 Get.toNamed("/request");
                 return;
               }
@@ -670,8 +666,7 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                             FormBuilderTextField(
                                               name: 'address',
                                               initialValue: '30/1 หมู่ 3',
-                                              keyboardType:
-                                                  TextInputType.number,
+                                              keyboardType: TextInputType.text,
                                               decoration: customInputDecoration(
                                                   'ค้นหาที่อยู่ (ตัวอย่าง xx/x หมู่ x)'),
                                               validator: FormBuilderValidators
@@ -692,11 +687,6 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                               .validate()) {
                                             _formKey.currentState?.save();
                                             // get data from trash
-                                            await EasyLoading.show(
-                                              status: 'ตรวจสอบผู้ใช้...',
-                                              maskType:
-                                                  EasyLoadingMaskType.black,
-                                            );
                                             await messageController.getUserId();
                                             var taxData = await AppwriteService()
                                                 .searchTrashTax(
@@ -729,7 +719,6 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                                         ?.value["address"]
                                                   ]);
                                             }
-                                            EasyLoading.dismiss();
                                             // Get.back();
                                           }
                                         },
@@ -808,6 +797,8 @@ class _ServiceMenuState extends State<ServiceMenu> {
         (index) => GestureDetector(
           onTap: () async {
             if (widget.data[index]["link"] != null) {
+              // check login account;
+              await messageController.getUserId();
               var docExist = await AppwriteService()
                   .checkDocMasterName(widget.data[index]["link"]);
               if (docExist == null) {
@@ -820,13 +811,6 @@ class _ServiceMenuState extends State<ServiceMenu> {
                 );
                 return;
               }
-              // check login account;
-              await EasyLoading.show(
-                status: 'ตรวจสอบผู้ใช้...',
-                maskType: EasyLoadingMaskType.black,
-              );
-              await messageController.getUserId();
-              await EasyLoading.dismiss();
               Get.toNamed("/${widget.data[index]["link"]}-form");
               return;
             }

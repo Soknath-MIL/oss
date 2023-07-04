@@ -26,26 +26,28 @@ class _RequestPageState extends State<RequestPage> {
         appBar: AppBar(
           title: const Text('ติดตาม'),
         ),
-        body: RefreshIndicator(
-          onRefresh: _pullRefresh,
-          child: _requestConroller.obx(
-            (state) {
-              return FadeInDown(
-                child: ListView(
-                  scrollDirection: Axis.vertical,
-                  children: List.generate(
-                    _requestConroller.reqList.length,
-                    (index) => renderItem(index),
+        body: SingleChildScrollView(
+          child: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            child: _requestConroller.obx(
+              (state) {
+                return FadeInDown(
+                  child: ListView(
+                    scrollDirection: Axis.vertical,
+                    children: List.generate(
+                      _requestConroller.reqList.length,
+                      (index) => renderItem(index),
+                    ),
                   ),
-                ),
-              );
-            },
-            onLoading: Column(
-              children: const [
-                PlayStoreShimmer(),
-                PlayStoreShimmer(),
-                PlayStoreShimmer(),
-              ],
+                );
+              },
+              onLoading: Column(
+                children: const [
+                  PlayStoreShimmer(),
+                  PlayStoreShimmer(),
+                  PlayStoreShimmer(),
+                ],
+              ),
             ),
           ),
         ),
@@ -77,9 +79,11 @@ class _RequestPageState extends State<RequestPage> {
           decoration: BoxDecoration(
             color: data["status"] == "new"
                 ? Colors.grey.shade300
-                : data["status"] == "complete"
+                : ((data["status"] == "complete" || data["status"] == "done")
                     ? Colors.green.shade400
-                    : Colors.yellow.shade400,
+                    : (data["status"] == "complete"
+                        ? Colors.red.shade400
+                        : Colors.yellow.shade800)),
             borderRadius: const BorderRadius.all(
               Radius.circular(16),
             ),
@@ -103,7 +107,7 @@ class _RequestPageState extends State<RequestPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 300,
+                        width: 200,
                         child: Text(
                           'หัวข้อ ${data["docSeq"]}',
                           overflow: TextOverflow.ellipsis,

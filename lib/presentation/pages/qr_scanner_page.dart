@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oss/presentation/pages/main_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../data/services/appwrite_service.dart';
@@ -55,6 +56,14 @@ class _QRScannerState extends State<QRScanner> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _getPermision();
+  }
+
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
   @override
@@ -86,13 +95,31 @@ class _QRScannerState extends State<QRScanner> {
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
+  // void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
+  //   debugPrint('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+  //   if (!p) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('No Permission')),
+  //     );
+  //   }
+  // }
 
-  void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
-    debugPrint('${DateTime.now().toIso8601String()}_onPermissionSet $p');
+  void _getPermision() async {
+    await Permission.camera.request();
+  }
+
+  void _onPermissionSet(
+      BuildContext context, QRViewController ctrl, bool p) async {
     if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('no Permission')),
+      Get.snackbar(
+        'Camera Permission Error',
+        'To use QR Scanner, please go to setting to enable Camera',
+        colorText: Colors.white,
+        backgroundColor: Colors.redAccent,
+        icon: const Icon(Icons.error),
       );
+      await Future.delayed(const Duration(seconds: 5));
+      openAppSettings();
     }
   }
 

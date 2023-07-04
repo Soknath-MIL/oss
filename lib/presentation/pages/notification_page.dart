@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:oss/presentation/controllers/message_controller.dart';
 import 'package:oss/presentation/controllers/notification_controller.dart';
+import 'package:oss/presentation/widgets/empty_widget.dart';
 
 import '../../data/services/appwrite_service.dart';
 
@@ -30,20 +31,18 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return RefreshIndicator(
       onRefresh: _pullRefresh,
       child: _notificationConroller.obx(
-        (state) => FadeInDown(
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: List.generate(
-              _notificationConroller.notiList.length,
-              (index) => renderItem(index),
-            ),
-          ),
-        ),
-        onLoading: Column(
-          children: const [
-            VideoShimmer(),
-          ],
-        ),
+        (state) => _notificationConroller.notiList.isEmpty
+            ? const EmptyWidget()
+            : FadeInDown(
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: List.generate(
+                    _notificationConroller.notiList.length,
+                    (index) => renderItem(index),
+                  ),
+                ),
+              ),
+        onLoading: const Center(child: ProfilePageShimmer()),
       ),
     );
   }

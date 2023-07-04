@@ -109,6 +109,46 @@ class AppwriteService {
     return null;
   }
 
+  Future<model.DocumentList?> countAppeal() async {
+    var appealData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.appealId,
+    );
+    return appealData;
+  }
+
+  Future<model.DocumentList?> countEms() async {
+    var emsData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.emsId,
+    );
+    return emsData;
+  }
+
+  Future<model.DocumentList?> countGeneral() async {
+    var generalData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.generalRequestId,
+    );
+    return generalData;
+  }
+
+  Future<model.DocumentList?> countOpenBusiness() async {
+    var openBusinessData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.openBusinessId,
+    );
+    return openBusinessData;
+  }
+
+  Future<model.DocumentList?> countTrash() async {
+    var trashData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.trashRequestId,
+    );
+    return trashData;
+  }
+
   Future<model.Document?> createAppeal(values) async {
     var appealData = await databases.createDocument(
       databaseId: Constants.databseId,
@@ -398,8 +438,7 @@ class AppwriteService {
         "ออกจากระบบ",
         "เรียบร้อยแล้ว",
         colorText: Colors.white,
-        backgroundColor: Colors.lightBlue,
-        icon: const Icon(Icons.check),
+        icon: const Icon(Icons.check_circle),
         duration: const Duration(seconds: 1),
         snackPosition: SnackPosition.BOTTOM,
       );
@@ -409,7 +448,6 @@ class AppwriteService {
         "ออกจากระบบ",
         "เรียบร้อยแล้ว",
         colorText: Colors.white,
-        backgroundColor: Colors.lightBlue,
         icon: const Icon(Icons.check),
         duration: const Duration(seconds: 1),
         snackPosition: SnackPosition.BOTTOM,

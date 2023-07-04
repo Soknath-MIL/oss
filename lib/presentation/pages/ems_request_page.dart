@@ -615,8 +615,10 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
       var accunt = await AppwriteService().getAccount();
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
+      var lastTotal = await AppwriteService().countEms();
       AppwriteService().createRequest({
-        "docSeq": 'บริการการแพทย์ฉุกเฉิน',
+        "docSeq": 'E${lastTotal?.total}',
+        "name": 'บริการการแพทย์ฉุกเฉิน',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
         "status": "new",

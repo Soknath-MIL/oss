@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:animate_do/animate_do.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_shimmer/flutter_shimmer.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:oss/presentation/controllers/appeal_list_controller.dart';
@@ -114,7 +115,7 @@ class _AppealListState extends State<AppealList> {
             ),
           );
         },
-        onLoading: const Center(child: CircularProgressIndicator()),
+        onLoading: const Center(child: ProfilePageShimmer()),
       ),
     );
   }

@@ -167,7 +167,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
   customInputDecoration(label) {
     return InputDecoration(
         contentPadding:
-            const EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
+            const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
         isDense: true,
         border: OutlineInputBorder(
           borderSide: const BorderSide(color: Colors.grey),
@@ -239,7 +239,6 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                             Row(
                               children: [
                                 SizedBox(
-                                  height: 35,
                                   width: MediaQuery.of(context).size.width / 4,
                                   child: FormBuilderDropdown<String>(
                                     borderRadius: const BorderRadius.all(
@@ -247,7 +246,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'title',
                                     decoration:
                                         customInputDecoration('คำนำหน้า'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                     items: Constants.titleOptions
                                         .map((item) => DropdownMenuItem(
                                               alignment: AlignmentDirectional
@@ -256,7 +256,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                               child: Text(
                                                 item["value"].toString(),
                                                 style: const TextStyle(
-                                                    fontSize: 13),
+                                                  fontSize: 13,
+                                                ),
                                               ),
                                             ))
                                         .toList(),
@@ -271,7 +272,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                   child: FormBuilderTextField(
                                     name: 'firstname',
                                     decoration: customInputDecoration('ชื่อ'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -283,7 +285,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     style: const TextStyle(fontSize: 13),
                                     decoration:
                                         customInputDecoration('นามสกุล'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -298,7 +301,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                             //         name: 'address',
                             //         decoration:
                             //             customInputDecoration("ที่อยู่"),
-                            //         validator: FormBuilderValidators.required(),
+                            //         validator: FormBuilderValidators.required(errorText: 'กรุณากรอกข้อมูล'),
                             //       ),
                             //     ),
                             //   ],
@@ -312,7 +315,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'houseNo',
                                     decoration:
                                         customInputDecoration("บ้านเลขที่"),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -323,7 +327,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'moo',
                                     decoration:
                                         customInputDecoration("หมู่ที่"),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -339,7 +344,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'soi',
                                     decoration:
                                         customInputDecoration("ตรอก/ซอย"),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -349,7 +355,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                   child: FormBuilderTextField(
                                     name: 'road',
                                     decoration: customInputDecoration("ถนน"),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -364,7 +371,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                   child: FormBuilderTextField(
                                     name: 'tambon',
                                     decoration: customInputDecoration('ตำบล'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -374,7 +382,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                   child: FormBuilderTextField(
                                     name: 'amphoe',
                                     decoration: customInputDecoration('อำเภอ'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -390,7 +399,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'province',
                                     decoration:
                                         customInputDecoration('จังหวัด'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -401,7 +411,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'postcode',
                                     decoration:
                                         customInputDecoration('รหัสไปรษณีย์'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -417,7 +428,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'phone',
                                     decoration:
                                         customInputDecoration('โทรศัพท์'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                                 const SizedBox(
@@ -428,7 +440,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                                     name: 'workplace',
                                     decoration:
                                         customInputDecoration('สถานที่ทำงาน'),
-                                    validator: FormBuilderValidators.required(),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
                                   ),
                                 ),
                               ],
@@ -440,7 +453,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                               maxLines: 3,
                               name: 'purpose',
                               decoration: customInputDecoration('วัตถุประสงค์'),
-                              validator: FormBuilderValidators.required(),
+                              validator: FormBuilderValidators.required(
+                                  errorText: 'กรุณากรอกข้อมูล'),
                             ),
                           ],
                         ),
@@ -472,26 +486,26 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
             child: FormBuilder(
               key: _formKeyDetail,
               initialValue: const {
-                'nationality': 'xx',
-                'corporation': 'xx',
-                'typeB1': 'xx',
-                'areaB1': 'xx',
-                'totalPersonB1': 'xx',
-                'nameB1': 'xx',
-                'addressB1': 'xx',
-                'typeB2': 'xx',
-                'totalPersonB2': 'xx',
-                'machineSizeB2': 'xx',
-                'nameB2': 'xx',
-                'totalRoomB2': 'xx',
-                'addressB2': 'xx',
-                'typeB3': 'xx',
-                'addressB3': 'xx',
-                'methodB3': 'xx',
-                'nameB4_1': 'xx',
-                'nameB4_2': 'xx',
-                'nameB4_3': 'xx',
-                'nameB4_4': 'xx',
+                'nationality': '',
+                'corporation': '',
+                'typeB1': '',
+                'areaB1': '',
+                'totalPersonB1': '',
+                'nameB1': '',
+                'addressB1': '',
+                'typeB2': '',
+                'totalPersonB2': '',
+                'machineSizeB2': '',
+                'nameB2': '',
+                'totalRoomB2': '',
+                'addressB2': '',
+                'typeB3': '',
+                'addressB3': '',
+                'methodB3': '',
+                'nameB4_1': '',
+                'nameB4_2': '',
+                'nameB4_3': '',
+                'nameB4_4': '',
               },
               child: Column(
                 children: [
@@ -502,7 +516,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'nationality',
                           decoration: customInputDecoration('สัญชาติ'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -513,7 +528,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                           name: 'corporation',
                           decoration:
                               customInputDecoration('กรณีเป็นนิติบุคคล'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -528,7 +544,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'typeB1',
                       decoration: customInputDecoration('ประเภท'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -542,7 +559,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                           name: 'areaB1',
                           decoration: customInputDecoration(
                               'โดยมีพื้นที่ประกอบการ (ตารางเมตร)'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -553,7 +571,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                           name: 'totalPersonB1',
                           decoration: customInputDecoration(
                               'มีบุคคลที่เกี่ยวข้องรวม (คน)'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -565,7 +584,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'nameB1',
                       decoration: customInputDecoration('โดยใช้ชื่อว่า'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -575,7 +595,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'addressB1',
                       decoration: customInputDecoration('ตั้งอยู่เลขที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const Divider(),
@@ -586,7 +607,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'typeB2',
                       decoration: customInputDecoration('ประเภท'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -599,7 +621,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'totalPersonB2',
                           decoration: customInputDecoration('มีคนงาน (คน)'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -610,7 +633,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                           name: 'machineSizeB2',
                           decoration: customInputDecoration(
                               'ใช้เครื่องจักรขนาด (แรงม้า)'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -625,7 +649,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'nameB2',
                           decoration: customInputDecoration('โดยใช้ชื่อว่า'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -635,7 +660,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'totalRoomB2',
                           decoration: customInputDecoration('จำนวน(ห้อง)'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -647,7 +673,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'addressB2',
                       decoration: customInputDecoration('ตั้งอยู่เลขที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const Divider(),
@@ -661,7 +688,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     child: FormBuilderTextField(
                       name: 'typeB3',
                       decoration: customInputDecoration('ประเภท'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -674,7 +702,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'addressB3',
                           decoration: customInputDecoration('ณ บริเวณ'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -684,7 +713,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                         child: FormBuilderTextField(
                           name: 'methodB3',
                           decoration: customInputDecoration('โดยวิธีการ'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -701,7 +731,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                       name: 'nameB4_1',
                       decoration: customInputDecoration(
                           'เก็บขนสิ่งปฏิกูล โดยมีแหล่งจำกัดที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -712,7 +743,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                       name: 'nameB4_2',
                       decoration: customInputDecoration(
                           'เก็บขนและกำจัดสิ่งปฏิกูล โดยมีระบบกำจัดอยู่ที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -723,7 +755,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                       name: 'nameB4_3',
                       decoration: customInputDecoration(
                           'เก็บขนขยะมูลฝอย โดยมีแหล่งกำจัดที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -734,7 +767,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                       name: 'nameB4_4',
                       decoration: customInputDecoration(
                           'เก็บขนและกำจัดมูลฝอย โดยมีระบบกำจัดอยู่ที่'),
-                      validator: FormBuilderValidators.required(),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
                   ),
                   const SizedBox(
@@ -1109,8 +1143,10 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
       var accunt = await AppwriteService().getAccount();
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
+      var lastTotal = await AppwriteService().countOpenBusiness();
       AppwriteService().createRequest({
-        "docSeq": 'คำขอใบอนุญาตประกอบกิจการ',
+        "docSeq": 'B${lastTotal?.total}',
+        "name": 'คำขอใบอนุญาตประกอบกิจการ',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
         "status": "new",

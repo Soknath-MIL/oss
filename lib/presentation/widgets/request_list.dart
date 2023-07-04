@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:grouped_list/grouped_list.dart';
 import 'package:oss/presentation/controllers/message_controller.dart';
+import 'package:oss/presentation/widgets/empty_widget.dart';
 
 import '../../data/services/appwrite_service.dart';
 import '../controllers/doc_type_controller.dart';
@@ -47,9 +48,7 @@ class _RequestListPageState extends State<RequestListPage> {
             debugPrint('data request ${data.toString()}');
 
             if (data.isEmpty) {
-              return const Center(
-                child: Text('ไม่มีเอกสาร'),
-              );
+              return const EmptyWidget();
             }
             return GroupedListView<dynamic, String>(
               elements: data,

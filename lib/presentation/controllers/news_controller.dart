@@ -15,6 +15,9 @@ class NewsController extends GetxController {
       var allNewsList = await database.listDocuments(
         databaseId: Constants.databseId,
         collectionId: Constants.newsId,
+        queries: [
+          Query.orderDesc("\$createdAt"),
+        ],
       ); // add group ID filter
       // debugPrint(allNewsList.documents[0].data.toString());
       newsList.value = allNewsList.documents;

@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:oss/presentation/controllers/pois_controller.dart';
+import 'package:oss/presentation/widgets/empty_widget.dart';
 
 import '../../utils/map_utils.dart';
 
@@ -77,7 +78,7 @@ class _DestinationsState extends State<Destinations> {
                                   top: 5,
                                   right: 5,
                                   child: FloatingActionButton(
-                                    heroTag: 'navi_2',
+                                    heroTag: 'navigator_$i',
                                     mini: true,
                                     onPressed: () {
                                       MapUtils.openMap(
@@ -139,7 +140,7 @@ class _DestinationsState extends State<Destinations> {
                       );
                     },
                   )
-                : const Center(child: Text('No Data')),
+                : const EmptyWidget(),
           ),
         );
       },

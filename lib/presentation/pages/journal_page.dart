@@ -72,15 +72,16 @@ class _JournalPageState extends State<JournalPage> {
                     ),
                     margin: const EdgeInsets.all(10),
                     padding: const EdgeInsets.all(10),
-                    child: Row(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Column(
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              height: 100,
-                              width: 100,
+                              height: 90,
+                              width: 90,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Set the desired border radius
@@ -92,16 +93,17 @@ class _JournalPageState extends State<JournalPage> {
                                 ),
                               ),
                             ),
-                            Text(
-                              _JournalConroller.journalList[i].data["title"],
-                            ),
+                            Text(formatted),
                           ],
                         ),
-                        Column(
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(formatted),
+                            Text(
+                              _JournalConroller.journalList[i].data["title"],
+                              overflow: TextOverflow.ellipsis,
+                            ),
                             GestureDetector(
                               onTap: () async {
                                 var url = jsonDecode(_JournalConroller
@@ -115,7 +117,12 @@ class _JournalPageState extends State<JournalPage> {
                                 final file = await loadPdfFromNetwork(url);
                                 await EasyLoading.dismiss();
                                 // ignore: use_build_context_synchronously
-                                openPdf(context, file, url);
+                                openPdf(
+                                    context,
+                                    file,
+                                    url,
+                                    _JournalConroller
+                                        .journalList[i].data["title"]);
                               },
                               child: const Icon(
                                 Icons.download,
@@ -167,13 +174,11 @@ class _JournalPageState extends State<JournalPage> {
     return _storeFile(url, bytes);
   }
 
-  void openPdf(BuildContext context, File file, String url) =>
+  void openPdf(BuildContext context, File file, String url, String title) =>
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) => PdfViewerPage(
-            file: file,
-            url: url,
-          ),
+          builder: (context) =>
+              PdfViewerPage(file: file, url: url, title: title),
         ),
       );
 

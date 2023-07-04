@@ -164,19 +164,20 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
 
   customInputDecoration(label) {
     return InputDecoration(
-        contentPadding:
-            const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
-        isDense: true,
-        border: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.blue),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        labelText: label,
-        labelStyle: const TextStyle(fontSize: 12));
+      contentPadding:
+          const EdgeInsets.only(left: 10, right: 10, top: 8, bottom: 8),
+      isDense: true,
+      border: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: const BorderSide(color: Colors.blue),
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      labelText: label,
+      labelStyle: const TextStyle(fontSize: 12),
+    );
   }
 
   List<Step> getSteps() {
@@ -247,8 +248,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       name: 'title',
                                       decoration:
                                           customInputDecoration('คำนำหน้า'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                       items: Constants.titleOptions
                                           .map((item) => DropdownMenuItem(
                                                 alignment: AlignmentDirectional
@@ -275,8 +276,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       name: 'firstname',
                                       style: const TextStyle(fontSize: 13),
                                       decoration: customInputDecoration('ชื่อ'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -288,8 +289,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('นามสกุล'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -306,7 +307,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                               //         decoration:
                               //             customInputDecoration("ที่อยู่"),
                               //         validator:
-                              //             FormBuilderValidators.required(),
+                              //             FormBuilderValidators.required(errorText: 'กรุณากรอกข้อมูล'),
                               //       ),
                               //     ),
                               //   ],
@@ -321,8 +322,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration("บ้านเลขที่"),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -334,8 +335,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration("หมู่ที่"),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -353,8 +354,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration("ตรอก/ซอย"),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -365,8 +366,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       name: 'road',
                                       style: const TextStyle(fontSize: 13),
                                       decoration: customInputDecoration("ถนน"),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -384,8 +385,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('แขวง/ตำบล'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -397,8 +398,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('เขต/อำเภอ'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -416,8 +417,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('จังหวัด'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -429,8 +430,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('รหัสไปรษณีย์'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -448,8 +449,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('โทรศัพท์'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                   const SizedBox(
@@ -461,8 +462,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                       style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('สถานที่ทำงาน'),
-                                      validator:
-                                          FormBuilderValidators.required(),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
                                     ),
                                   ),
                                 ],
@@ -475,7 +476,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                 name: 'purpose',
                                 decoration:
                                     customInputDecoration('วัตถุประสงค์'),
-                                validator: FormBuilderValidators.required(),
+                                validator: FormBuilderValidators.required(
+                                    errorText: 'กรุณากรอกข้อมูล'),
                               ),
                             ],
                           ),
@@ -567,10 +569,17 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                   ),
                   Row(
                     children: [
-                      FormBuilderTextField(
-                        name: 'trashAddress',
-                        decoration: customInputDecoration('สถานที่ตั้งขยะ'),
-                        validator: FormBuilderValidators.required(),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width / 4,
+                        child: FormBuilderTextField(
+                          name: 'trashAddress',
+                          decoration: customInputDecoration('สถานที่ตั้งขยะ'),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
                       ),
                       Expanded(
                         child: FormBuilderDropdown(
@@ -579,7 +588,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                           name: 'houseType',
                           decoration:
                               customInputDecoration('ประเภทของที่อยู่อาศัย'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                           items: Constants.houseType
                               .map((item) => DropdownMenuItem(
                                     alignment: AlignmentDirectional.centerStart,
@@ -615,20 +625,24 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                       const SizedBox(
                         width: 12,
                       ),
-                      showRoom
-                          ? SizedBox(
-                              width: MediaQuery.of(context).size.width / 4,
-                              child: FormBuilderTextField(
-                                name: 'noOfRoom',
-                                decoration: customInputDecoration('จำนวนห้อง'),
-                                validator: FormBuilderValidators.required(),
-                              ),
-                            )
-                          : Container(),
                     ],
                   ),
                   const SizedBox(
-                    height: 4,
+                    height: 8,
+                  ),
+                  showRoom
+                      ? SizedBox(
+                          width: MediaQuery.of(context).size.width / 4,
+                          child: FormBuilderTextField(
+                            name: 'noOfRoom',
+                            decoration: customInputDecoration('จำนวนห้อง'),
+                            validator: FormBuilderValidators.required(
+                                errorText: 'กรุณากรอกข้อมูล'),
+                          ),
+                        )
+                      : Container(),
+                  const SizedBox(
+                    height: 8,
                   ),
                   showDetail
                       ? FormBuilderTextField(
@@ -636,7 +650,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                           maxLines: 3,
                           minLines: 3,
                           decoration: customInputDecoration('อื่น'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         )
                       : const SizedBox(),
                   const Text(
@@ -653,7 +668,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'quantityDailyLitre',
                           decoration: customInputDecoration('ลิตร รายวัน'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -664,7 +680,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'quantityWeeklyLitre',
                           decoration: customInputDecoration('ลิตร รายสัปดาห์'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -674,7 +691,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'pricePerMonth',
                           decoration: customInputDecoration('ราคาต่อเดือน'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -689,7 +707,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'trashNo',
                           decoration: customInputDecoration('หมายเลข ถัง'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -699,7 +718,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'trashColor',
                           decoration: customInputDecoration('สี'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -717,7 +737,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                   FormBuilderTextField(
                     name: 'totalBin',
                     decoration: customInputDecoration('จำนวนถังขยะที่ขอใหม่'),
-                    validator: FormBuilderValidators.required(),
+                    validator: FormBuilderValidators.required(
+                        errorText: 'กรุณากรอกข้อมูล'),
                   ),
                   const SizedBox(
                     height: 8,
@@ -729,7 +750,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'totalOldBin',
                           decoration: customInputDecoration('จำนวนของเดิม'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -740,7 +762,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'totalUsedBin',
                           decoration: customInputDecoration('ใช้ได้'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -751,7 +774,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'totalBrokenBin',
                           decoration: customInputDecoration('ชำรุด'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                       const SizedBox(
@@ -761,7 +785,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                         child: FormBuilderTextField(
                           name: 'yearRecOldBin',
                           decoration: customInputDecoration('พ.ศ. ที่ได้รับ'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                         ),
                       ),
                     ],
@@ -808,7 +833,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                       ? FormBuilderTextField(
                           name: 'monthlyPrice',
                           decoration: const InputDecoration(labelText: 'Baht'),
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'กรุณากรอกข้อมูล'),
                           style: const TextStyle(fontSize: 12),
                         )
                       : Container(),
@@ -1111,8 +1137,10 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
       var accunt = await AppwriteService().getAccount();
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
+      var lastTotal = await AppwriteService().countTrash();
       AppwriteService().createRequest({
-        "docSeq": 'ความต้องการให้เก็บขยะมูลฝอยตำบลหนองปลาหมอ',
+        "docSeq": 'B${lastTotal?.total}',
+        "name": 'ความต้องการให้เก็บขยะมูลฝอยตำบลหนองปลาหมอ',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
         "status": "new",

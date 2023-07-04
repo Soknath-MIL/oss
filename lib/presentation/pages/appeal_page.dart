@@ -65,7 +65,7 @@ class _AppealPageState extends State<AppealPage>
     void submit() async {
       if (location == null) {
         Get.snackbar(
-          "ข้อผิดพลาด",
+          "กรุณากรอกข้อมูลให้ครบ",
           "ไม่มีสถานที่",
           colorText: Colors.white,
           icon: const Icon(Icons.cancel),
@@ -117,22 +117,24 @@ class _AppealPageState extends State<AppealPage>
         var accunt = await AppwriteService().getAccount();
         DateTime now = DateTime.now();
         var epochTime = (now.millisecondsSinceEpoch / 1000).round();
-        debugPrint(epochTime.toString());
+        var lastTotal = await AppwriteService().countAppeal();
         AppwriteService().createRequest({
-          "docSeq": 'การร้องเรียน [${formKey.currentState!.value["name"]}]',
+          "docSeq": 'A${lastTotal?.total}', // "A"
+          "name": formKey.currentState!.value["name"],
           "docCode": docMasterId.toString(),
           "userId": accunt?.$id,
           "status": "new",
           "requestedAt": epochTime,
           "type": "appeal",
           "docId": appealData?.$id,
-          "unitId": unitId
+          "unitId": unitId,
+          "appealId": appealId
         });
         await EasyLoading.dismiss();
         // display dialog to ask user to confirm
         Get.defaultDialog(
-          title: "ข้อความ",
-          content: const Text("อัปโหลดการร้องเรียนำเร็จ"),
+          title: "",
+          content: const Text("บันทึกการร้องเรียนสำเร็จแล้ว"),
           backgroundColor: Colors.white,
           titleStyle: const TextStyle(color: Colors.black54),
           radius: 10,
@@ -214,7 +216,7 @@ class _AppealPageState extends State<AppealPage>
                     const SizedBox(height: 10.0),
                     FormBuilderTextField(
                       name: 'address',
-                      decoration: customInputDecoration('ที่อยู่'),
+                      decoration: customInputDecoration('บริเวณจุดเกิดเหตุ'),
                       validator: FormBuilderValidators.required(),
                     ),
                   ],

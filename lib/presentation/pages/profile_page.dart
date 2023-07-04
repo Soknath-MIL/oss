@@ -104,7 +104,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               Text(
                                 'ชื่อผู้ใช้: ${data["name"]}',
                                 style: const TextStyle(
-                                    fontWeight: FontWeight.w600),
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                               const SizedBox(
                                 height: 10,
@@ -157,11 +158,29 @@ class _ProfilePageState extends State<ProfilePage> {
                                 size: 20,
                               ),
                               onPressed: () async {
-                                await FirebaseAuth.instance.signOut();
-                                // delete session only
-                                await storage.delete(key: 'user');
-                                AppwriteService().logout();
-                                widget.onLogoutPressed(0);
+                                // Confirm Button
+
+                                Get.defaultDialog(
+                                  title: "ยืนยัน",
+                                  content:
+                                      const Text("คุณแน่ใจไหม, จะออกจากระบบ?"),
+                                  backgroundColor: Colors.white,
+                                  titleStyle:
+                                      const TextStyle(color: Colors.black54),
+                                  radius: 10,
+                                  confirm: FloatingActionButton.extended(
+                                    heroTag: 'to_home',
+                                    onPressed: () async {
+                                      await FirebaseAuth.instance.signOut();
+                                      // delete session only
+                                      await storage.delete(key: 'user');
+                                      AppwriteService().logout();
+                                      widget.onLogoutPressed(0);
+                                      Get.back();
+                                    },
+                                    label: const Text('ออกจากระบบ'),
+                                  ),
+                                );
                               },
                             )
                           ],
@@ -443,26 +462,36 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  // scan to login
-                                  Get.toNamed("/qr-scanner");
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.only(
-                                      left: 16, right: 10),
-                                  color: Colors.white,
-                                  child: const ListTile(
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 10),
+                                color: Colors.white,
+                                child: const ListTile(
                                     iconColor: Colors.green,
-                                    leading: Icon(Icons.qr_code),
-                                    title: Text(
-                                        "สแกนเพื่อเข้าสู่ระบบผ่านคอมพิวเตอร์"),
-                                    dense: true,
-                                    trailing:
-                                        Icon(Icons.arrow_forward_ios_rounded),
-                                  ),
-                                ),
-                              )
+                                    leading: Icon(Icons.verified),
+                                    title: Text("version 1.0.2"),
+                                    dense: true),
+                              ),
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     // scan to login
+                              //     Get.toNamed("/qr-scanner");
+                              //   },
+                              //   child: Container(
+                              //     padding: const EdgeInsets.only(
+                              //         left: 16, right: 10),
+                              //     color: Colors.white,
+                              //     child: const ListTile(
+                              //       iconColor: Colors.green,
+                              //       leading: Icon(Icons.qr_code),
+                              //       title: Text(
+                              //           "สแกนเพื่อเข้าสู่ระบบผ่านคอมพิวเตอร์"),
+                              //       dense: true,
+                              //       trailing:
+                              //           Icon(Icons.arrow_forward_ios_rounded),
+                              //     ),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),

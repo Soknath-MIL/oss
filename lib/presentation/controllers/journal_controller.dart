@@ -15,6 +15,9 @@ class JournalController extends GetxController {
       var allJournalList = await database.listDocuments(
         databaseId: Constants.databseId,
         collectionId: Constants.journalId,
+        queries: [
+          Query.orderDesc("\$createdAt"),
+        ],
       ); // add group ID filter
       // debugPrint('journal ${allJournalList.documents[0].data.toString()}');
       journalList.value = allJournalList.documents;

@@ -3,10 +3,12 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  file_selector_windows
   firebase_core
   flutter_secure_storage_windows
   geolocator_windows
   permission_handler_windows
+  thai_id_card_numbers
   url_launcher_windows
   window_to_front
 )

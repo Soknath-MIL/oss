@@ -39,18 +39,18 @@ class _TaxPaymentPageState extends State<TaxPaymentPage> {
     {
       "expanded": false,
       "name": "ชำระค่าธรรมเนียมการจัดเก็บขยะ",
-      "icon": "assets/images/trash.png"
+      "icon": "assets/images/paid.png"
     },
-    {
-      "expanded": false,
-      "name": "ชำระค่าธรรมเนียมป้าย",
-      "icon": "assets/images/tax-sign.png"
-    },
-    {
-      "expanded": false,
-      "name": "ชำระค่าธรรมเนียมอื่นๆ",
-      "icon": "assets/images/tax-other.png"
-    }
+    // {
+    //   "expanded": false,
+    //   "name": "ชำระค่าธรรมเนียมป้าย",
+    //   "icon": "assets/images/tax-sign.png"
+    // },
+    // {
+    //   "expanded": false,
+    //   "name": "ชำระค่าธรรมเนียมอื่นๆ",
+    //   "icon": "assets/images/tax-other.png"
+    // }
   ];
 
   @override
