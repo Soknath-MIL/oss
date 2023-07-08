@@ -103,7 +103,8 @@ class _BottomSheetPinState extends State<BottomSheetPin> {
                         await AppwriteService().updateUser(
                           widget.data.value["\$id"],
                           {
-                            "name": widget.data.value["name"],
+                            "name":
+                                '${widget.data.value["title"]} ${widget.data.value["firstname"]} ${widget.data.value["lastname"]}',
                             "address": widget.data.value["address"],
                             "phone": widget.data.value["phone"],
                             "title": widget.data.value["title"],

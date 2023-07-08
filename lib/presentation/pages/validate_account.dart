@@ -7,6 +7,8 @@ import 'package:oss/data/services/appwrite_service.dart';
 import 'package:thai_id_card_numbers/thai_id_card_numbers.dart';
 import 'package:thai_id_card_numbers/thai_id_card_numbers_formatter.dart';
 
+import '../../constants/constants.dart';
+
 // ignore: must_be_immutable
 class ValidateSccount extends StatefulWidget {
   const ValidateSccount({super.key});
@@ -51,7 +53,7 @@ class _ValidateSccountState extends State<ValidateSccount> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(
-                  height: 80,
+                  height: 40,
                 ),
                 Image.asset('assets/logo.png'),
                 const Padding(
@@ -99,16 +101,69 @@ class _ValidateSccountState extends State<ValidateSccount> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 10),
-                        FormBuilderTextField(
-                          name: 'full_name',
-                          style: const TextStyle(color: Colors.white),
-                          decoration: customInputDecoration(
-                              'ชื่อ-นามสกุล', "ชื่อ-นามสกุล"),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(),
-                          ]),
+                        const SizedBox(
+                          height: 16,
                         ),
+                        FormBuilderDropdown<String>(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          name: 'title',
+                          style: const TextStyle(color: Colors.white),
+                          dropdownColor: Colors.green,
+                          decoration:
+                              customInputDecoration('คำนำหน้า', 'คำนำหน้า'),
+                          validator: FormBuilderValidators.required(),
+                          items: Constants.titleOptions
+                              .map((item) => DropdownMenuItem(
+                                    alignment: AlignmentDirectional.centerStart,
+                                    value: item["name"],
+                                    child: Text(item["value"].toString()),
+                                  ))
+                              .toList(),
+                          valueTransformer: (val) => val?.toString(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        FormBuilderTextField(
+                          name: 'firstname',
+                          style: const TextStyle(color: Colors.white),
+                          decoration: customInputDecoration('ชื่อ', 'ชื่อ'),
+                          validator: FormBuilderValidators.required(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        FormBuilderTextField(
+                          name: 'lastname',
+                          style: const TextStyle(color: Colors.white),
+                          decoration:
+                              customInputDecoration('นามสกุล', 'นามสกุล'),
+                          validator: FormBuilderValidators.required(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        FormBuilderTextField(
+                          name: 'address',
+                          style: const TextStyle(color: Colors.white),
+                          decoration:
+                              customInputDecoration('ที่อยู่', "ที่อยู่"),
+                          validator: FormBuilderValidators.required(),
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        // const SizedBox(height: 10),
+                        // FormBuilderTextField(
+                        //   name: 'full_name',
+                        //   style: const TextStyle(color: Colors.white),
+                        //   decoration: customInputDecoration(
+                        //       'ชื่อ-นามสกุล', "ชื่อ-นามสกุล"),
+                        //   validator: FormBuilderValidators.compose([
+                        //     FormBuilderValidators.required(),
+                        //   ]),
+                        // ),
                         const SizedBox(height: 10),
                         MaterialButton(
                           shape: const StadiumBorder(),
@@ -121,9 +176,13 @@ class _ValidateSccountState extends State<ValidateSccount> {
                                 maskType: EasyLoadingMaskType.black,
                               );
                               await AppwriteService().createUser(
-                                int.parse(
-                                    _formKey.currentState?.value["nationalId"]),
-                                _formKey.currentState?.value["full_name"],
+                                int.parse(_formKey
+                                    .currentState?.value["nationalId"]
+                                    .replaceAll("-", "")),
+                                _formKey.currentState?.value["title"],
+                                _formKey.currentState?.value["firstname"],
+                                _formKey.currentState?.value["lastname"],
+                                _formKey.currentState?.value["address"],
                               );
                               await EasyLoading.dismiss();
 
@@ -150,17 +209,18 @@ class _ValidateSccountState extends State<ValidateSccount> {
 
   customInputDecoration(label, hint) {
     return InputDecoration(
+      contentPadding: const EdgeInsets.only(left: 10),
       border: OutlineInputBorder(
         borderSide: const BorderSide(color: Colors.white),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       enabledBorder: OutlineInputBorder(
         borderSide: const BorderSide(color: Colors.white),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: const BorderSide(color: Colors.white),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(10.0),
       ),
       hintText: hint,
       labelText: label,

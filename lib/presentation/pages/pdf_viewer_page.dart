@@ -6,17 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfViewerPage extends StatefulWidget {
-  final File file;
   final String url;
   final String title;
 
   const PdfViewerPage({
     Key? key,
-    required this.file,
     required this.url,
     required this.title,
   }) : super(key: key);
@@ -28,14 +25,14 @@ class PdfViewerPage extends StatefulWidget {
 class _PdfViewerPageState extends State<PdfViewerPage> {
   @override
   Widget build(BuildContext context) {
-    final name = basename(widget.file.path);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
           IconButton(
             onPressed: () async {
-              var saveSuccess = await saveFile(widget.url, "$name.pdf");
+              var saveSuccess =
+                  await saveFile(widget.url, "${widget.title}.pdf");
             },
             icon: const Icon(Icons.download_rounded),
           ),
@@ -43,6 +40,19 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       ),
       body: const PDF().cachedFromUrl(
         widget.url,
+        placeholder: (progress) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const LinearProgressIndicator(),
+                Text('$progress %'),
+                const LinearProgressIndicator(),
+              ],
+            ),
+          );
+        },
+        errorWidget: (error) => Center(child: Text(error.toString())),
       ),
     );
   }

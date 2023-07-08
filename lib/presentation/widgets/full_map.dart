@@ -63,7 +63,7 @@ class FullMapState extends State<FullMap> {
               double.parse(widget.lat!),
             )).toJson(),
             textField: widget.label ?? "ที่ตั้ง ตำบล",
-            textOffset: [0.0, -2.0],
+            textOffset: [0.0, -3.0],
             textColor: const Color.fromRGBO(244, 67, 54, 1).value,
             iconSize: 2,
             iconOffset: [0.0, -5.0],

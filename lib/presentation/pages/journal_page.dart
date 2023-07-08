@@ -5,7 +5,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:oss/presentation/pages/pdf_viewer_page.dart';
@@ -52,17 +51,38 @@ class _JournalPageState extends State<JournalPage> {
                   .toLocal();
               var formatted = DateFormat.yMMMMEEEEd('th').format(createdAt);
               return GestureDetector(
-                onTap: () {
-                  // Download book
+                onTap: () async {
+                  var url = jsonDecode(_JournalConroller
+                      .journalList[i].data["attachment"])[0]["url"];
+                  if (url == null) {
+                    Get.snackbar(
+                      "ข้อผิดพลาด",
+                      "ไม่พบเอกสาร",
+                      duration: const Duration(seconds: 1),
+                      colorText: Colors.redAccent,
+                      icon: const Icon(Icons.cancel),
+                      snackPosition: SnackPosition.BOTTOM,
+                    );
+                    return;
+                  }
+                  // await EasyLoading.show(
+                  //   status: 'กำลังโหลด...',
+                  //   maskType: EasyLoadingMaskType.black,
+                  // );
+                  // final file = await loadPdfFromNetwork(url);
+                  // await EasyLoading.dismiss();
+                  // ignore: use_build_context_synchronously
+                  openPdf(context, url,
+                      _JournalConroller.journalList[i].data["title"]);
                 },
                 child: Container(
-                    height: 150,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
+                    height: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
                         Radius.circular(10),
                       ),
-                      color: Colors.white,
-                      boxShadow: [
+                      color: Colors.green.shade300,
+                      boxShadow: const [
                         BoxShadow(
                           offset: Offset(0, 1),
                           color: Colors.grey,
@@ -70,7 +90,7 @@ class _JournalPageState extends State<JournalPage> {
                         )
                       ],
                     ),
-                    margin: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
                     padding: const EdgeInsets.all(10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -80,8 +100,8 @@ class _JournalPageState extends State<JournalPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              height: 90,
-                              width: 90,
+                              height: 100,
+                              width: 100,
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Set the desired border radius
@@ -93,40 +113,18 @@ class _JournalPageState extends State<JournalPage> {
                                 ),
                               ),
                             ),
-                            Text(formatted),
-                          ],
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              _JournalConroller.journalList[i].data["title"],
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                var url = jsonDecode(_JournalConroller
-                                    .journalList[i]
-                                    .data["attachment"])[0]["url"];
-                                debugPrint('file name: $url');
-                                await EasyLoading.show(
-                                  status: 'กำลังโหลด...',
-                                  maskType: EasyLoadingMaskType.black,
-                                );
-                                final file = await loadPdfFromNetwork(url);
-                                await EasyLoading.dismiss();
-                                // ignore: use_build_context_synchronously
-                                openPdf(
-                                    context,
-                                    file,
-                                    url,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(formatted),
+                                  Text(
                                     _JournalConroller
-                                        .journalList[i].data["title"]);
-                              },
-                              child: const Icon(
-                                Icons.download,
-                                color: Colors.green,
+                                        .journalList[i].data["title"],
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -174,11 +172,10 @@ class _JournalPageState extends State<JournalPage> {
     return _storeFile(url, bytes);
   }
 
-  void openPdf(BuildContext context, File file, String url, String title) =>
+  void openPdf(BuildContext context, String url, String title) =>
       Navigator.of(context).push(
         MaterialPageRoute(
-          builder: (context) =>
-              PdfViewerPage(file: file, url: url, title: title),
+          builder: (context) => PdfViewerPage(url: url, title: title),
         ),
       );
 

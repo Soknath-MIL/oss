@@ -37,10 +37,17 @@ class _ProfilePageState extends State<ProfilePage> {
             return Column(
               children: [
                 Container(
-                  height: 150,
+                  height: 140,
                   padding: const EdgeInsets.only(left: 10, right: 10),
                   decoration: const BoxDecoration(
                     color: Colors.green,
+                    boxShadow: [
+                      BoxShadow(
+                        offset: Offset(0, 3),
+                        color: Colors.black12,
+                        blurRadius: 10,
+                      )
+                    ],
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),
@@ -50,7 +57,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          debugPrint('image tab');
                           showModalBottomSheet(
                             context: context,
                             builder: (context) {
@@ -86,7 +92,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             ? CircleAvatar(
                                 radius: 50.0, // Set the desired radius
                                 backgroundImage: NetworkImage(
-                                    jsonDecode(data["avatar"])[0]["url"]),
+                                  jsonDecode(data["avatar"])[0]["url"],
+                                ),
                               )
                             : const CircleAvatar(
                                 radius: 50.0, // Set the desired radius
@@ -101,17 +108,15 @@ class _ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'ชื่อผู้ใช้: ${data["name"]}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                  '${Constants.title[data["title"]] ?? "ไม่มีข้อมูล"} ${data["firstname"] ?? ""} ${data["lastname"] ?? ""}'),
+                                '${Constants.title[data["title"]] ?? "ไม่มีข้อมูล"} ${data["firstname"] ?? ""} ${data["lastname"] ?? ""}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                               const SizedBox(
                                 height: 10,
                               ),
@@ -469,7 +474,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: const ListTile(
                                     iconColor: Colors.green,
                                     leading: Icon(Icons.verified),
-                                    title: Text("version 1.0.2"),
+                                    title: Text("version 1.0.6"),
                                     dense: true),
                               ),
                               // GestureDetector(

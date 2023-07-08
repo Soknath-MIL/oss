@@ -862,9 +862,13 @@ class _ServiceMenuState extends State<ServiceMenu> {
                     ),
                   ),
                   child: Center(
-                    child: Text(widget.data[index]["name"],
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12)),
+                    child: Text(
+                      widget.data[index]["name"],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                      ),
+                    ),
                   ),
                 ),
               )

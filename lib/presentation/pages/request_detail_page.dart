@@ -11,6 +11,7 @@ import 'package:oss/data/services/appwrite_service.dart';
 import '../../constants/constants.dart';
 import '../../utils/map_utils.dart';
 import '../widgets/full_map.dart';
+import '../widgets/full_map_google.dart';
 import '../widgets/process_timeline.dart';
 
 class RequestDetailPage extends StatefulWidget {
@@ -145,12 +146,17 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
                       detail != null
                           ? SizedBox(
                               height: 250,
-                              child: FullMap(
+                              child: MapGoogle(
                                 lat: jsonDecode(detail!["coordinates"])[1],
                                 lng: jsonDecode(detail!["coordinates"])[0],
                                 label: "สถานที่ร้องเรียน",
-                              ),
-                            )
+                              )
+                              // FullMap(
+                              //   lat: jsonDecode(detail!["coordinates"])[1],
+                              //   lng: jsonDecode(detail!["coordinates"])[0],
+                              //   label: "สถานที่ร้องเรียน",
+                              // ),
+                              )
                           : const PlayStoreShimmer(),
                     ],
                   )
@@ -482,16 +488,24 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
         ),
       ),
       floatingActionButton: detail != null
-          ? FloatingActionButton(
-              heroTag: 'navi_1',
-              onPressed: () {
-                MapUtils.openMap(
-                    double.parse(jsonDecode(detail!["coordinates"])[1]),
-                    double.parse(jsonDecode(detail!["coordinates"])[0]));
-              },
-              child: const Icon(
-                Icons.navigation,
-              ),
+          ? Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 25),
+                  child: FloatingActionButton(
+                    heroTag: 'navi_1',
+                    onPressed: () {
+                      MapUtils.openMap(
+                          double.parse(jsonDecode(detail!["coordinates"])[1]),
+                          double.parse(jsonDecode(detail!["coordinates"])[0]));
+                    },
+                    child: const Icon(
+                      Icons.navigation,
+                    ),
+                  ),
+                ),
+              ],
             )
           : Container(),
     );

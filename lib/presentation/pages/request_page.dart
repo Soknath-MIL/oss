@@ -20,35 +20,26 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('notification list ${_requestConroller.reqList.toString()}');
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: const Text('ติดตาม'),
         ),
-        body: SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: _pullRefresh,
-            child: _requestConroller.obx(
-              (state) {
-                return FadeInDown(
-                  child: ListView(
-                    scrollDirection: Axis.vertical,
-                    children: List.generate(
-                      _requestConroller.reqList.length,
-                      (index) => renderItem(index),
-                    ),
+        body: RefreshIndicator(
+          onRefresh: _pullRefresh,
+          child: _requestConroller.obx(
+            (state) {
+              return FadeInDown(
+                child: ListView(
+                  scrollDirection: Axis.vertical,
+                  children: List.generate(
+                    _requestConroller.reqList.length,
+                    (index) => renderItem(index),
                   ),
-                );
-              },
-              onLoading: Column(
-                children: const [
-                  PlayStoreShimmer(),
-                  PlayStoreShimmer(),
-                  PlayStoreShimmer(),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
+            onLoading: const Center(child: ProfileShimmer()),
           ),
         ),
       ),

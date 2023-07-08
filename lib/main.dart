@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -29,6 +30,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+
+        // statusBarColor is used to set Status bar color in Android devices.
+        statusBarColor: const Color(0xFFFF6F00),
+
+        // To make Status bar icons color white in Android devices.
+        statusBarIconBrightness: Brightness.light,
+
+        // statusBarBrightness is used to set Status bar icon color in iOS.
+        statusBarBrightness: Brightness.light
+        // Here light means dark color Status bar icons.
+
+        ));
     return OverlaySupport(
       child: GetMaterialApp(
         title: 'Flutter Demo',

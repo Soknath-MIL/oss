@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
+import 'package:intl_phone_field/countries.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 
 import '../controllers/login_controller.dart';
@@ -55,7 +55,41 @@ class LoginPage extends StatelessWidget {
               ),
               IntlPhoneField(
                 disableLengthCheck: true,
+                countries: const [
+                  Country(
+                    name: "Thailand",
+                    nameTranslations: {
+                      "sk": "Thajsko",
+                      "se": "Thaieana",
+                      "pl": "Tajlandia",
+                      "no": "Thailand",
+                      "ja": "タイ",
+                      "it": "Thailandia",
+                      "zh": "泰国",
+                      "nl": "Thailand",
+                      "de": "Thailand",
+                      "fr": "Thaïlande",
+                      "es": "Tailandia",
+                      "en": "Thailand",
+                      "pt_BR": "Tailândia",
+                      "sr-Cyrl": "Тајланд",
+                      "sr-Latn": "Tajland",
+                      "zh_TW": "泰國",
+                      "tr": "Tayland",
+                      "ro": "Tailanda",
+                      "ar": "تايلاند",
+                      "fa": "تایلند",
+                      "yue": "泰國"
+                    },
+                    flag: "🇹🇭",
+                    code: "TH",
+                    dialCode: "66",
+                    minLength: 9,
+                    maxLength: 9,
+                  ),
+                ],
                 initialValue: '830232090',
+                onTap: () {},
                 decoration: InputDecoration(
                   labelText: 'หมายเลขโทรศัพท์',
                   labelStyle: const TextStyle(color: Colors.white),
@@ -78,14 +112,9 @@ class LoginPage extends StatelessWidget {
                 shape: const StadiumBorder(),
                 color: Theme.of(context).colorScheme.secondary,
                 onPressed: () async {
-                  await EasyLoading.show(
-                    status: 'กำลังโหลด...',
-                    maskType: EasyLoadingMaskType.black,
-                  );
                   await _loginController.signInWithPhoneNumber(
                     _loginController.phoneNumber.value,
                   );
-                  await EasyLoading.dismiss();
                 },
                 child: const Text(
                   'เข้าสู่ระบบ',

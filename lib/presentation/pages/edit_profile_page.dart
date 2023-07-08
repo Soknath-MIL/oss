@@ -37,7 +37,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     key: _formKey,
                     initialValue: {
                       "\$id": data["\$id"],
-                      "name": data["name"],
                       "title": data["title"],
                       "firstname": data["firstname"],
                       "lastname": data["lastname"],
@@ -48,14 +47,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       margin: const EdgeInsets.all(10),
                       child: Column(
                         children: [
-                          FormBuilderTextField(
-                            name: 'name',
-                            decoration: customInputDecoration('ชื่อผู้ใช้'),
-                            validator: FormBuilderValidators.required(),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
                           FormBuilderDropdown<String>(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
@@ -146,61 +137,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               return const SizedBox.shrink();
                             },
                           ),
-                          // FormBuilderTextField(
-                          //   name: 'otp',
-                          //   decoration: customInputDecoration('OTP'),
-                          //   validator: FormBuilderValidators.required(),
-                          // ),
-                          // ElevatedButton(
-                          //   child: const Text('ยืนยัน'),
-                          //   onPressed: () async {
-                          //     // update user name in appwrite
-                          //     if (_formKey.currentState!.validate()) {
-                          //       _formKey.currentState?.save();
-                          //       // verify token
-                          //       var verifyToken = await _firebaseService
-                          //           .signInWithCredentialNoRedirect(
-                          //         _formKey.currentState!.value["token"],
-                          //         _formKey.currentState!.value["otp"],
-                          //       );
-                          //       if (verifyToken) {
-                          //         await AppwriteService().updateUser(
-                          //           data["\$id"],
-                          //           {
-                          //             "name":
-                          //                 _formKey.currentState!.value["name"],
-                          //             "address": _formKey
-                          //                 .currentState!.value["address"],
-                          //             "phone":
-                          //                 _formKey.currentState!.value["phone"],
-                          //             "title":
-                          //                 _formKey.currentState!.value["title"],
-                          //             "firstname": _formKey
-                          //                 .currentState!.value["firstname"],
-                          //             "lastname": _formKey
-                          //                 .currentState!.value["lastname"],
-                          //           },
-                          //         );
-                          //         Get.snackbar(
-                          //           "ข้อมูล",
-                          //           "อัปเดตโปรไฟล์สำเร็จ",
-                          //           colorText: Colors.white,
-                          //           icon: const Icon(Icons.check_circle),
-                          //           snackPosition: SnackPosition.TOP,
-                          //         );
-                          //         Get.toNamed('/main');
-                          //       } else {
-                          //         Get.snackbar(
-                          //           "ข้อผิดพลาด",
-                          //           "OTP ไม่ถูกต้อง",
-                          //           colorText: Colors.white,
-                          //           icon: const Icon(Icons.cancel),
-                          //           snackPosition: SnackPosition.TOP,
-                          //         );
-                          //       }
-                          //     }
-                          //   },
-                          // ),
                         ],
                       ),
                     ),

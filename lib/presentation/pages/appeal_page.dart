@@ -241,12 +241,18 @@ class _AppealPageState extends State<AppealPage>
                           maintainState: true,
                           builder: (context) {
                             return MapLocationPicker(
+                              showMoreOptions: false,
                               apiKey: "AIzaSyBB2X6grO8t8zyW6cktVqBs7duJP0mqN3A",
                               canPopOnNextButtonTaped: false,
-                              currentLatLng: const LatLng(14, 100),
+                              currentLatLng: LatLng(
+                                  Constants.tambonLocation.latitude,
+                                  Constants.tambonLocation.longitude),
+                              radius: 1,
+                              region: "th",
                               mapType: MapType.satellite,
                               onNext: (GeocodingResult? result) {
-                                debugPrint('result $result');
+                                debugPrint(
+                                    'result ${result?.geometry.location.toString()}');
                                 debugPrint(
                                     'result ${result?.formattedAddress}');
                                 if (result != null) {
@@ -254,7 +260,7 @@ class _AppealPageState extends State<AppealPage>
                                     address = result.formattedAddress ?? "";
                                     location = result.geometry.location;
                                   });
-                                  Get.back();
+                                  // Get.back();
                                 } else {
                                   debugPrint('No result');
                                   Get.snackbar("No address",
@@ -274,6 +280,7 @@ class _AppealPageState extends State<AppealPage>
                               },
                               onSuggestionSelected:
                                   (PlacesDetailsResponse? result) {
+                                debugPrint('result $result');
                                 if (result != null) {
                                   setState(() {
                                     autocompletePlace =

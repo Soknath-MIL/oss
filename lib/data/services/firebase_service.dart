@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,10 @@ class FirebaseService {
 
   Future<String?> signInWithPhoneNumber(String phoneNumber) async {
     try {
+      await EasyLoading.show(
+        status: 'กำลังโหลด...',
+        maskType: EasyLoadingMaskType.black,
+      );
       await _firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         verificationCompleted: (PhoneAuthCredential credential) async {
@@ -52,12 +57,15 @@ class FirebaseService {
             duration: const Duration(seconds: 1),
             snackPosition: SnackPosition.BOTTOM,
           );
-          debugPrint(e.message);
+          EasyLoading.dismiss();
         },
         codeSent: (String verificationId, int? resendToken) {
+          EasyLoading.dismiss();
           Get.toNamed('/verify-otp', arguments: [phoneNumber, verificationId]);
         },
-        codeAutoRetrievalTimeout: (String verificationId) {},
+        codeAutoRetrievalTimeout: (String verificationId) async {
+          EasyLoading.dismiss();
+        },
       );
       return null;
     } catch (e) {
@@ -76,6 +84,10 @@ class FirebaseService {
 
   Future<void> signInWithPhoneNumberNoRedirect(
       String phoneNumber, FormBuilderState data, BuildContext context) async {
+    await EasyLoading.show(
+      status: 'กำลังโหลด...',
+      maskType: EasyLoadingMaskType.black,
+    );
     await _firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber,
       verificationCompleted: (PhoneAuthCredential credential) async {
@@ -83,8 +95,10 @@ class FirebaseService {
       },
       verificationFailed: (FirebaseAuthException e) {
         debugPrint(e.message);
+        EasyLoading.dismiss();
       },
       codeSent: (String verificationId, int? resendToken) {
+        EasyLoading.dismiss();
         debugPrint('code sent $verificationId');
         showModalBottomSheet(
           shape: RoundedRectangleBorder(
@@ -98,7 +112,9 @@ class FirebaseService {
           context: context,
         );
       },
-      codeAutoRetrievalTimeout: (String verificationId) {},
+      codeAutoRetrievalTimeout: (String verificationId) {
+        EasyLoading.dismiss();
+      },
     );
     return;
   }

@@ -9,7 +9,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:oss/data/services/appwrite_service.dart';
-import 'package:oss/presentation/pages/home_page.dart';
 import 'package:oss/presentation/pages/notification_page.dart';
 import 'package:oss/presentation/pages/profile_page.dart';
 import 'package:oss/presentation/pages/unit_chat_page.dart';
@@ -20,6 +19,7 @@ import '../controllers/config_controller.dart';
 import '../controllers/message_controller.dart';
 import '../models/push_notification.dart';
 import '../widgets/appeal_list.dart';
+import 'home_page.dart';
 
 const storage = FlutterSecureStorage();
 

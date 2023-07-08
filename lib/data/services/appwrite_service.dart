@@ -242,7 +242,8 @@ class AppwriteService {
     }
   }
 
-  Future<void> createUser(int nationalId, String fullName) async {
+  Future<void> createUser(int nationalId, String title, String firstname,
+      String lastname, String address) async {
     // phone number get from firebase
     final user = FirebaseAuth.instance.currentUser;
     if (user?.phoneNumber != null) {
@@ -252,10 +253,11 @@ class AppwriteService {
           userId: ID.unique(),
           email: '$phoneNumber@appwrite.io',
           password: phoneNumber!,
-          name: fullName,
+          name: '$title $firstname $lastname',
         );
       } catch (e) {
-        debugPrint("account createion error ${e.toString()}");
+        debugPrint(
+            "account creation error ${e.toString()} $phoneNumber $title $firstname $lastname $address");
       }
 
       // try login with phone number
@@ -295,9 +297,13 @@ class AppwriteService {
                   : "alien", // do check whitelist
               "role": "mobile",
               "online": true,
-              "email": '${user?.phoneNumber!}@appwrite.io',
-              "name": fullName,
+              "email": '${user?.phoneNumber!}@appwrite.io', //
+              "name": '$title $firstname $lastname',
               "userId": response.userId,
+              "title": title,
+              "firstname": firstname,
+              "lastname": lastname,
+              "address": address
             },
           );
           Get.snackbar(
@@ -310,6 +316,7 @@ class AppwriteService {
           );
           return;
         } catch (e) {
+          debugPrint(e.toString());
           Get.snackbar(
             "ข้อมูล",
             "ข้อมูลผู้ใช้มีอยู่แล้ว",
@@ -323,6 +330,15 @@ class AppwriteService {
         print(error.response);
         return;
       });
+    } else {
+      Get.snackbar(
+        "ข้อผิดพลาด",
+        "ไม่พบหมายเลขโทรศัพท์มือถือ",
+        duration: const Duration(seconds: 1),
+        colorText: Colors.red,
+        icon: const Icon(Icons.cancel),
+        snackPosition: SnackPosition.BOTTOM,
+      );
     }
   }
 
@@ -550,7 +566,7 @@ class AppwriteService {
             );
           } catch (e) {
             return null;
-            debugPrint('erro not user fount ${e.toString()}');
+            // debugPrint('erro not user fount ${e.toString()}');
           }
           debugPrint('userID ${response.userId.toString()}');
           // store user data in storage
