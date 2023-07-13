@@ -22,6 +22,7 @@ class PoisController extends GetxController with StateMixin {
       var allPoisList = await database.listDocuments(
         databaseId: Constants.databseId,
         collectionId: Constants.poiId,
+        queries: [Query.orderAsc("distance")],
       ); // add group ID filter
       // debugPrint(allPoisList.documents[0].data.toString());
       var poisAllList = allPoisList.documents;

@@ -18,21 +18,22 @@ class MessageConroller extends GetxController with StateMixin {
   final accountData = {}.obs;
 
   Future<void> getUserId() async {
-    await EasyLoading.show(
-      status: 'ตรวจสอบผู้ใช้...',
-      maskType: EasyLoadingMaskType.black,
-    );
     try {
       change(null, status: RxStatus.loading());
 
       var accountObject = await account.get();
 
       userId.value = accountObject.$id;
+      await EasyLoading.show(
+        status: 'ตรวจสอบผู้ใช้...',
+        maskType: EasyLoadingMaskType.black,
+      );
       var userDetail = await database.getDocument(
         databaseId: Constants.databseId,
         collectionId: Constants.userId,
         documentId: accountObject.$id,
       );
+      EasyLoading.dismiss();
       adminUnreadMessage.value = userDetail.data["adminUnreadMessage"] != null
           ? jsonDecode(userDetail.data["adminUnreadMessage"])
           : {};
@@ -49,7 +50,5 @@ class MessageConroller extends GetxController with StateMixin {
       EasyLoading.dismiss();
       return Get.offAndToNamed('/login');
     }
-
-    EasyLoading.dismiss();
   }
 }

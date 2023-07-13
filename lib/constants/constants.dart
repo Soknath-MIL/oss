@@ -41,6 +41,7 @@ class Constants {
   static const trashBucketId = "trashRequests";
   static const docTypesId = "docTypes";
   static const adminMessageCountId = "adminMessageCount";
+  static const userRequestNotificationId = "userRequestNotification";
 
   static const requestStatus = {
     "new": "ใหม่",
@@ -69,6 +70,24 @@ class Constants {
       "name": "miss",
       "value": "นาง",
     }
+  ];
+  static const BusinessTypes = [
+    {
+      "name": "สถานที่จำหน่ายอาหารหรือสะสมอาหาร",
+      "value": "สถานที่จำหน่ายอาหารหรือสะสมอาหาร",
+    },
+    {
+      "name": "กิจการที่เป็นอันตรายต่อสุขภาพ",
+      "value": "กิจการที่เป็นอันตรายต่อสุขภาพ",
+    },
+    {
+      "name": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า",
+      "value": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า",
+    },
+    {
+      "name": "กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย",
+      "value": "กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย",
+    },
   ];
 
   static const String mapBoxAccessToken =

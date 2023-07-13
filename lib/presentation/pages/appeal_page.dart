@@ -43,7 +43,6 @@ class _AppealPageState extends State<AppealPage>
 
   @override
   Widget build(BuildContext context) {
-    debugPrint('docMaster ${docMasterId.toString()}');
     super.build(context);
     openImages() async {
       try {
@@ -95,10 +94,16 @@ class _AppealPageState extends State<AppealPage>
         for (var imageone in imagefiles!) {
           var result = await AppwriteService().uploadPicture(
               imageone.path, imageone.name, Constants.appealBucketId);
+
+          var fileMap = result?.toMap();
+          // remove permission from image
+          fileMap?.removeWhere((key, value) =>
+              ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
           filesArray.add(jsonEncode({
-            ...result!.toMap(),
+            ...fileMap!,
             "url":
-                '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+                '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
           }));
         }
 
@@ -118,8 +123,12 @@ class _AppealPageState extends State<AppealPage>
         DateTime now = DateTime.now();
         var epochTime = (now.millisecondsSinceEpoch / 1000).round();
         var lastTotal = await AppwriteService().countAppeal();
-        AppwriteService().createRequest({
-          "docSeq": 'A${lastTotal?.total}', // "A"
+        var unitDetail = await AppwriteService().getUnit(unitId);
+        var currentYear = (DateTime.now().year + 543).toString();
+
+        await AppwriteService().createRequest({
+          "docSeq":
+              '${unitDetail?.data["unit_id"]}-A-${lastTotal?.total.toString().padLeft(4, '0')}/${currentYear.substring(currentYear.length - 2)}', // "A"
           "name": formKey.currentState!.value["name"],
           "docCode": docMasterId.toString(),
           "userId": accunt?.$id,
@@ -130,6 +139,7 @@ class _AppealPageState extends State<AppealPage>
           "unitId": unitId,
           "appealId": appealId
         });
+
         await EasyLoading.dismiss();
         // display dialog to ask user to confirm
         Get.defaultDialog(
@@ -247,24 +257,25 @@ class _AppealPageState extends State<AppealPage>
                               currentLatLng: LatLng(
                                   Constants.tambonLocation.latitude,
                                   Constants.tambonLocation.longitude),
-                              radius: 1,
                               region: "th",
                               mapType: MapType.satellite,
+                              onTap: (LatLng selectedLatLng) {
+                                debugPrint(selectedLatLng.toString());
+                                setState(() {
+                                  location = Location(
+                                      lat: selectedLatLng.latitude,
+                                      lng: selectedLatLng.longitude);
+                                });
+                              },
                               onNext: (GeocodingResult? result) {
-                                debugPrint(
-                                    'result ${result?.geometry.location.toString()}');
-                                debugPrint(
-                                    'result ${result?.formattedAddress}');
-                                if (result != null) {
+                                if (result != null && location != null) {
                                   setState(() {
                                     address = result.formattedAddress ?? "";
-                                    location = result.geometry.location;
                                   });
-                                  // Get.back();
+                                  Get.back();
                                 } else {
-                                  debugPrint('No result');
-                                  Get.snackbar("No address",
-                                      "Please pick location on map",
+                                  Get.snackbar("ไม่มีที่อยู่",
+                                      "กรุณาเลือกตำแหน่งบนแผนที่",
                                       titleText: const Text(
                                         "No address",
                                         style: TextStyle(color: Colors.white),
@@ -299,7 +310,8 @@ class _AppealPageState extends State<AppealPage>
               const Divider(),
               // ignore: unnecessary_null_comparison
               location != null
-                  ? Text('ละติจูดและลองจิจูด:  ${location.toString()}')
+                  ? Text(
+                      'ละติจูดและลองจิจูด:  ${location!.lat.toStringAsFixed(6)}, ${location!.lng.toStringAsFixed(6)}')
                   : Container(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

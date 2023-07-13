@@ -1096,11 +1096,10 @@ packages:
   map_location_picker:
     dependency: "direct main"
     description:
-      name: map_location_picker
-      sha256: cf2aef76b2a68140fa550d40cf9162fc648c26da1c9e3505df1f026d301a4a67
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.1.0"
+      path: map_location_picker
+      relative: true
+    source: path
+    version: "1.0.2"
   mapbox_maps_flutter:
     dependency: "direct main"
     description:

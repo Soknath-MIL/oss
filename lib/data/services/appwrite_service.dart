@@ -224,6 +224,17 @@ class AppwriteService {
       documentId: ID.unique(),
       data: values,
     );
+
+    // create notification here too
+
+    // create user request notification
+    createUserRequestNotification(
+      {
+        "name": '${values.name} ใหม่',
+        "source": requestData.$id,
+        "unitId": values.unitId
+      },
+    );
     return requestData;
   }
 
@@ -342,6 +353,16 @@ class AppwriteService {
     }
   }
 
+  Future<model.Document?> createUserRequestNotification(values) async {
+    var requestData = await databases.createDocument(
+      databaseId: Constants.databseId,
+      collectionId: Constants.userRequestNotificationId,
+      documentId: ID.unique(),
+      data: values,
+    );
+    return requestData;
+  }
+
   Future<model.Account?> getAccount() async {
     return await account.get();
   }
@@ -446,6 +467,14 @@ class AppwriteService {
     return null;
   }
 
+  Future<model.Document?> getUnit(unitId) async {
+    var unitData = await databases.getDocument(
+        databaseId: Constants.databseId,
+        collectionId: Constants.unitId,
+        documentId: unitId);
+    return unitData;
+  }
+
   Future<void> logout() async {
     try {
       model.Session session = await account.getSession(sessionId: 'current');
@@ -502,30 +531,68 @@ class AppwriteService {
   }
 
   Future<Object?> searchTrashTax(nationalId, address, year) async {
-    debugPrint(' $address ${year.runtimeType}');
-    var trashTaxData1 = await databases.listDocuments(
-      databaseId: Constants.databseId,
-      collectionId: Constants.taxTrashId,
-      queries: [Query.equal('nationalId', int.parse(nationalId))],
-    );
-    var trashTaxData2 = await databases.listDocuments(
-      databaseId: Constants.databseId,
-      collectionId: Constants.taxTrashId,
-      queries: [Query.equal('address', address)],
-    );
+    model.DocumentList trashTaxData1;
+    model.DocumentList trashTaxData2;
 
-    if (trashTaxData1.total != 0) {
-      // filter only selected year
-      var selectYearTrash1 =
-          trashTaxData1.documents.where((i) => i.data["year"] == year).toList();
-      debugPrint('data ${selectYearTrash1.toString()}');
-      return selectYearTrash1.isNotEmpty ? selectYearTrash1[0].data : null;
+    debugPrint('nationalId: $nationalId');
+
+    if (nationalId != null && nationalId != "") {
+      trashTaxData1 = await databases.listDocuments(
+        databaseId: Constants.databseId,
+        collectionId: Constants.taxTrashId,
+        queries: [Query.equal('nationalId', int.parse(nationalId))],
+      );
+
+      if (trashTaxData1.total != 0) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "มี บัตรประจำตัวประชาชนซ้ำ",
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+          ),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return null;
+      }
+      if (trashTaxData1.total != 0) {
+        // filter only selected year
+        var selectYearTrash1 = trashTaxData1.documents
+            .where((i) => i.data["year"] == year)
+            .toList();
+        debugPrint('data ${selectYearTrash1.toString()}');
+        return selectYearTrash1.isNotEmpty ? selectYearTrash1[0].data : null;
+      }
     }
-    if (trashTaxData2.total != 0) {
-      var selectYearTrash2 =
-          trashTaxData2.documents.where((i) => i.data["year"] == year).toList();
-      debugPrint('data ${selectYearTrash2.toString()}');
-      return selectYearTrash2.isNotEmpty ? selectYearTrash2[0].data : null;
+    if (address != null && address != "") {
+      trashTaxData2 = await databases.listDocuments(
+        databaseId: Constants.databseId,
+        collectionId: Constants.taxTrashId,
+        queries: [Query.equal('address', address)],
+      );
+      if (trashTaxData2.total != 0) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "มีที่อยู่ซ้ำ",
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+          ),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return null;
+      }
+      if (trashTaxData2.total != 0) {
+        var selectYearTrash2 = trashTaxData2.documents
+            .where((i) => i.data["year"] == year)
+            .toList();
+        debugPrint('data ${selectYearTrash2.toString()}');
+        return selectYearTrash2.isNotEmpty ? selectYearTrash2[0].data : null;
+      }
     }
     return null;
   }

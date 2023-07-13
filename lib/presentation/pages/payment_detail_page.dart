@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:oss/presentation/pages/tax_payment_page.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../constants/constants.dart';
 import '../../data/services/appwrite_service.dart';
@@ -154,8 +155,8 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         CachedNetworkImage(
-                          imageUrl: jsonDecode(dataMap["promtpay"])[0]["url"],
-                        ),
+                            imageUrl: jsonDecode(dataMap["promtpay"])[0]["url"],
+                            width: MediaQuery.of(context).size.width * 0.5),
                         FloatingActionButton(
                           elevation: 3,
                           mini: true,
@@ -212,7 +213,7 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
                                       imageProvider: Image.file(
                                         //to show image, you type like this.
                                         File(image!.path),
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.fitWidth,
                                         width:
                                             MediaQuery.of(context).size.width *
                                                 0.6,
@@ -321,10 +322,16 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
       var filesArray = [];
       var result = await AppwriteService()
           .uploadPicture(image!.path, image!.name, Constants.slipBucketId);
+
+      var fileMap = result?.toMap();
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArray.add({
-        ...result!.toMap(),
+        ...fileMap!,
         "url":
-            '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+            '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
       });
 
       List<String> newDetails = [...data["detail"]];
@@ -332,7 +339,8 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
         if (isChecked[i]) {
           Map<String, dynamic> currentDetail = jsonDecode(newDetails[i]);
           newDetails[i] = jsonEncode(
-              {...currentDetail, "status": "complete", "slip": filesArray});
+            {...currentDetail, "status": "complete", "slip": filesArray},
+          );
         }
       }
 
@@ -368,5 +376,10 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');
     }
+  }
+
+  Future<File> _localFile(String fileName) async {
+    final directory = await getDownloadsDirectory();
+    return File('${directory?.path}/$fileName');
   }
 }

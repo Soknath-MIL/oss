@@ -20,10 +20,9 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   var title = Get.arguments[0];
   var admin = Get.arguments[1];
-  final MessageConroller _messageConroller = Get.put(MessageConroller());
+  final MessageConroller _messageConroller = Get.find();
   final TextEditingController _textEditingController = TextEditingController();
   RealtimeSubscription? _subscription;
-  late Future<String> _initialStateFuture;
 
   late List<types.Message> _messages = [];
   late types.User? _user;
@@ -34,62 +33,28 @@ class _MessageScreenState extends State<MessageScreen> {
       appBar: AppBar(
         title: Text('สนทนากับ $title'),
       ),
-      body: FutureBuilder<String>(
-        future: _initialStateFuture,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show a loading spinner while waiting for initial state
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            // Show an error message if the future failed
-            return Text('Error: ${snapshot.error}');
-          } else {
-            // Build the widget tree with the initial state
-            return Scaffold(
-              body: Chat(
-                emptyState: const Center(child: Text('ไม่พบข้อความ')),
-                theme: DefaultChatTheme(
-                  sendingIcon: const Icon(
-                    Icons.send_rounded,
-                    color: Colors.green,
-                  ),
-                  inputBackgroundColor: Colors.grey.shade100,
-                  inputTextColor: Colors.green,
-                ),
-                messages: _messages,
-                // onAttachmentPressed: _handleAttachmentPressed,
-                // onMessageTap: _handleMessageTap,
-                // onPreviewDataFetched: _handlePreviewDataFetched,
-                onSendPressed: _handleSendPressed,
-                showUserAvatars: true,
-                showUserNames: true,
-                user: _user!,
-              ),
-            );
-          }
-        },
+      body: Scaffold(
+        body: Chat(
+          emptyState: const Center(child: Text('ไม่พบข้อความ')),
+          theme: DefaultChatTheme(
+            sendingIcon: const Icon(
+              Icons.send_rounded,
+              color: Colors.green,
+            ),
+            inputBackgroundColor: Colors.grey.shade100,
+            inputTextColor: Colors.green,
+          ),
+          messages: _messages,
+          // onAttachmentPressed: _handleAttachmentPressed,
+          // onMessageTap: _handleMessageTap,
+          // onPreviewDataFetched: _handlePreviewDataFetched,
+          onSendPressed: _handleSendPressed,
+          showUserAvatars: true,
+          showUserNames: true,
+          user: _user!,
+        ),
       ),
     );
-  }
-
-  Future<String> checkLogin() async {
-    await _messageConroller.getUserId();
-    _user = types.User(
-      id: _messageConroller.userId.value,
-    );
-    _loadMessages();
-
-    final realtime = Realtime(Appwrite.instance.client);
-    _subscription = realtime.subscribe([
-      'databases.${Constants.databseId}.collections.${Constants.chatMessageCollectionId}.documents'
-    ]);
-
-    _subscription!.stream.listen((response) {
-      // Callback will be executed on changes for documents A and all files.
-      _loadMessages();
-      // do query to update massage
-    });
-    return 'Initial state';
   }
 
   void clearMessage() async {
@@ -109,8 +74,27 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void initState() {
     super.initState();
-    _initialStateFuture = checkLogin();
     clearMessage();
+    subscribe();
+  }
+
+  Future<String> subscribe() async {
+    _user = types.User(
+      id: _messageConroller.userId.value,
+    );
+    _loadMessages();
+
+    final realtime = Realtime(Appwrite.instance.client);
+    _subscription = realtime.subscribe([
+      'databases.${Constants.databseId}.collections.${Constants.chatMessageCollectionId}.documents'
+    ]);
+
+    _subscription!.stream.listen((response) {
+      // Callback will be executed on changes for documents A and all files.
+      _loadMessages();
+      // do query to update massage
+    });
+    return 'Initial state';
   }
 
   void _handleSendPressed(types.PartialText message) async {
@@ -124,7 +108,7 @@ class _MessageScreenState extends State<MessageScreen> {
     // send message to server
     AppwriteService().addMessage(jsonMessage);
     AppwriteService().updateUser(
-      _messageConroller.user$Id.value.toString(),
+      _messageConroller.user$Id.toString(),
       {
         "adminUnreadMessage": jsonEncode({
           ..._messageConroller.adminUnreadMessage,

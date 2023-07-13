@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:map_location_picker/map_location_picker.dart';
 
+import '../../utils/map_utils.dart';
+
 Future<Uint8List> getBytesFromAsset(String path, int width) async {
   ByteData data = await rootBundle.load(path);
   ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
@@ -30,6 +32,26 @@ class FullGoogleMap extends State<MapGoogle> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: FloatingActionButton(
+              heroTag: 'navi_1',
+              onPressed: () {
+                MapUtils.openMap(
+                  double.parse(widget.lat!),
+                  double.parse(widget.lng!),
+                );
+              },
+              child: const Icon(
+                Icons.navigation,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: GoogleMap(
         mapType: MapType.satellite,
         initialCameraPosition: CameraPosition(

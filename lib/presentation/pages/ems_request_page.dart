@@ -29,6 +29,7 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
   final ImagePicker imgpicker = ImagePicker();
   XFile? imageIDCard;
   XFile? imageIDHouse;
+  List<XFile>? imageOthers = [];
   final _formKey = GlobalKey<FormBuilderState>();
   final String docName = 'ems';
   String address = "null";
@@ -363,6 +364,41 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        const Text('เลือกรูปภาพ อื่น'),
+                        ElevatedButton(
+                          onPressed: () {
+                            pickMultiImageGallery();
+                          },
+                          child: const Icon(Icons.image),
+                        ),
+                      ],
+                    ),
+                    imageOthers!.isNotEmpty
+                        ? Container(
+                            height: 130,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: imageOthers?.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                debugPrint(imageOthers![index].path);
+                                return Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: Image.file(
+                                      File(imageOthers![index].path),
+                                      height: 120,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                        : Container(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -390,21 +426,24 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                                     canPopOnNextButtonTaped: false,
                                     currentLatLng: const LatLng(14, 100),
                                     mapType: MapType.satellite,
+                                    onTap: (LatLng selectedLatLng) {
+                                      setState(() {
+                                        location = Location(
+                                            lat: selectedLatLng.latitude,
+                                            lng: selectedLatLng.longitude);
+                                      });
+                                    },
                                     onNext: (GeocodingResult? result) {
-                                      debugPrint('result $result');
-                                      debugPrint(
-                                          'result ${result?.formattedAddress}');
-                                      if (result != null) {
+                                      if (result != null && location != null) {
                                         setState(() {
                                           address =
                                               result.formattedAddress ?? "";
-                                          location = result.geometry.location;
                                         });
                                         Get.back();
                                       } else {
                                         debugPrint('No result');
-                                        Get.snackbar("No address",
-                                            "Please pick location on map",
+                                        Get.snackbar("ไม่มีที่อยู่",
+                                            "กรุณาเลือกตำแหน่งบนแผนที่",
                                             titleText: const Text(
                                               "No address",
                                               style: TextStyle(
@@ -581,23 +620,63 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
       String filesArrayIDCard;
       var result = await AppwriteService().uploadPicture(
           imageIDCard!.path, imageIDCard!.name, Constants.emsBucketId);
+
+      var fileMap = result?.toMap();
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDCard = jsonEncode([
         {
-          ...result!.toMap(),
+          ...fileMap!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
       String filesArrayIDHouse;
       var resultUpload = await AppwriteService().uploadPicture(
           imageIDHouse!.path, imageIDHouse!.name, Constants.emsBucketId);
+
+      var fileMapUpload = resultUpload?.toMap();
+      // remove permission from image
+      fileMapUpload?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDHouse = jsonEncode([
         {
-          ...resultUpload!.toMap(),
+          ...fileMapUpload!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload.bucketId}/files/${resultUpload.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload?.bucketId}/files/${resultUpload?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
+
+      var filesArray = [];
+      if (imageOthers != null) {
+        for (var item in imageOthers!) {
+          // upload image
+          var result = await AppwriteService().uploadPicture(
+            item.path,
+            item.name,
+            Constants.trashBucketId,
+          );
+
+          var fileMap = result?.toMap();
+
+          // remove permission from image
+          fileMap?.removeWhere(
+            (key, value) =>
+                ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key),
+          );
+
+          filesArray.add(
+            jsonEncode({
+              ...fileMap!,
+              "url":
+                  '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+            }),
+          );
+        }
+      }
 
       // create appeal record
       var emsData = await AppwriteService().createEMSRequest({
@@ -607,6 +686,7 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
         "bookedDate": value['bookedDate'].millisecondsSinceEpoch,
         "nationalIdImg": filesArrayIDCard,
         "houseCertImg": filesArrayIDHouse,
+        "otherImages": filesArray
       });
 
       debugPrint('ems data ${emsData?.data["\$id"].toString()}');
@@ -616,8 +696,13 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
       var lastTotal = await AppwriteService().countEms();
+      var unitDetail = await AppwriteService()
+          .getUnit(docExist.documents[0].data["docOwner"].toString());
+      var currentYear = (DateTime.now().year + 543).toString();
+
       AppwriteService().createRequest({
-        "docSeq": 'E${lastTotal?.total}',
+        "docSeq":
+            '${unitDetail?.data["unit_id"]}-E-${lastTotal?.total.toString().padLeft(4, '0')}/${currentYear.substring(currentYear.length - 2)}', // "E"
         "name": 'บริการการแพทย์ฉุกเฉิน',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
@@ -685,6 +770,31 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
         setState(() {
           imageIDHouse = image;
         });
+      }
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
+
+  Future pickMultiImageGallery() async {
+    try {
+      final image = await ImagePicker().pickMultiImage();
+      // ignore: unnecessary_null_comparison
+      if (image.isEmpty) return;
+
+      if (image.length < 4) {
+        setState(() {
+          imageOthers = image;
+        });
+      }
+      if (image.length >= 4) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "ไม่สามารถเลือก มากกว่า 3 ภาพ",
+          colorText: Colors.white,
+          icon: const Icon(Icons.cancel),
+          snackPosition: SnackPosition.TOP,
+        );
       }
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');

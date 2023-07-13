@@ -287,7 +287,7 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('เลือกรูปภาพ ใบรับรองบ้าน'),
+                        const Text('เลือกรูปภาพ ทะเบียนบ้าน'),
                         ElevatedButton(
                           onPressed: () {
                             showModalBottomSheet(
@@ -356,21 +356,24 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
                                     canPopOnNextButtonTaped: false,
                                     currentLatLng: const LatLng(14, 100),
                                     mapType: MapType.satellite,
+                                    onTap: (LatLng selectedLatLng) {
+                                      setState(() {
+                                        location = Location(
+                                            lat: selectedLatLng.latitude,
+                                            lng: selectedLatLng.longitude);
+                                      });
+                                    },
                                     onNext: (GeocodingResult? result) {
-                                      debugPrint('result $result');
-                                      debugPrint(
-                                          'result ${result?.formattedAddress}');
-                                      if (result != null) {
+                                      if (result != null && location != null) {
                                         setState(() {
                                           address =
                                               result.formattedAddress ?? "";
-                                          location = result.geometry.location;
                                         });
                                         Get.back();
                                       } else {
                                         debugPrint('No result');
-                                        Get.snackbar("No address",
-                                            "Please pick location on map",
+                                        Get.snackbar("ไม่มีที่อยู่",
+                                            "กรุณาเลือกตำแหน่งบนแผนที่",
                                             titleText: const Text(
                                               "No address",
                                               style: TextStyle(
@@ -547,21 +550,33 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
       String filesArrayIDCard;
       var result = await AppwriteService().uploadPicture(
           imageIDCard!.path, imageIDCard!.name, Constants.emsBucketId);
+
+      var fileMap = result?.toMap();
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDCard = jsonEncode([
         {
-          ...result!.toMap(),
+          ...fileMap!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
       String filesArrayIDHouse;
       var resultUpload = await AppwriteService().uploadPicture(
           imageIDHouse!.path, imageIDHouse!.name, Constants.generalBucketId);
+
+      var fileMapUpload = resultUpload?.toMap();
+      // remove permission from image
+      fileMapUpload?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDHouse = jsonEncode([
         {
-          ...resultUpload!.toMap(),
+          ...fileMapUpload!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload.bucketId}/files/${resultUpload.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload?.bucketId}/files/${resultUpload?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
 

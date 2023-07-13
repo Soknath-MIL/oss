@@ -88,7 +88,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           );
                         },
-                        child: data["avatar"] != null
+                        child: data["avatar"].length != 0
                             ? CircleAvatar(
                                 radius: 50.0, // Set the desired radius
                                 backgroundImage: NetworkImage(
@@ -474,7 +474,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: const ListTile(
                                     iconColor: Colors.green,
                                     leading: Icon(Icons.verified),
-                                    title: Text("version 1.0.6"),
+                                    title: Text("version 1.0.8"),
                                     dense: true),
                               ),
                               // GestureDetector(
@@ -519,7 +519,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     checkLogin();
   }
@@ -531,11 +530,18 @@ class _ProfilePageState extends State<ProfilePage> {
       var filesArray = [];
       var result = await AppwriteService()
           .uploadPicture(image.path, image.name, Constants.profileBucketId);
-      debugPrint(result.toString());
+
+      var fileMap = result?.toMap();
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
+      debugPrint('after ${result?.toMap().toString()}');
+
       filesArray.add(jsonEncode({
-        ...result!.toMap(),
+        ...fileMap!,
         "url":
-            '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+            '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
       }));
 
       // create user colletion
@@ -558,11 +564,17 @@ class _ProfilePageState extends State<ProfilePage> {
       var filesArray = [];
       var result = await AppwriteService()
           .uploadPicture(image.path, image.name, Constants.profileBucketId);
-      debugPrint(result.toString());
+
+      var fileMap = result?.toMap();
+
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArray.add(jsonEncode({
-        ...result!.toMap(),
+        ...fileMap!,
         "url":
-            '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+            '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
       }));
 
       // create user colletion

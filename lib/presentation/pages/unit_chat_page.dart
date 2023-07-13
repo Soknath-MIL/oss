@@ -7,8 +7,6 @@ import 'package:flutter_shimmer/flutter_shimmer.dart';
 import 'package:get/get.dart';
 import 'package:oss/presentation/controllers/unit_controller.dart';
 
-import '../../constants/constants.dart';
-import '../../data/services/appwrite_service.dart';
 import '../controllers/message_controller.dart';
 
 const storage = FlutterSecureStorage();
@@ -155,18 +153,18 @@ class _UnitSelectionPageState extends State<UnitSelectionPage> {
     super.initState();
     checkLogin();
 
-    final realtime = Realtime(Appwrite.instance.client);
-    _subscription = realtime.subscribe([
-      'databases.${Constants.databseId}.collections.${Constants.userId}.documents'
-    ]);
+    // final realtime = Realtime(Appwrite.instance.client);
+    // _subscription = realtime.subscribe([
+    //   'databases.${Constants.databseId}.collections.${Constants.userId}.documents'
+    // ]);
 
-    _subscription!.stream.listen((response) async {
-      // Callback will be executed on changes for documents A and all files.
-      String? userID = await storage.read(key: 'userID');
-      if (response.payload["\$id"] == userID!) {
-        checkLogin();
-      }
-      // do query to update massage
-    });
+    // _subscription!.stream.listen((response) async {
+    //   // Callback will be executed on changes for documents A and all files.
+    //   String? userID = await storage.read(key: 'userID');
+    //   if (response.payload["\$id"] == userID!) {
+    //     checkLogin();
+    //   }
+    //   // do query to update massage
+    // });
   }
 }

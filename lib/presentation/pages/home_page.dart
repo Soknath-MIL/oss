@@ -6,7 +6,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_shimmer/flutter_shimmer.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:oss/presentation/controllers/appeal_list_controller.dart';
@@ -651,8 +650,6 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                                   TextInputType.number,
                                               decoration: customInputDecoration(
                                                   'ค้นหารหัสประจำตัวประชาชน'),
-                                              validator: FormBuilderValidators
-                                                  .required(),
                                             ),
                                             SizedBox(
                                               height: 60,
@@ -669,8 +666,6 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                               keyboardType: TextInputType.text,
                                               decoration: customInputDecoration(
                                                   'ค้นหาที่อยู่ (ตัวอย่าง xx/x หมู่ x)'),
-                                              validator: FormBuilderValidators
-                                                  .required(),
                                             ),
                                           ],
                                         ),

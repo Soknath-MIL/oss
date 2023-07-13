@@ -32,6 +32,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
   final ImagePicker imgpicker = ImagePicker();
   XFile? imageIDCard;
   XFile? imageIDHouse;
+  List<XFile>? imageOthers = [];
   Color step1 = Colors.black;
   Color step2 = Colors.black;
   Color step3 = Colors.black;
@@ -274,7 +275,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                         MediaQuery.of(context).size.width / 4,
                                     child: FormBuilderTextField(
                                       name: 'firstname',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration: customInputDecoration('ชื่อ'),
                                       validator: FormBuilderValidators.required(
                                           errorText: 'กรุณากรอกข้อมูล'),
@@ -286,7 +286,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   Expanded(
                                     child: FormBuilderTextField(
                                       name: 'lastname',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('นามสกุล'),
                                       validator: FormBuilderValidators.required(
@@ -298,80 +297,77 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                               const SizedBox(
                                 height: 8,
                               ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: FormBuilderTextField(
+                                      name: 'address',
+                                      style: const TextStyle(fontSize: 13),
+                                      decoration:
+                                          customInputDecoration("ที่อยู่"),
+                                      validator: FormBuilderValidators.required(
+                                          errorText: 'กรุณากรอกข้อมูล'),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               // Row(
                               //   children: [
+                              //     SizedBox(
+                              //       width:
+                              //           MediaQuery.of(context).size.width / 3,
+                              //       child: FormBuilderTextField(
+                              //         name: 'houseNo',
+                              //         decoration:
+                              //             customInputDecoration("บ้านเลขที่"),
+                              //         validator: FormBuilderValidators.required(
+                              //             errorText: 'กรุณากรอกข้อมูล'),
+                              //       ),
+                              //     ),
+                              //     const SizedBox(
+                              //       width: 8,
+                              //     ),
                               //     Expanded(
                               //       child: FormBuilderTextField(
-                              //         name: 'address',
+                              //         name: 'moo',
                               //         style: const TextStyle(fontSize: 13),
                               //         decoration:
-                              //             customInputDecoration("ที่อยู่"),
-                              //         validator:
-                              //             FormBuilderValidators.required(errorText: 'กรุณากรอกข้อมูล'),
+                              //             customInputDecoration("หมู่ที่"),
+                              //         validator: FormBuilderValidators.required(
+                              //             errorText: 'กรุณากรอกข้อมูล'),
                               //       ),
                               //     ),
                               //   ],
                               // ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    child: FormBuilderTextField(
-                                      name: 'houseNo',
-                                      style: const TextStyle(fontSize: 13),
-                                      decoration:
-                                          customInputDecoration("บ้านเลขที่"),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'moo',
-                                      style: const TextStyle(fontSize: 13),
-                                      decoration:
-                                          customInputDecoration("หมู่ที่"),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    child: FormBuilderTextField(
-                                      name: 'soi',
-                                      style: const TextStyle(fontSize: 13),
-                                      decoration:
-                                          customInputDecoration("ตรอก/ซอย"),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'road',
-                                      style: const TextStyle(fontSize: 13),
-                                      decoration: customInputDecoration("ถนน"),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              // const SizedBox(
+                              //   height: 8,
+                              // ),
+                              // Row(
+                              //   children: [
+                              //     SizedBox(
+                              //       width:
+                              //           MediaQuery.of(context).size.width / 3,
+                              //       child: FormBuilderTextField(
+                              //         name: 'soi',
+                              //         decoration:
+                              //             customInputDecoration("ตรอก/ซอย"),
+                              //         validator: FormBuilderValidators.required(
+                              //             errorText: 'กรุณากรอกข้อมูล'),
+                              //       ),
+                              //     ),
+                              //     const SizedBox(
+                              //       width: 8,
+                              //     ),
+                              //     Expanded(
+                              //       child: FormBuilderTextField(
+                              //         name: 'road',
+                              //         decoration: customInputDecoration("ถนน"),
+                              //         validator: FormBuilderValidators.required(
+                              //             errorText: 'กรุณากรอกข้อมูล'),
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
                               const SizedBox(
                                 height: 8,
                               ),
@@ -382,7 +378,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                         MediaQuery.of(context).size.width / 3,
                                     child: FormBuilderTextField(
                                       name: 'tambon',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('แขวง/ตำบล'),
                                       validator: FormBuilderValidators.required(
@@ -395,7 +390,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   Expanded(
                                     child: FormBuilderTextField(
                                       name: 'amphoe',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('เขต/อำเภอ'),
                                       validator: FormBuilderValidators.required(
@@ -414,7 +408,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                         MediaQuery.of(context).size.width / 2,
                                     child: FormBuilderTextField(
                                       name: 'province',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('จังหวัด'),
                                       validator: FormBuilderValidators.required(
@@ -427,7 +420,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   Expanded(
                                     child: FormBuilderTextField(
                                       name: 'postcode',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('รหัสไปรษณีย์'),
                                       validator: FormBuilderValidators.required(
@@ -446,7 +438,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                         MediaQuery.of(context).size.width / 3,
                                     child: FormBuilderTextField(
                                       name: 'phone',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('โทรศัพท์'),
                                       validator: FormBuilderValidators.required(
@@ -459,7 +450,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   Expanded(
                                     child: FormBuilderTextField(
                                       name: 'workplace',
-                                      style: const TextStyle(fontSize: 13),
                                       decoration:
                                           customInputDecoration('สถานที่ทำงาน'),
                                       validator: FormBuilderValidators.required(
@@ -596,7 +586,6 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                     value: item["name"],
                                     child: Text(
                                       item["value"].toString(),
-                                      style: const TextStyle(fontSize: 13),
                                     ),
                                   ))
                               .toList(),
@@ -920,7 +909,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('เลือกรูปภาพ ใบรับรองบ้าน'),
+                  const Text('เลือกรูปภาพ ทะเบียนบ้าน'),
                   ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet(
@@ -970,6 +959,41 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  const Text('เลือกรูปภาพ อื่น'),
+                  ElevatedButton(
+                    onPressed: () {
+                      pickMultiImageGallery();
+                    },
+                    child: const Icon(Icons.image),
+                  ),
+                ],
+              ),
+              imageOthers!.isNotEmpty
+                  ? Container(
+                      height: 130,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: imageOthers?.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          debugPrint(imageOthers![index].path);
+                          return Center(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Image.file(
+                                File(imageOthers![index].path),
+                                height: 120,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -996,17 +1020,24 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                               canPopOnNextButtonTaped: false,
                               currentLatLng: const LatLng(14, 100),
                               mapType: MapType.satellite,
+                              onTap: (LatLng selectedLatLng) {
+                                setState(() {
+                                  location = Location(
+                                    lat: selectedLatLng.latitude,
+                                    lng: selectedLatLng.longitude,
+                                  );
+                                });
+                              },
                               onNext: (GeocodingResult? result) {
-                                if (result != null) {
+                                if (result != null && location != null) {
                                   setState(() {
                                     address = result.formattedAddress ?? "";
-                                    location = result.geometry.location;
                                   });
                                   Get.back();
                                 } else {
                                   debugPrint('No result');
-                                  Get.snackbar("No address",
-                                      "Please pick location on map",
+                                  Get.snackbar("ไม่มีที่อยู่",
+                                      "กรุณาเลือกตำแหน่งบนแผนที่",
                                       titleText: const Text(
                                         "No address",
                                         style: TextStyle(color: Colors.white),
@@ -1073,7 +1104,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
     if (imageIDHouse == null) {
       Get.snackbar(
         "ข้อผิดพลาด",
-        "ไม่มีใบรับรองบ้าน",
+        "ไม่มีทะเบียนบ้าน",
         colorText: Colors.white,
         icon: const Icon(Icons.cancel),
         snackPosition: SnackPosition.TOP,
@@ -1100,23 +1131,65 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
       String filesArrayIDCard;
       var result = await AppwriteService().uploadPicture(
           imageIDCard!.path, imageIDCard!.name, Constants.trashBucketId);
+
+      var fileMap = result?.toMap();
+
+      // remove permission from image
+      fileMap?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDCard = jsonEncode([
         {
-          ...result!.toMap(),
+          ...fileMap!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${result.bucketId}/files/${result.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
       String filesArrayIDHouse;
       var resultUpload = await AppwriteService().uploadPicture(
           imageIDHouse!.path, imageIDHouse!.name, Constants.trashBucketId);
+
+      var fileMapUpload = resultUpload?.toMap();
+
+      // remove permission from image
+      fileMapUpload?.removeWhere((key, value) =>
+          ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key));
+
       filesArrayIDHouse = jsonEncode([
         {
-          ...resultUpload!.toMap(),
+          ...fileMapUpload!,
           "url":
-              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload.bucketId}/files/${resultUpload.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+              '${Constants.appwriteEndpoint}/storage/buckets/${resultUpload?.bucketId}/files/${resultUpload?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
         }
       ]);
+
+      var filesArray = [];
+      if (imageOthers != null) {
+        for (var item in imageOthers!) {
+          // upload image
+          var result = await AppwriteService().uploadPicture(
+            item.path,
+            item.name,
+            Constants.trashBucketId,
+          );
+
+          var fileMap = result?.toMap();
+
+          // remove permission from image
+          fileMap?.removeWhere(
+            (key, value) =>
+                ["\$permissions", "\$createdAt", "\$updatedAt"].contains(key),
+          );
+
+          filesArray.add(
+            jsonEncode({
+              ...fileMap!,
+              "url":
+                  '${Constants.appwriteEndpoint}/storage/buckets/${result?.bucketId}/files/${result?.$id}/view?project=${Constants.appwriteProjectId}&mode=admin'
+            }),
+          );
+        }
+      }
 
       // create appeal record
       var generalRequest = await AppwriteService().createGeneralRequest({
@@ -1131,6 +1204,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
         "nationalIdImg": filesArrayIDCard,
         "houseCertImg": filesArrayIDHouse,
         "generalFormId": generalRequest?.data["\$id"].toString(),
+        "otherImages": filesArray
       });
 
       // create request
@@ -1138,8 +1212,12 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
       var lastTotal = await AppwriteService().countTrash();
+      var unitDetail = await AppwriteService()
+          .getUnit(docExist.documents[0].data["docOwner"].toString());
+      var currentYear = (DateTime.now().year + 543).toString();
       AppwriteService().createRequest({
-        "docSeq": 'B${lastTotal?.total}',
+        "docSeq":
+            '${unitDetail?.data["unit_id"]}-T-${lastTotal?.total.toString().padLeft(4, '0')}/${currentYear.substring(currentYear.length - 2)}', // "T"
         "name": 'ความต้องการให้เก็บขยะมูลฝอยตำบลหนองปลาหมอ',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
@@ -1207,6 +1285,31 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
         setState(() {
           imageIDHouse = image;
         });
+      }
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
+
+  Future pickMultiImageGallery() async {
+    try {
+      final image = await ImagePicker().pickMultiImage();
+      // ignore: unnecessary_null_comparison
+      if (image.isEmpty) return;
+
+      if (image.length < 4) {
+        setState(() {
+          imageOthers = image;
+        });
+      }
+      if (image.length >= 4) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "ไม่สามารถเลือก มากกว่า 3 ภาพ",
+          colorText: Colors.white,
+          icon: const Icon(Icons.cancel),
+          snackPosition: SnackPosition.TOP,
+        );
       }
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');

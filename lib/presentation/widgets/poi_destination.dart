@@ -128,12 +128,24 @@ class _DestinationsState extends State<Destinations> {
                                 )
                               ],
                             ),
-                            const Text(
-                              '~ 1.6 kilometers',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '~ ${(data[i].data["distance"] / 1000).toStringAsFixed(2)} Km',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey),
+                                ),
+                                Text(
+                                  '~ ${(data[i].data["duration"] / 60).toStringAsFixed(2)} min',
+                                  style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.grey),
+                                ),
+                              ],
                             ),
                           ],
                         ),
