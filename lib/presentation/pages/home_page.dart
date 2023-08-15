@@ -16,6 +16,7 @@ import 'package:oss/presentation/controllers/unit_controller.dart';
 import '../../constants/constants.dart';
 import '../../data/services/appwrite_service.dart';
 import '../controllers/news_controller.dart';
+import '../widgets/riv_loading.dart';
 import '../widgets/vetical_tab_view.dart';
 
 List<Map<String, dynamic>> dataMenu = [
@@ -28,21 +29,6 @@ List<Map<String, dynamic>> dataMenu = [
   {"icon": "assets/images/mail.png", "name": "ข่าวสาร", "id": "news"},
   {"icon": "assets/images/paid.png", "name": "ชำระค่าบริการ", "id": "payment"},
   {"icon": "assets/images/info.png", "name": "ติดต่อเรา", "id": "contact"}
-];
-
-List<Map<String, dynamic>> dataService = [
-  {
-    "icon": "assets/images/service4.png",
-    "name": "ขอลงทะเบียนผู้สูงอายุ",
-    'id': 'ems'
-  },
-  {
-    "icon": "assets/images/service1.png",
-    "name": "ขอจดทะเบียนพาณิชย์",
-    'id': 'test'
-  },
-  {"icon": "assets/images/service2.png", "name": "แจ้งปลดป้าย-เปลี่ยนแปลงป้าย"},
-  {"icon": "assets/images/service3.png", "name": "ขอลงทะเบียนผู้สูงอายุ"}
 ];
 
 class HomeScreen extends StatefulWidget {
@@ -88,197 +74,250 @@ class _HomeScreenState extends State<HomeScreen> {
       return Center(child: Text(errorMessageController.text));
     }
 
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
     return SafeArea(
-      child: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 0),
-          child: Column(
-            children: [
-              Stack(children: [
-                SizedBox(
-                  height: 250,
-                  child: Column(children: [
-                    FutureBuilder<List<String>>(
-                      future: fetchBoard(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          boardList = snapshot.data!;
-                          return Expanded(
-                            child: CarouselSlider(
-                              items: getCarouseSlider(boardList),
-                              carouselController: controller,
-                              options: CarouselOptions(
-                                  autoPlay: true,
-                                  viewportFraction: 0.98,
-                                  enlargeCenterPage: true,
-                                  aspectRatio: 16 / 9,
-                                  onPageChanged: (index, reason) {
-                                    setState(() {
-                                      current = index;
-                                    });
-                                  }),
-                            ),
-                          );
-                        } else if (snapshot.hasError) {
-                          return Text('${snapshot.error}');
-                        }
-                        return const SizedBox(
-                            height: 250, child: Center(child: VideoShimmer()));
-                      },
-                    ),
-                  ]),
+      child: LoadingOverlay(
+        isLoading: isLoading,
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 0),
+            child: Column(
+              children: [
+                Stack(children: [
+                  SizedBox(
+                    height: 250,
+                    child: Column(children: [
+                      FutureBuilder<List<String>>(
+                        future: fetchBoard(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            boardList = snapshot.data!;
+                            return Expanded(
+                              child: CarouselSlider(
+                                items: getCarouseSlider(boardList),
+                                carouselController: controller,
+                                options: CarouselOptions(
+                                    autoPlay: true,
+                                    viewportFraction: 0.98,
+                                    enlargeCenterPage: true,
+                                    aspectRatio: 16 / 9,
+                                    onPageChanged: (index, reason) {
+                                      setState(() {
+                                        current = index;
+                                      });
+                                    }),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text('${snapshot.error}');
+                          }
+                          return const SizedBox(
+                              height: 250,
+                              child: Center(child: VideoShimmer()));
+                        },
+                      ),
+                    ]),
+                  ),
+                ]),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: const BoxDecoration(color: Colors.white),
+                  height: 150,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'บริการยอดนิยม',
+                        style: TextStyle(color: Colors.green),
+                      ),
+                      HorizonMenu(data: dataMenu),
+                    ],
+                  ),
                 ),
-              ]),
-              Container(
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.only(bottom: 10),
-                decoration: const BoxDecoration(color: Colors.white),
-                height: 150,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'บริการยอดนิยม',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                    HorizonMenu(data: dataMenu),
-                  ],
-                ),
-              ),
 
-              // Appeal list
-              appealListController.obx(
-                (state) {
-                  var appealData = appealListController.appealList;
-                  return Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(color: Colors.white),
-                    height: 145,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'แจ้งเรื่องร้องเรียน',
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed('/appeal-list');
-                              },
-                              child: const Text(
-                                'ดูทั้งหมด',
+                // Appeal list
+                appealListController.obx(
+                  (state) {
+                    var appealData = appealListController.appealList;
+                    return Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(color: Colors.white),
+                      height: 145,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text(
+                                'แจ้งเรื่องร้องเรียน',
                                 style: TextStyle(color: Colors.green),
                               ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: List.generate(
-                              appealData.length,
-                              (index) => GestureDetector(
-                                onTap: () async {
-                                  await messageController.getUserId();
-                                  // check if flow of current appeal exist
-                                  var docExist = await AppwriteService()
-                                      .checkDocMaster(
-                                          appealData[index]["\$id"]);
-                                  if (docExist == null) {
-                                    Get.snackbar(
-                                      "ข้อผิดพลาด",
-                                      "ไม่มีเวิร์กโฟลว์ ของเอกสาร",
-                                      colorText: Colors.white,
-                                      icon: const Icon(Icons.cancel),
-                                      snackPosition: SnackPosition.TOP,
-                                    );
-                                  } else {
-                                    Get.toNamed("/appeal-request", arguments: [
-                                      docExist.documents[0].data["\$id"],
-                                      appealData[index]["\$id"],
-                                      appealData[index]["name"],
-                                      docExist.documents[0].data["docOwner"],
-                                    ]);
-                                  }
+                              GestureDetector(
+                                onTap: () {
+                                  Get.toNamed('/appeal-list');
                                 },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 20,
-                                          right: 20,
-                                          top: 10,
-                                          bottom: 10),
-                                      width: 60,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            offset: Offset(0, 1),
-                                            color: Colors.black12,
-                                            blurRadius: 10,
-                                          )
-                                        ],
-                                      ),
-                                      padding: const EdgeInsets.all(10),
-                                      child: appealData[index]["icon"] != null
-                                          ? CachedNetworkImage(
-                                              imageUrl: jsonDecode(
-                                                  appealData[index]
-                                                      ["icon"])[0]["url"],
-                                              height: 40,
+                                child: const Text(
+                                  'ดูทั้งหมด',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Expanded(
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: List.generate(
+                                appealData.length,
+                                (index) => GestureDetector(
+                                  onTap: () async {
+                                    await messageController.getUserId();
+                                    // check if flow of current appeal exist
+                                    var docExist = await AppwriteService()
+                                        .checkDocMaster(
+                                            appealData[index]["\$id"]);
+                                    if (docExist == null) {
+                                      Get.snackbar(
+                                        "ข้อผิดพลาด",
+                                        "ไม่มีเวิร์กโฟลว์ ของเอกสาร",
+                                        colorText: Colors.white,
+                                        icon: const Icon(Icons.cancel),
+                                        snackPosition: SnackPosition.TOP,
+                                      );
+                                    } else {
+                                      Get.toNamed("/appeal-request",
+                                          arguments: [
+                                            docExist.documents[0].data["\$id"],
+                                            appealData[index]["\$id"],
+                                            appealData[index]["name"],
+                                            docExist
+                                                .documents[0].data["docOwner"],
+                                          ]);
+                                    }
+                                  },
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        margin: const EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        width: 60,
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              offset: Offset(0, 1),
+                                              color: Colors.black12,
+                                              blurRadius: 10,
                                             )
-                                          : const Icon(
-                                              Icons.question_mark,
-                                              color: Colors.green,
-                                              size: 40,
-                                            ),
-                                    ),
-                                    Text(
-                                      appealData[index]["name"] ?? "",
-                                    )
-                                  ],
+                                          ],
+                                        ),
+                                        padding: const EdgeInsets.all(10),
+                                        child: appealData[index]["icon"] != null
+                                            ? CachedNetworkImage(
+                                                imageUrl: jsonDecode(
+                                                    appealData[index]
+                                                        ["icon"])[0]["url"],
+                                                height: 40,
+                                              )
+                                            : const Icon(
+                                                Icons.question_mark,
+                                                color: Colors.green,
+                                                size: 40,
+                                              ),
+                                      ),
+                                      Text(
+                                        appealData[index]["name"] ?? "",
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           ),
+                        ],
+                      ),
+                    );
+                  },
+                  onLoading: const Center(child: PlayStoreShimmer()),
+                ),
+
+                // doc type
+                docTypesController.obx(
+                  (state) {
+                    List<Map<String, dynamic>> dataMap = [];
+                    for (var element in docTypesController.docTyesList) {
+                      dataMap.add(element.data);
+                    }
+
+                    return Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.all(10),
+                      height: 180,
+                      color: Colors.white,
+                      child: SizedBox(
+                        height: 40,
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'บริการร้องขอยอดนิยม',
+                                  style: TextStyle(color: Colors.green),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed('/request-list',
+                                        arguments: [""]);
+                                  },
+                                  child: const Text(
+                                    'ดูทั้งหมด',
+                                    style: TextStyle(color: Colors.green),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Expanded(
+                              child: ServiceMenu(
+                                data: dataMap,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                },
-                onLoading: const Center(child: PlayStoreShimmer()),
-              ),
+                      ),
+                    );
+                  },
+                  onLoading: const Center(child: PlayStoreShimmer()),
+                ),
 
-              // doc type
-              docTypesController.obx(
-                (state) {
-                  List<Map<String, dynamic>> dataMap = [];
-                  for (var element in docTypesController.docTyesList) {
-                    dataMap.add(element.data);
-                  }
-
-                  return Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.all(10),
-                    height: 180,
-                    color: Colors.white,
-                    child: SizedBox(
-                      height: 40,
+                // unit
+                unitsController.obx(
+                  (state) {
+                    List<Map<String, dynamic>> dataUnitMap = [];
+                    for (var element in unitsController.unitList) {
+                      dataUnitMap.add(
+                        {
+                          ...element.data,
+                          "name": element.data["name_t"],
+                        },
+                      );
+                    }
+                    return Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.all(10),
+                      color: Colors.white,
+                      height: 250,
                       child: Column(
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
-                                'บริการร้องขอยอดนิยม',
+                                'บริการร้องขอตามแผนก',
                                 style: TextStyle(color: Colors.green),
                               ),
                               GestureDetector(
@@ -294,183 +333,136 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Expanded(
                             child: ServiceMenu(
-                              data: dataMap,
+                              data: dataUnitMap,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                  );
-                },
-                onLoading: const Center(child: PlayStoreShimmer()),
-              ),
-
-              // unit
-              unitsController.obx(
-                (state) {
-                  List<Map<String, dynamic>> dataUnitMap = [];
-                  for (var element in unitsController.unitList) {
-                    dataUnitMap.add(
-                      {
-                        ...element.data,
-                        "name": element.data["name_t"],
-                      },
                     );
-                  }
-                  return Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    padding: const EdgeInsets.all(10),
-                    color: Colors.white,
-                    height: 250,
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              'บริการร้องขอตามแผนก',
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed('/request-list', arguments: [""]);
-                              },
-                              child: const Text(
-                                'ดูทั้งหมด',
-                                style: TextStyle(color: Colors.green),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: ServiceMenu(
-                            data: dataUnitMap,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-                onLoading: const Center(child: PlayStoreShimmer()),
-              ),
+                  },
+                  onLoading: const Center(child: PlayStoreShimmer()),
+                ),
 
-              Container(
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.only(top: 10),
-                color: Colors.transparent,
-                height: 250,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'ข่าวสาร/กิจกรรม',
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed("/news");
-                          },
-                          child: const Text(
-                            'ดูทั้งหมด',
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(top: 10),
+                  color: Colors.transparent,
+                  height: 250,
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'ข่าวสาร/กิจกรรม',
                             style: TextStyle(color: Colors.green),
                           ),
-                        ),
-                      ],
-                    ),
-                    Expanded(
-                      child: Obx(() {
-                        debugPrint('${newsController.newsList}');
-                        return ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: newsController.newsList.length,
-                          itemBuilder: (ctx, i) {
-                            var createdAt = DateTime.parse(newsController
-                                    .newsList[i].data['\$createdAt'])
-                                .toLocal();
-                            var formatted =
-                                DateFormat.yMMMMEEEEd('th').format(createdAt);
-                            return GestureDetector(
-                              onTap: () {
-                                Get.toNamed("/news-detail", arguments: [
-                                  newsController.newsList[i].data
-                                ]);
-                              },
-                              child: Container(
-                                height: 200,
-                                width: 200,
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                margin: const EdgeInsets.all(5),
-                                child: Stack(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        SizedBox(
-                                          height: 90,
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(16)),
-                                            child: CachedNetworkImage(
-                                              imageUrl: jsonDecode(
-                                                      newsController.newsList[i]
-                                                          .data['images'])[0]
-                                                  ["url"],
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        Text(
-                                          formatted,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                          ),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                newsController
-                                                    .newsList[i].data['title'],
-                                                softWrap: true,
-                                                maxLines: 3,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(
-                                                  fontSize: 15,
-                                                ),
+                          GestureDetector(
+                            onTap: () {
+                              Get.toNamed("/news");
+                            },
+                            child: const Text(
+                              'ดูทั้งหมด',
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Expanded(
+                        child: Obx(() {
+                          debugPrint('${newsController.newsList}');
+                          return ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: newsController.newsList.length,
+                            itemBuilder: (ctx, i) {
+                              var createdAt = DateTime.parse(newsController
+                                      .newsList[i].data['\$createdAt'])
+                                  .toLocal();
+                              var formatted =
+                                  DateFormat.yMMMMEEEEd('th').format(createdAt);
+                              return GestureDetector(
+                                onTap: () {
+                                  Get.toNamed("/news-detail", arguments: [
+                                    newsController.newsList[i].data
+                                  ]);
+                                },
+                                child: Container(
+                                  height: 200,
+                                  width: 200,
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  margin: const EdgeInsets.all(5),
+                                  child: Stack(
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          SizedBox(
+                                            height: 90,
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(16)),
+                                              child: CachedNetworkImage(
+                                                imageUrl: jsonDecode(
+                                                        newsController
+                                                            .newsList[i]
+                                                            .data['images'])[0]
+                                                    ["url"],
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                                          ),
+                                          Text(
+                                            formatted,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.start,
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Expanded(
+                                                child: Text(
+                                                  newsController.newsList[i]
+                                                      .data['title'],
+                                                  softWrap: true,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                    fontSize: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        );
-                      }),
-                    ),
-                  ],
+                              );
+                            },
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const VerticalTabView()
-            ],
+                const SizedBox(
+                  height: 10,
+                ),
+                const VerticalTabView()
+              ],
+            ),
           ),
         ),
       ),
@@ -645,16 +637,15 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                           children: [
                                             FormBuilderTextField(
                                               name: 'nationalId',
-                                              initialValue: '3190300425582',
+                                              initialValue: '',
                                               keyboardType:
                                                   TextInputType.number,
                                               decoration: customInputDecoration(
                                                   'ค้นหารหัสประจำตัวประชาชน'),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 60,
-                                              child:
-                                                  Row(children: const <Widget>[
+                                              child: Row(children: <Widget>[
                                                 Expanded(child: Divider()),
                                                 Text("หรือ"),
                                                 Expanded(child: Divider()),
@@ -662,7 +653,7 @@ class _HorizonMenuState extends State<HorizonMenu> {
                                             ),
                                             FormBuilderTextField(
                                               name: 'address',
-                                              initialValue: '30/1 หมู่ 3',
+                                              initialValue: '',
                                               keyboardType: TextInputType.text,
                                               decoration: customInputDecoration(
                                                   'ค้นหาที่อยู่ (ตัวอย่าง xx/x หมู่ x)'),
@@ -694,14 +685,15 @@ class _HorizonMenuState extends State<HorizonMenu> {
 
                                             // close dialog
                                             if (taxData == null) {
-                                              Get.snackbar(
-                                                "ข้อผิดพลาด",
-                                                "ไม่พบข้อมูล",
-                                                colorText: Colors.white,
-                                                icon: const Icon(Icons.cancel),
-                                                snackPosition:
-                                                    SnackPosition.TOP,
-                                              );
+                                              // Get.snackbar(
+                                              //   "ข้อผิดพลาด",
+                                              //   "ไม่พบข้อมูล",
+                                              //   colorText: Colors.white,
+                                              //   icon: const Icon(Icons.cancel),
+                                              //   snackPosition:
+                                              //       SnackPosition.TOP,
+                                              // );
+                                              return;
                                             } else {
                                               // GO to tax detail
                                               Get.back();

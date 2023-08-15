@@ -35,6 +35,8 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
   String address = "null";
   Location? location;
   String autocompletePlace = "null";
+  String patientType = "";
+  String title = '';
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,9 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                     FormBuilder(
                       key: _formKey,
                       initialValue: {
-                        "title": _messageConroller.accountData["data"]["title"],
+                        "title": title != ""
+                            ? title
+                            : _messageConroller.accountData["data"]["title"],
                         "firstname": _messageConroller.accountData["data"]
                             ["firstname"],
                         "lastname": _messageConroller.accountData["data"]
@@ -74,6 +78,10 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                         "amphoe": dataMap["amphoe"],
                         "province": dataMap["province"],
                         "postcode": dataMap["postcode"],
+                        "workplace": "",
+                        "position": "",
+                        "purpose": "",
+                        "patientType": patientType
                       },
                       child: Column(
                         children: [
@@ -88,6 +96,11 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   name: 'title',
+                                  onChanged: (value) {
+                                    setState(() {
+                                      title = value!;
+                                    });
+                                  },
                                   decoration: customInputDecoration('คำนำหน้า'),
                                   validator: FormBuilderValidators.required(),
                                   items: Constants.titleOptions
@@ -214,6 +227,15 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                             ],
                           ),
                           const SizedBox(
+                            height: 10,
+                          ),
+                          FormBuilderTextField(
+                            name: 'position',
+                            decoration: customInputDecoration('ตำแหน่ง'),
+                            validator: FormBuilderValidators.required(
+                                errorText: 'กรุณากรอกข้อมูล'),
+                          ),
+                          const SizedBox(
                             height: 16,
                           ),
                           FormBuilderDropdown(
@@ -221,7 +243,11 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                                 const BorderRadius.all(Radius.circular(10)),
                             name: 'patientType',
                             decoration: customInputDecoration('ประเภทผู้ป่วย'),
-                            validator: FormBuilderValidators.required(),
+                            validator: FormBuilderValidators.required(
+                                errorText: 'โปรดเลือกประเภทผู้ป่วย'),
+                            onChanged: (value) => setState(() {
+                              patientType = value!;
+                            }),
                             items: Constants.patientOptions
                                 .map((item) => DropdownMenuItem(
                                       alignment:
@@ -313,7 +339,7 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('เลือกรูปภาพ ใบรับรองบ้าน'),
+                        const Text('เลือกรูปภาพ ทะเบียนบ้าน'),
                         ElevatedButton(
                           onPressed: () {
                             showModalBottomSheet(
@@ -356,7 +382,7 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                             child: SizedBox(
                               height: 100,
                               width: 100,
-                              child: Image.file(File(imageIDCard!.path)),
+                              child: Image.file(File(imageIDHouse!.path)),
                             ),
                           )
                         : Container(),
@@ -405,7 +431,10 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                             const Text('ปักหมุดตำแหน่ง'),
                             // ignore: unnecessary_null_comparison
                             location != null
-                                ? Text(location.toString())
+                                ? Text(
+                                    'ละติจูดและลองจิจูด:  ${location!.lat.toStringAsFixed(6)}, ${location!.lng.toStringAsFixed(6)}',
+                                    style: const TextStyle(fontSize: 10),
+                                  )
                                 : Container(),
                           ],
                         ),
@@ -426,6 +455,15 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                                     canPopOnNextButtonTaped: false,
                                     currentLatLng: const LatLng(14, 100),
                                     mapType: MapType.satellite,
+                                    language: "th",
+                                    onCurrentLocation: (LatLng currentLatLng) {
+                                      setState(() {
+                                        location = Location(
+                                          lat: currentLatLng.latitude,
+                                          lng: currentLatLng.longitude,
+                                        );
+                                      });
+                                    },
                                     onTap: (LatLng selectedLatLng) {
                                       setState(() {
                                         location = Location(
@@ -518,6 +556,14 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
                                         _formKey.currentState!.save();
                                         handleSubmit(
                                             _formKey.currentState!.value);
+                                      } else {
+                                        Get.snackbar(
+                                          "ข้อผิดพลาด",
+                                          "ข้อมูลยังไม่สมบูรณ์",
+                                          colorText: Colors.white,
+                                          icon: const Icon(Icons.cancel),
+                                          snackPosition: SnackPosition.TOP,
+                                        );
                                       }
                                     },
                                     icon: const Icon(Icons.upload),
@@ -534,9 +580,9 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
               );
             });
           },
-          onLoading: Center(
+          onLoading: const Center(
               child: Column(
-            children: const [
+            children: [
               ListTileShimmer(),
               ListTileShimmer(),
               ListTileShimmer(),
@@ -742,7 +788,10 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
 
   Future pickImageCamera(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {
@@ -760,7 +809,10 @@ class _EmsRequestPageState extends State<EmsRequestPage> {
 
   Future pickImageGallery(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {

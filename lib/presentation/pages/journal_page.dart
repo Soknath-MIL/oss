@@ -65,12 +65,6 @@ class _JournalPageState extends State<JournalPage> {
                     );
                     return;
                   }
-                  // await EasyLoading.show(
-                  //   status: 'กำลังโหลด...',
-                  //   maskType: EasyLoadingMaskType.black,
-                  // );
-                  // final file = await loadPdfFromNetwork(url);
-                  // await EasyLoading.dismiss();
                   // ignore: use_build_context_synchronously
                   openPdf(context, url,
                       _JournalConroller.journalList[i].data["title"]);
@@ -163,13 +157,6 @@ class _JournalPageState extends State<JournalPage> {
         errorMessageController.text = 'Error: ${error.toString()}';
       });
     }
-  }
-
-  Future<File> loadPdfFromNetwork(String url) async {
-    final response =
-        await dio.get(url, options: Options(responseType: ResponseType.bytes));
-    final bytes = response.data;
-    return _storeFile(url, bytes);
   }
 
   void openPdf(BuildContext context, String url, String title) =>

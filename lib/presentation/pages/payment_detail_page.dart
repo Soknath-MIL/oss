@@ -62,9 +62,9 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
                 Container(
                   width: double.infinity,
                   margin: const EdgeInsets.only(top: 16),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
                         'ชำระค่าธรรมเนียมจัดเก็บขยะ',
                         textAlign: TextAlign.center,
@@ -293,7 +293,10 @@ class _PaymentDetailPageState extends State<PaymentDetailPage> {
   }
 
   Future pickImageGallery() async {
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+    final file = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 25,
+    );
     if (file == null) return;
     setState(() {
       image = file;

@@ -2,24 +2,29 @@ import 'dart:convert';
 
 import 'package:appwrite/appwrite.dart';
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:oss/data/services/appwrite_service.dart';
+import 'package:oss/presentation/pages/home_page.dart';
 import 'package:oss/presentation/pages/notification_page.dart';
 import 'package:oss/presentation/pages/profile_page.dart';
 import 'package:oss/presentation/pages/unit_chat_page.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:upgrader/upgrader.dart';
 
 import '../../constants/constants.dart';
 import '../controllers/config_controller.dart';
 import '../controllers/message_controller.dart';
 import '../models/push_notification.dart';
 import '../widgets/appeal_list.dart';
-import 'home_page.dart';
+import '../widgets/maintenance_widget.dart';
+import '../widgets/riv_loading.dart';
 
 const storage = FlutterSecureStorage();
 
@@ -51,13 +56,13 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   RealtimeSubscription? _subscription;
   // Notification
   late final FirebaseMessaging _messaging;
-
+  var loading = false;
   PushNotification? _notificationInfo;
 
   @override
   Widget build(BuildContext context) {
     List<Widget> pages = <Widget>[
-      const HomeScreen(),
+      const HomeScreen(), //const HomeScreen(),
       const UnitSelectionPage(),
       const AppealList(),
       NotificationsPage(clearNotification: () async {
@@ -73,64 +78,95 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
         _appBarKey.currentState?.animateTo(index);
       })
     ];
-    return configController.obx((state) {
-      var maintenance = configController.configList.where((item) {
-        return item.data["name"] == 'maintenance';
-      }).toList();
 
-      if (maintenance[0].data["value"].split("|")[0] == 'true') {
-        return SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Iconsax.setting_4,
-                  size: 40,
-                  color: Colors.green,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  maintenance[0].data["value"].split("|")[1] ??
-                      "ภายใต้การบำรุงรักษา",
-                  style: const TextStyle(fontSize: 18),
-                ),
+    if (loading) {
+      return const LoadingOverlay(
+        isLoading: true,
+        child: MaintenanceWidget(
+          label: "checking server status",
+        ),
+      );
+    }
+
+    return configController.obx(
+      (state) {
+        var maintenance = configController.configList.where((item) {
+          return item.data["name"] == 'maintenance';
+        }).toList();
+
+        if (maintenance[0].data["value"].split("|")[0] == 'true') {
+          return MaintenanceWidget(
+            label: maintenance[0].data["value"].split("|")[1] ??
+                "ภายใต้การบำรุงรักษา",
+          );
+        }
+        return UpgradeAlert(
+          child: Scaffold(
+            body: pages[currentIndex],
+            bottomNavigationBar: ConvexAppBar.badge(
+              {
+                1: unreadMessage != 0 ? '$unreadMessage' : '',
+                3: notiCount,
+              },
+              height: 55,
+              key: _appBarKey,
+              badgeMargin: const EdgeInsets.only(bottom: 30, left: 30),
+              style: TabStyle.react,
+              backgroundColor: Colors.green,
+              items: const [
+                TabItem(icon: Iconsax.category, title: "หน้าแรก"),
+                TabItem(icon: Iconsax.message, title: "คุยกับเรา"),
+                TabItem(icon: Iconsax.info_circle, title: "แจ้งเหตุ"),
+                TabItem(icon: Iconsax.notification, title: "แจ้งเตือน"),
+                TabItem(icon: Iconsax.textalign_left, title: "อื่นๆ"),
               ],
+              initialActiveIndex: currentIndex,
+              onTap: (int i) {
+                setState(() {
+                  currentIndex = i;
+                });
+              },
             ),
           ),
         );
-      }
-      return Scaffold(
-        body: pages[currentIndex],
-        bottomNavigationBar: ConvexAppBar.badge(
-          {
-            1: unreadMessage != 0 ? '$unreadMessage' : '',
-            3: notiCount,
-          },
-          height: 55,
-          key: _appBarKey,
-          badgeMargin: const EdgeInsets.only(bottom: 30, left: 30),
-          style: TabStyle.react,
-          backgroundColor: Colors.green,
-          items: const [
-            TabItem(icon: Iconsax.category, title: "หน้าแรก"),
-            TabItem(icon: Iconsax.message, title: "คุยกับเรา"),
-            TabItem(icon: Iconsax.info_circle, title: "แจ้งเหตุ"),
-            TabItem(icon: Iconsax.notification, title: "แจ้งเตือน"),
-            TabItem(icon: Iconsax.textalign_left, title: "อื่นๆ"),
-          ],
-          initialActiveIndex: currentIndex,
-          onTap: (int i) {
-            setState(() {
-              currentIndex = i;
-            });
-          },
+      },
+      onLoading: const LoadingOverlay(
+        isLoading: true,
+        child: MaintenanceWidget(
+          label: "checking server status",
         ),
+      ),
+    );
+  }
+
+  void checkAppwriteStatus() async {
+    try {
+      setState(() {
+        loading = true;
+      });
+      var response = await dio.post(
+        '${Constants.appwriteEndpoint}/functions/${Constants.functionHealCheckId}/executions',
+        options: Options(
+            headers: {"X-Appwrite-Project": Constants.appwriteProjectId}),
       );
-    });
+
+      setState(() {
+        loading = false;
+      });
+      if (response.data["statusCode"] == 200) {
+        return;
+      } else {
+        Get.offAndToNamed('/maintenance');
+        return;
+      }
+    } catch (e) {
+      setState(() {
+        loading = false;
+      });
+      debugPrint('error dio ${e.toString()}');
+      Get.offAndToNamed('/maintenance');
+      return;
+    }
   }
 
   // For handling notification when the app is in terminated state
@@ -150,6 +186,15 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
       setState(() {
         _notificationInfo = notification;
       });
+    }
+  }
+
+  void checkInternet() async {
+    bool result = await InternetConnectionChecker().hasConnection;
+    if (result == true) {
+      print('YAY! Free cute dog pics!');
+    } else {
+      Get.offAndToNamed('/no-connection');
     }
   }
 
@@ -216,6 +261,8 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkInternet();
+    checkAppwriteStatus();
     AppwriteService().makeOnline(true);
     WidgetsBinding.instance.addObserver(this);
     getUnreadMessage();

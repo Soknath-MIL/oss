@@ -66,15 +66,15 @@ class _RequestPageState extends State<RequestPage> {
       child: Container(
           margin: const EdgeInsets.only(left: 16, right: 16, top: 10),
           padding: const EdgeInsets.all(10),
-          height: 100,
+          height: 120,
           decoration: BoxDecoration(
             color: data["status"] == "new"
                 ? Colors.grey.shade300
-                : ((data["status"] == "complete" || data["status"] == "done")
+                : (data["status"] == "complete" || data["status"] == "done")
                     ? Colors.green.shade400
-                    : (data["status"] == "complete"
-                        ? Colors.red.shade400
-                        : Colors.yellow.shade800)),
+                    : (data["status"] == "reject"
+                        ? Colors.red.shade200
+                        : Colors.yellow.shade400),
             borderRadius: const BorderRadius.all(
               Radius.circular(16),
             ),
@@ -98,12 +98,20 @@ class _RequestPageState extends State<RequestPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
-                        width: 200,
                         child: Text(
-                          'หัวข้อ ${data["docSeq"]}',
+                          'หมายเลขเอกสาร ${data["docSeq"]}',
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          style: const TextStyle(fontWeight: FontWeight.w600),
+                          style: const TextStyle(fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          '${data["name"]}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, fontSize: 14),
                         ),
                       ),
                       Text(

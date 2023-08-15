@@ -88,7 +88,7 @@ class LoginPage extends StatelessWidget {
                     maxLength: 9,
                   ),
                 ],
-                initialValue: '830232090',
+                initialValue: '',
                 onTap: () {},
                 decoration: InputDecoration(
                   labelText: 'หมายเลขโทรศัพท์',

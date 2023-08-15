@@ -88,18 +88,19 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                           );
                         },
-                        child: data["avatar"].length != 0
-                            ? CircleAvatar(
-                                radius: 50.0, // Set the desired radius
-                                backgroundImage: NetworkImage(
-                                  jsonDecode(data["avatar"])[0]["url"],
-                                ),
-                              )
-                            : const CircleAvatar(
-                                radius: 50.0, // Set the desired radius
-                                backgroundImage:
-                                    AssetImage("assets/images/avatar.png"),
-                              ),
+                        child:
+                            data["avatar"] != null && data["avatar"].length != 0
+                                ? CircleAvatar(
+                                    radius: 50.0, // Set the desired radius
+                                    backgroundImage: NetworkImage(
+                                      jsonDecode(data["avatar"])[0]["url"],
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 50.0, // Set the desired radius
+                                    backgroundImage:
+                                        AssetImage("assets/images/avatar.png"),
+                                  ),
                       ),
                       Expanded(
                         child: Container(
@@ -474,7 +475,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 child: const ListTile(
                                     iconColor: Colors.green,
                                     leading: Icon(Icons.verified),
-                                    title: Text("version 1.0.8"),
+                                    title: Text("version 1.0.10"),
                                     dense: true),
                               ),
                               // GestureDetector(
@@ -525,7 +526,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future pickImageCamera() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 25,
+      );
       if (image == null) return;
       var filesArray = [];
       var result = await AppwriteService()
@@ -559,7 +563,10 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future pickImageGallery() async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 25,
+      );
       if (image == null) return;
       var filesArray = [];
       var result = await AppwriteService()

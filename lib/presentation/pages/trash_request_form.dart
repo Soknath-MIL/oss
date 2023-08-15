@@ -43,6 +43,8 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
   String address = "null";
   Location? location;
   String autocompletePlace = "null";
+  String houseType = "";
+  String title = "mr";
 
   @override
   Widget build(BuildContext context) {
@@ -62,23 +64,31 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
               style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
             ),
             Stepper(
+              physics: const ClampingScrollPhysics(),
               controlsBuilder: (context, _) {
-                return Row(
-                  children: <Widget>[
-                    TextButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.green),
-                      ),
-                      onPressed: _.onStepContinue,
-                      child: const Text(
-                        'ต่อไป',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                return Column(
+                  children: [
+                    const SizedBox(
+                      height: 16,
                     ),
-                    TextButton(
-                      onPressed: _.onStepCancel,
-                      child: const Text('กลับ'),
+                    Row(
+                      children: <Widget>[
+                        TextButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all<Color>(Colors.green),
+                          ),
+                          onPressed: _.onStepContinue,
+                          child: const Text(
+                            'ต่อไป',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: _.onStepCancel,
+                          child: const Text('กลับ'),
+                        ),
+                      ],
                     ),
                   ],
                 );
@@ -95,14 +105,19 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                 if (isLastStep) {
                   //Do something with this information
                   var isGeneralError = _formKeyGeneral.currentState?.validate();
-                  debugPrint('general $isGeneralError');
-
                   if (isGeneralError!) {
                     setState(() {
                       step1 = Colors.black;
                     });
                     _formKeyGeneral.currentState?.save();
                   } else {
+                    Get.snackbar(
+                      "ข้อผิดพลาด",
+                      "ข้อมูลยังไม่สมบูรณ์",
+                      colorText: Colors.white,
+                      icon: const Icon(Icons.cancel),
+                      snackPosition: SnackPosition.TOP,
+                    );
                     setState(() {
                       step1 = Colors.red;
                     });
@@ -115,6 +130,13 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                     });
                     _formKeyDetail.currentState?.save();
                   } else {
+                    Get.snackbar(
+                      "ข้อผิดพลาด",
+                      "ข้อมูลยังไม่สมบูรณ์",
+                      colorText: Colors.white,
+                      icon: const Icon(Icons.cancel),
+                      snackPosition: SnackPosition.TOP,
+                    );
                     setState(() {
                       step2 = Colors.red;
                     });
@@ -204,335 +226,324 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                   }
                 }
                 return Obx(() {
-                  return Container(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        FormBuilder(
-                          key: _formKeyGeneral,
-                          initialValue: {
-                            "title": _messageConroller.accountData["data"]
-                                ["title"],
-                            "firstname": _messageConroller.accountData["data"]
-                                ["firstname"],
-                            "lastname": _messageConroller.accountData["data"]
-                                ["lastname"],
-                            // "address": _messageConroller.accountData["data"]
-                            //     ["address"],
-                            "houseNo": _messageConroller.accountData["data"]
-                                ["houseNo"],
-                            "moo": _messageConroller.accountData["data"]["moo"],
-                            "soi": _messageConroller.accountData["data"]["soi"],
-                            "road": _messageConroller.accountData["data"]
-                                ["road"],
-                            "phone": _messageConroller.accountData["data"]
-                                ["phone"],
-                            "tambon": dataMap["tambon"],
-                            "amphoe": dataMap["amphoe"],
-                            "province": dataMap["province"],
-                            "postcode": dataMap["postcode"],
-                          },
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: 35,
-                                    width:
-                                        MediaQuery.of(context).size.width / 4,
-                                    child: FormBuilderDropdown<String>(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
-                                      name: 'title',
-                                      decoration:
-                                          customInputDecoration('คำนำหน้า'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                      items: Constants.titleOptions
-                                          .map((item) => DropdownMenuItem(
-                                                alignment: AlignmentDirectional
-                                                    .centerStart,
-                                                value: item["name"],
-                                                child: Text(
-                                                  item["value"].toString(),
-                                                  style: const TextStyle(
-                                                      fontSize: 13),
-                                                ),
-                                              ))
-                                          .toList(),
-                                      valueTransformer: (val) =>
-                                          val?.toString(),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 4,
-                                    child: FormBuilderTextField(
-                                      name: 'firstname',
-                                      decoration: customInputDecoration('ชื่อ'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'lastname',
-                                      decoration:
-                                          customInputDecoration('นามสกุล'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'address',
-                                      style: const TextStyle(fontSize: 13),
-                                      decoration:
-                                          customInputDecoration("ที่อยู่"),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(
-                              //       width:
-                              //           MediaQuery.of(context).size.width / 3,
-                              //       child: FormBuilderTextField(
-                              //         name: 'houseNo',
-                              //         decoration:
-                              //             customInputDecoration("บ้านเลขที่"),
-                              //         validator: FormBuilderValidators.required(
-                              //             errorText: 'กรุณากรอกข้อมูล'),
-                              //       ),
-                              //     ),
-                              //     const SizedBox(
-                              //       width: 8,
-                              //     ),
-                              //     Expanded(
-                              //       child: FormBuilderTextField(
-                              //         name: 'moo',
-                              //         style: const TextStyle(fontSize: 13),
-                              //         decoration:
-                              //             customInputDecoration("หมู่ที่"),
-                              //         validator: FormBuilderValidators.required(
-                              //             errorText: 'กรุณากรอกข้อมูล'),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              // const SizedBox(
-                              //   height: 8,
-                              // ),
-                              // Row(
-                              //   children: [
-                              //     SizedBox(
-                              //       width:
-                              //           MediaQuery.of(context).size.width / 3,
-                              //       child: FormBuilderTextField(
-                              //         name: 'soi',
-                              //         decoration:
-                              //             customInputDecoration("ตรอก/ซอย"),
-                              //         validator: FormBuilderValidators.required(
-                              //             errorText: 'กรุณากรอกข้อมูล'),
-                              //       ),
-                              //     ),
-                              //     const SizedBox(
-                              //       width: 8,
-                              //     ),
-                              //     Expanded(
-                              //       child: FormBuilderTextField(
-                              //         name: 'road',
-                              //         decoration: customInputDecoration("ถนน"),
-                              //         validator: FormBuilderValidators.required(
-                              //             errorText: 'กรุณากรอกข้อมูล'),
-                              //       ),
-                              //     ),
-                              //   ],
-                              // ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    child: FormBuilderTextField(
-                                      name: 'tambon',
-                                      decoration:
-                                          customInputDecoration('แขวง/ตำบล'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'amphoe',
-                                      decoration:
-                                          customInputDecoration('เขต/อำเภอ'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    child: FormBuilderTextField(
-                                      name: 'province',
-                                      decoration:
-                                          customInputDecoration('จังหวัด'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'postcode',
-                                      decoration:
-                                          customInputDecoration('รหัสไปรษณีย์'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width / 3,
-                                    child: FormBuilderTextField(
-                                      name: 'phone',
-                                      decoration:
-                                          customInputDecoration('โทรศัพท์'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 8,
-                                  ),
-                                  Expanded(
-                                    child: FormBuilderTextField(
-                                      name: 'workplace',
-                                      decoration:
-                                          customInputDecoration('สถานที่ทำงาน'),
-                                      validator: FormBuilderValidators.required(
-                                          errorText: 'กรุณากรอกข้อมูล'),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 8,
-                              ),
-                              FormBuilderTextField(
-                                maxLines: 3,
-                                name: 'purpose',
-                                decoration:
-                                    customInputDecoration('วัตถุประสงค์'),
+                  return Column(
+                    children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      FormBuilder(
+                        key: _formKeyGeneral,
+                        initialValue: {
+                          "title": _messageConroller.accountData["data"]
+                              ["title"],
+                          "firstname": _messageConroller.accountData["data"]
+                              ["firstname"],
+                          "lastname": _messageConroller.accountData["data"]
+                              ["lastname"],
+                          "address": _messageConroller.accountData["data"]
+                              ["address"],
+                          // "houseNo": _messageConroller.accountData["data"]
+                          //     ["houseNo"],
+                          // "moo": _messageConroller.accountData["data"]["moo"],
+                          // "soi": _messageConroller.accountData["data"]["soi"],
+                          // "road": _messageConroller.accountData["data"]
+                          //     ["road"],
+                          "phone": _messageConroller.accountData["data"]
+                              ["phone"],
+                          "tambon": dataMap["tambon"],
+                          "amphoe": dataMap["amphoe"],
+                          "province": dataMap["province"],
+                          "postcode": dataMap["postcode"],
+                        },
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 35,
+                              width: MediaQuery.of(context).size.width,
+                              child: FormBuilderDropdown<String>(
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                name: 'title',
+                                decoration: customInputDecoration('คำนำหน้า'),
                                 validator: FormBuilderValidators.required(
                                     errorText: 'กรุณากรอกข้อมูล'),
+                                items: Constants.titleOptions
+                                    .map((item) => DropdownMenuItem(
+                                          alignment:
+                                              AlignmentDirectional.centerStart,
+                                          value: item["name"],
+                                          child: Text(
+                                            item["value"].toString(),
+                                            style:
+                                                const TextStyle(fontSize: 13),
+                                          ),
+                                        ))
+                                    .toList(),
+                                valueTransformer: (val) => val?.toString(),
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 4,
+                                  child: FormBuilderTextField(
+                                    name: 'firstname',
+                                    decoration: customInputDecoration('ชื่อ'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: FormBuilderTextField(
+                                    name: 'lastname',
+                                    decoration:
+                                        customInputDecoration('นามสกุล'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: FormBuilderTextField(
+                                    name: 'address',
+                                    style: const TextStyle(fontSize: 13),
+                                    decoration:
+                                        customInputDecoration("ที่อยู่"),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // Row(
+                            //   children: [
+                            //     SizedBox(
+                            //       width:
+                            //           MediaQuery.of(context).size.width / 3,
+                            //       child: FormBuilderTextField(
+                            //         name: 'houseNo',
+                            //         decoration:
+                            //             customInputDecoration("บ้านเลขที่"),
+                            //         validator: FormBuilderValidators.required(
+                            //             errorText: 'กรุณากรอกข้อมูล'),
+                            //       ),
+                            //     ),
+                            //     const SizedBox(
+                            //       width: 8,
+                            //     ),
+                            //     Expanded(
+                            //       child: FormBuilderTextField(
+                            //         name: 'moo',
+                            //         style: const TextStyle(fontSize: 13),
+                            //         decoration:
+                            //             customInputDecoration("หมู่ที่"),
+                            //         validator: FormBuilderValidators.required(
+                            //             errorText: 'กรุณากรอกข้อมูล'),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // const SizedBox(
+                            //   height: 8,
+                            // ),
+                            // Row(
+                            //   children: [
+                            //     SizedBox(
+                            //       width:
+                            //           MediaQuery.of(context).size.width / 3,
+                            //       child: FormBuilderTextField(
+                            //         name: 'soi',
+                            //         decoration:
+                            //             customInputDecoration("ตรอก/ซอย"),
+                            //         validator: FormBuilderValidators.required(
+                            //             errorText: 'กรุณากรอกข้อมูล'),
+                            //       ),
+                            //     ),
+                            //     const SizedBox(
+                            //       width: 8,
+                            //     ),
+                            //     Expanded(
+                            //       child: FormBuilderTextField(
+                            //         name: 'road',
+                            //         decoration: customInputDecoration("ถนน"),
+                            //         validator: FormBuilderValidators.required(
+                            //             errorText: 'กรุณากรอกข้อมูล'),
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: FormBuilderTextField(
+                                    name: 'tambon',
+                                    decoration:
+                                        customInputDecoration('แขวง/ตำบล'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: FormBuilderTextField(
+                                    name: 'amphoe',
+                                    decoration:
+                                        customInputDecoration('เขต/อำเภอ'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 2,
+                                  child: FormBuilderTextField(
+                                    name: 'province',
+                                    decoration:
+                                        customInputDecoration('จังหวัด'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: FormBuilderTextField(
+                                    name: 'postcode',
+                                    decoration:
+                                        customInputDecoration('รหัสไปรษณีย์'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  child: FormBuilderTextField(
+                                    name: 'phone',
+                                    decoration:
+                                        customInputDecoration('โทรศัพท์'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Expanded(
+                                  child: FormBuilderTextField(
+                                    name: 'workplace',
+                                    decoration:
+                                        customInputDecoration('สถานที่ทำงาน'),
+                                    validator: FormBuilderValidators.required(
+                                        errorText: 'กรุณากรอกข้อมูล'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 8,
+                            ),
+                            FormBuilderTextField(
+                              maxLines: 3,
+                              name: 'purpose',
+                              decoration: customInputDecoration('วัตถุประสงค์'),
+                              validator: FormBuilderValidators.required(
+                                  errorText: 'กรุณากรอกข้อมูล'),
+                            ),
+                          ],
                         ),
-                        // Container(
-                        //   margin: const EdgeInsets.all(16),
-                        //   child: Row(
-                        //       mainAxisAlignment: MainAxisAlignment.center,
-                        //       children: [
-                        //         SizedBox(
-                        //           height: 40,
-                        //           child: FittedBox(
-                        //             child: FloatingActionButton.extended(
-                        //               shape: RoundedRectangleBorder(
-                        //                 borderRadius: BorderRadius.circular(10),
-                        //               ),
-                        //               backgroundColor: Colors.grey,
-                        //               heroTag: 'reset',
-                        //               onPressed: () {},
-                        //               icon: const Icon(Icons.refresh),
-                        //               label: const Text(
-                        //                 'รีเซ็ต',
-                        //                 style: TextStyle(fontSize: 18),
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        // const Divider(
-                        //   height: 10,
-                        // ),
-                        // SizedBox(
-                        //   height: 40,
-                        //   child: FittedBox(
-                        //     child: FloatingActionButton.extended(
-                        //         shape: RoundedRectangleBorder(
-                        //           borderRadius:
-                        //               BorderRadius.circular(10),
-                        //         ),
-                        //         backgroundColor: Colors.green,
-                        //         heroTag: 'submit',
-                        //         onPressed: () {
-                        //           if (_formKey.currentState!
-                        //               .validate()) {
-                        //             _formKey.currentState!.save();
-                        //             handleSubmit(
-                        //                 _formKey.currentState!.value);
-                        //           }
-                        //         },
-                        //         icon: const Icon(Icons.upload),
-                        //         label: const Text(
-                        //           'ส่ง',
-                        //           style: TextStyle(fontSize: 18),
-                        //         )),
-                        //   ),
-                        // ),
-                        //       ]),
-                        // )
-                      ],
-                    ),
+                      ),
+                      // Container(
+                      //   margin: const EdgeInsets.all(16),
+                      //   child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.center,
+                      //       children: [
+                      //         SizedBox(
+                      //           height: 40,
+                      //           child: FittedBox(
+                      //             child: FloatingActionButton.extended(
+                      //               shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(10),
+                      //               ),
+                      //               backgroundColor: Colors.grey,
+                      //               heroTag: 'reset',
+                      //               onPressed: () {},
+                      //               icon: const Icon(Icons.refresh),
+                      //               label: const Text(
+                      //                 'รีเซ็ต',
+                      //                 style: TextStyle(fontSize: 18),
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      // const Divider(
+                      //   height: 10,
+                      // ),
+                      // SizedBox(
+                      //   height: 40,
+                      //   child: FittedBox(
+                      //     child: FloatingActionButton.extended(
+                      //         shape: RoundedRectangleBorder(
+                      //           borderRadius:
+                      //               BorderRadius.circular(10),
+                      //         ),
+                      //         backgroundColor: Colors.green,
+                      //         heroTag: 'submit',
+                      //         onPressed: () {
+                      //           if (_formKey.currentState!
+                      //               .validate()) {
+                      //             _formKey.currentState!.save();
+                      //             handleSubmit(
+                      //                 _formKey.currentState!.value);
+                      //           }
+                      //         },
+                      //         icon: const Icon(Icons.upload),
+                      //         label: const Text(
+                      //           'ส่ง',
+                      //           style: TextStyle(fontSize: 18),
+                      //         )),
+                      //   ),
+                      // ),
+                      //       ]),
+                      // )
+                    ],
                   );
                 });
               },
-              onLoading: Center(
+              onLoading: const Center(
                   child: Column(
-                children: const [CircularProgressIndicator()],
+                children: [CircularProgressIndicator()],
               )),
             ),
           ],
@@ -542,302 +553,419 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
         state: currentStep > 1 ? StepState.complete : StepState.indexed,
         isActive: currentStep >= 1,
         title: Text(
-          "คำขอรายละเอียด",
+          "รายละเอียดคำขอ",
           style: TextStyle(
             color: step2,
           ),
         ),
-        content: SizedBox(
-          height: 500,
-          child: SingleChildScrollView(
-            child: FormBuilder(
-              key: _formKeyDetail,
-              child: Column(
+        content: FormBuilder(
+          initialValue: {
+            "houseType": houseType,
+            "title": title,
+            "firstName": "",
+            "lastName": "",
+            "houseNo": "",
+            "moo": "",
+            "soi": "",
+            "road": "",
+          },
+          key: _formKeyDetail,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                child: FormBuilderDropdown<String>(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  name: 'title',
+                  decoration: customInputDecoration('คำนำหน้า'),
+                  validator: FormBuilderValidators.required(
+                      errorText: 'กรุณากรอกข้อมูล'),
+                  onChanged: (value) {
+                    setState(() {
+                      title = value!;
+                    });
+                  },
+                  items: Constants.titleOptions
+                      .map((item) => DropdownMenuItem(
+                            alignment: AlignmentDirectional.centerStart,
+                            value: item["name"],
+                            child: Text(
+                              item["value"].toString(),
+                              style: const TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          ))
+                      .toList(),
+                  valueTransformer: (val) => val?.toString(),
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
                 children: [
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: FormBuilderTextField(
-                          name: 'trashAddress',
-                          decoration: customInputDecoration('สถานที่ตั้งขยะ'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: FormBuilderDropdown(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          name: 'houseType',
-                          decoration:
-                              customInputDecoration('ประเภทของที่อยู่อาศัย'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                          items: Constants.houseType
-                              .map((item) => DropdownMenuItem(
-                                    alignment: AlignmentDirectional.centerStart,
-                                    value: item["name"],
-                                    child: Text(
-                                      item["value"].toString(),
-                                    ),
-                                  ))
-                              .toList(),
-                          valueTransformer: (val) => val?.toString(),
-                          onChanged: (val) {
-                            if (["โรงแรม", "ห้องเช่า/อพาร์ทเม้นท์"]
-                                .contains(val)) {
-                              setState(() {
-                                showRoom = true;
-                                showDetail = false;
-                              });
-                            } else if (val == "อื่นๆ") {
-                              setState(() {
-                                showDetail = true;
-                                showRoom = false;
-                              });
-                            } else {
-                              setState(() {
-                                showRoom = false;
-                                showDetail = false;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  showRoom
-                      ? SizedBox(
-                          width: MediaQuery.of(context).size.width / 4,
-                          child: FormBuilderTextField(
-                            name: 'noOfRoom',
-                            decoration: customInputDecoration('จำนวนห้อง'),
-                            validator: FormBuilderValidators.required(
-                                errorText: 'กรุณากรอกข้อมูล'),
-                          ),
-                        )
-                      : Container(),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  showDetail
-                      ? FormBuilderTextField(
-                          name: 'noOfRoom',
-                          maxLines: 3,
-                          minLines: 3,
-                          decoration: customInputDecoration('อื่น'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        )
-                      : const SizedBox(),
-                  const Text(
-                    'ปริมาณขยะมูลฝอย',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: FormBuilderTextField(
-                          name: 'quantityDailyLitre',
-                          decoration: customInputDecoration('ลิตร รายวัน'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: FormBuilderTextField(
-                          name: 'quantityWeeklyLitre',
-                          decoration: customInputDecoration('ลิตร รายสัปดาห์'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: FormBuilderTextField(
-                          name: 'pricePerMonth',
-                          decoration: customInputDecoration('ราคาต่อเดือน'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: FormBuilderTextField(
-                          name: 'trashNo',
-                          decoration: customInputDecoration('หมายเลข ถัง'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Expanded(
-                        child: FormBuilderTextField(
-                          name: 'trashColor',
-                          decoration: customInputDecoration('สี'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  const Text(
-                    'จำนวนถังขยะ',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  FormBuilderTextField(
-                    name: 'totalBin',
-                    decoration: customInputDecoration('จำนวนถังขยะที่ขอใหม่'),
-                    validator: FormBuilderValidators.required(
-                        errorText: 'กรุณากรอกข้อมูล'),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 4,
-                        child: FormBuilderTextField(
-                          name: 'totalOldBin',
-                          decoration: customInputDecoration('จำนวนของเดิม'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 8,
-                        child: FormBuilderTextField(
-                          name: 'totalUsedBin',
-                          decoration: customInputDecoration('ใช้ได้'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width / 8,
-                        child: FormBuilderTextField(
-                          name: 'totalBrokenBin',
-                          decoration: customInputDecoration('ชำรุด'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 8,
-                      ),
-                      Expanded(
-                        child: FormBuilderTextField(
-                          name: 'yearRecOldBin',
-                          decoration: customInputDecoration('พ.ศ. ที่ได้รับ'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                        ),
-                      ),
-                    ],
-                  ),
-                  FormBuilderSwitch(
-                    title: const Text(
-                      'ยินยอมให้จัดวางถังขยะบริเวณบ้านและดูแลทำความสะอาดถังขยะ และบริเวณที่จัดวางถังขยะให้สะอาด',
-                      style: TextStyle(fontSize: 13),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'firstname',
+                      decoration: customInputDecoration('ชื่อ'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
-                    name: 'allowPlaceBin',
-                    initialValue: true,
                   ),
                   const SizedBox(
-                    height: 10,
+                    width: 8,
                   ),
-                  const Text(
-                    'ต้องการให้องค์การบริหารส่วนตำบลหนองปลาหมอจัดเก็บขยะมูลฝอยและยินดีชำระค่าบริการจัดเก็บขยะตามราคาของข้อบังคับตำบลว่าด้วยการจัดเก็บขยะมูลฝอยและสิ่งปฏิกูล พ.ศ. 2546',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                  FormBuilderCheckboxGroup<String>(
-                    wrapDirection: Axis.vertical,
-                    name: 'allowPayment',
-                    initialValue: const ['ต้องการ'],
-                    options: const [
-                      FormBuilderFieldOption(value: 'ต้องการ'),
-                      FormBuilderFieldOption(value: 'แบบจ่ายรายเดือน'),
-                    ],
-                    separator: const Divider(
-                      thickness: 5,
-                      color: Colors.black,
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'lastname',
+                      decoration: customInputDecoration('นามสกุล'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
                     ),
-                    onChanged: (val) {
-                      debugPrint("$val");
-                      setState(() {
-                        allowPayment = val!;
-                      });
-                    },
-                    validator: FormBuilderValidators.compose([
-                      FormBuilderValidators.minLength(1),
-                      FormBuilderValidators.maxLength(2),
-                    ]),
-                  ),
-                  allowPayment.contains("แบบจ่ายรายเดือน")
-                      ? FormBuilderTextField(
-                          name: 'monthlyPrice',
-                          decoration: const InputDecoration(labelText: 'Baht'),
-                          validator: FormBuilderValidators.required(
-                              errorText: 'กรุณากรอกข้อมูล'),
-                          style: const TextStyle(fontSize: 12),
-                        )
-                      : Container(),
-                  FormBuilderSwitch(
-                    title: const Text(
-                      'หากไม่ชำระค่าบริการจัดเก็บขยะภายใน 2 เดือน ยินยอมให้ทางองค์การบริหารส่วนตำบลหนองปลาหมอดำเนินการจัดเก็บถังขยะคืน',
-                      style: TextStyle(fontSize: 12),
-                    ),
-                    name: 'allowReturnBin',
-                    initialValue: true,
                   ),
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'houseNo',
+                      decoration: customInputDecoration('บ้านเลขที่'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'บ้านเลขที่'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'moo',
+                      decoration: customInputDecoration('มู'),
+                      validator:
+                          FormBuilderValidators.required(errorText: 'มู'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'soi',
+                      decoration: customInputDecoration('ซอย'),
+                      validator:
+                          FormBuilderValidators.required(errorText: 'ซอย'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'road',
+                      decoration: customInputDecoration('ถนน'),
+                      validator:
+                          FormBuilderValidators.required(errorText: 'ถนน'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'trashAddress',
+                      decoration: customInputDecoration('สถานที่ตั้งขยะ'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: FormBuilderDropdown(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      name: 'houseType',
+                      decoration:
+                          customInputDecoration('ประเภทของที่อยู่อาศัย'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                      items: Constants.houseType
+                          .map((item) => DropdownMenuItem(
+                                alignment: AlignmentDirectional.centerStart,
+                                value: item["name"],
+                                child: Text(
+                                  item["value"].toString(),
+                                ),
+                              ))
+                          .toList(),
+                      valueTransformer: (val) => val?.toString(),
+                      onChanged: (val) {
+                        setState(() {
+                          houseType = val!;
+                        });
+                        if (["โรงแรม", "ห้องเช่า/อพาร์ทเม้นท์"].contains(val)) {
+                          setState(() {
+                            showRoom = true;
+                            showDetail = false;
+                          });
+                        } else if (val == "อื่นๆ") {
+                          setState(() {
+                            showDetail = true;
+                            showRoom = false;
+                          });
+                        } else {
+                          setState(() {
+                            showRoom = false;
+                            showDetail = false;
+                          });
+                        }
+                      },
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 12,
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              showRoom
+                  ? SizedBox(
+                      width: MediaQuery.of(context).size.width / 4,
+                      child: FormBuilderTextField(
+                        name: 'noOfRoom',
+                        decoration: customInputDecoration('จำนวนห้อง'),
+                        validator: FormBuilderValidators.required(
+                            errorText: 'กรุณากรอกข้อมูล'),
+                      ),
+                    )
+                  : Container(),
+              const SizedBox(
+                height: 8,
+              ),
+              showDetail
+                  ? FormBuilderTextField(
+                      name: 'noOfRoom',
+                      maxLines: 3,
+                      minLines: 3,
+                      decoration: customInputDecoration('อื่น'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    )
+                  : const SizedBox(),
+              const Text(
+                'ปริมาณขยะมูลฝอย',
+                style: TextStyle(fontSize: 13),
+              ),
+              const SizedBox(
+                height: 4,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'quantityDailyLitre',
+                      decoration: customInputDecoration('ลิตร รายวัน'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'quantityWeeklyLitre',
+                      decoration: customInputDecoration('ลิตร รายสัปดาห์'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'pricePerMonth',
+                      decoration: customInputDecoration('ราคาต่อเดือน'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'trashNo',
+                      decoration: customInputDecoration('หมายเลข ถัง'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'trashColor',
+                      decoration: customInputDecoration('สี'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const Text(
+                'จำนวนถังขยะ',
+                style: TextStyle(fontSize: 13),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              FormBuilderTextField(
+                name: 'totalBin',
+                decoration: customInputDecoration('จำนวนถังขยะที่ขอใหม่'),
+                validator: FormBuilderValidators.required(
+                    errorText: 'กรุณากรอกข้อมูล'),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: FormBuilderTextField(
+                      name: 'totalOldBin',
+                      decoration: customInputDecoration('จำนวนของเดิม'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 8,
+                    child: FormBuilderTextField(
+                      name: 'totalUsedBin',
+                      decoration: customInputDecoration('ใช้ได้'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 8,
+                    child: FormBuilderTextField(
+                      name: 'totalBrokenBin',
+                      decoration: customInputDecoration('ชำรุด'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 8,
+                  ),
+                  Expanded(
+                    child: FormBuilderTextField(
+                      name: 'yearRecOldBin',
+                      decoration: customInputDecoration('พ.ศ. ที่ได้รับ'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                    ),
+                  ),
+                ],
+              ),
+              FormBuilderSwitch(
+                title: const Text(
+                  'ยินยอมให้จัดวางถังขยะบริเวณบ้านและดูแลทำความสะอาดถังขยะ และบริเวณที่จัดวางถังขยะให้สะอาด',
+                  style: TextStyle(fontSize: 13),
+                ),
+                name: 'allowPlaceBin',
+                initialValue: true,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
+                'ต้องการให้องค์การบริหารส่วนตำบลหนองปลาหมอจัดเก็บขยะมูลฝอยและยินดีชำระค่าบริการจัดเก็บขยะตามราคาของข้อบังคับตำบลว่าด้วยการจัดเก็บขยะมูลฝอยและสิ่งปฏิกูล พ.ศ. 2546',
+                style: TextStyle(fontSize: 13),
+              ),
+              FormBuilderCheckboxGroup<String>(
+                wrapDirection: Axis.vertical,
+                name: 'allowPayment',
+                initialValue: const ['ต้องการ'],
+                options: const [
+                  FormBuilderFieldOption(value: 'ต้องการ'),
+                  FormBuilderFieldOption(value: 'แบบจ่ายรายเดือน'),
+                ],
+                separator: const Divider(
+                  thickness: 5,
+                  color: Colors.black,
+                ),
+                onChanged: (val) {
+                  debugPrint("$val");
+                  setState(() {
+                    allowPayment = val!;
+                  });
+                },
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.minLength(1),
+                  FormBuilderValidators.maxLength(2),
+                ]),
+              ),
+              allowPayment.contains("แบบจ่ายรายเดือน")
+                  ? FormBuilderTextField(
+                      name: 'monthlyPrice',
+                      decoration: const InputDecoration(labelText: 'Baht'),
+                      validator: FormBuilderValidators.required(
+                          errorText: 'กรุณากรอกข้อมูล'),
+                      style: const TextStyle(fontSize: 12),
+                    )
+                  : Container(),
+              FormBuilderSwitch(
+                title: const Text(
+                  'หากไม่ชำระค่าบริการจัดเก็บขยะภายใน 2 เดือน ยินยอมให้ทางองค์การบริหารส่วนตำบลหนองปลาหมอดำเนินการจัดเก็บถังขยะคืน',
+                  style: TextStyle(fontSize: 12),
+                ),
+                name: 'allowReturnBin',
+                initialValue: true,
+              ),
+            ],
           ),
         ),
       ),
@@ -952,7 +1080,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                       child: SizedBox(
                         height: 100,
                         width: 100,
-                        child: Image.file(File(imageIDCard!.path)),
+                        child: Image.file(File(imageIDHouse!.path)),
                       ),
                     )
                   : Container(),
@@ -1016,6 +1144,7 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                           maintainState: true,
                           builder: (context) {
                             return MapLocationPicker(
+                              language: "th",
                               apiKey: "AIzaSyBB2X6grO8t8zyW6cktVqBs7duJP0mqN3A",
                               canPopOnNextButtonTaped: false,
                               currentLatLng: const LatLng(14, 100),
@@ -1025,6 +1154,14 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   location = Location(
                                     lat: selectedLatLng.latitude,
                                     lng: selectedLatLng.longitude,
+                                  );
+                                });
+                              },
+                              onCurrentLocation: (LatLng currentLatLng) {
+                                setState(() {
+                                  location = Location(
+                                    lat: currentLatLng.latitude,
+                                    lng: currentLatLng.longitude,
                                   );
                                 });
                               },
@@ -1039,11 +1176,11 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
                                   Get.snackbar("ไม่มีที่อยู่",
                                       "กรุณาเลือกตำแหน่งบนแผนที่",
                                       titleText: const Text(
-                                        "No address",
+                                        "ไม่มีที่อยู่",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       messageText: const Text(
-                                        "Please pick location on map",
+                                        "กรุณาเลือกตำแหน่งบน แผนที่",
                                         style: TextStyle(color: Colors.white),
                                       ),
                                       snackPosition: SnackPosition.BOTTOM,
@@ -1257,7 +1394,10 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
 
   Future pickImageCamera(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {
@@ -1275,7 +1415,10 @@ class _TrashRequestPageState extends State<TrashRequestPage> {
 
   Future pickImageGallery(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {

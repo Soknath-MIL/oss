@@ -259,6 +259,14 @@ class _AppealPageState extends State<AppealPage>
                                   Constants.tambonLocation.longitude),
                               region: "th",
                               mapType: MapType.satellite,
+                              onCurrentLocation: (LatLng currentLatLng) {
+                                setState(() {
+                                  location = Location(
+                                    lat: currentLatLng.latitude,
+                                    lng: currentLatLng.longitude,
+                                  );
+                                });
+                              },
                               onTap: (LatLng selectedLatLng) {
                                 debugPrint(selectedLatLng.toString());
                                 setState(() {

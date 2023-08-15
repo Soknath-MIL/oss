@@ -16,7 +16,6 @@ import 'package:oss/presentation/pages/message_page.dart';
 import 'package:oss/presentation/pages/news_detail_page.dart';
 import 'package:oss/presentation/pages/news_page.dart';
 import 'package:oss/presentation/pages/notification_detail_page.dart';
-import 'package:oss/presentation/pages/open_business_request_form.dart';
 import 'package:oss/presentation/pages/payment_detail_page.dart';
 import 'package:oss/presentation/pages/pois_page.dart';
 import 'package:oss/presentation/pages/qr_scanner_page.dart';
@@ -29,9 +28,12 @@ import 'package:oss/presentation/pages/trash_request_form.dart';
 import 'package:oss/presentation/pages/validate_account.dart';
 import 'package:oss/presentation/pages/verify_otp_page.dart';
 import 'package:oss/presentation/pages/vision_page.dart';
+import 'package:oss/presentation/widgets/no_internet.dart';
 
 import '../presentation/pages/open_access_page.dart';
+import '../presentation/pages/open_bussiness_main_page.dart';
 import '../presentation/pages/vision_detail_page.dart';
+import '../presentation/widgets/maintenance_widget.dart';
 import '../presentation/widgets/request_list.dart';
 
 appRoutes() => [
@@ -252,7 +254,7 @@ appRoutes() => [
       ),
       GetPage(
         name: '/openBusiness-form',
-        page: () => const OpenBusinessRequestPage(),
+        page: () => const OpenBusiness(),
         middlewares: [MyMiddelware()],
         transition: Transition.leftToRightWithFade,
         transitionDuration: const Duration(milliseconds: 300),
@@ -267,6 +269,22 @@ appRoutes() => [
       GetPage(
         name: '/qr-scanner',
         page: () => const QRScanner(),
+        middlewares: [MyMiddelware()],
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 300),
+      ),
+      GetPage(
+        name: '/no-connection',
+        page: () => const NoInternetConnection(),
+        middlewares: [MyMiddelware()],
+        transition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 300),
+      ),
+      GetPage(
+        name: '/maintenance',
+        page: () => const MaintenanceWidget(
+          label: "ภายใต้การบำรุงรักษา",
+        ),
         middlewares: [MyMiddelware()],
         transition: Transition.leftToRightWithFade,
         transitionDuration: const Duration(milliseconds: 300),

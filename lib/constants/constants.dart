@@ -38,10 +38,14 @@ class Constants {
   static const generalBucketId = "generalRequests";
   static const openBusinessBucketId = "openBusiness";
   static const openBusinessId = "openBusiness";
+  static const conBusinessBucketId = "continueBusiness";
+  static const continueBusinessId = "continueBusiness";
   static const trashBucketId = "trashRequests";
   static const docTypesId = "docTypes";
   static const adminMessageCountId = "adminMessageCount";
   static const userRequestNotificationId = "userRequestNotification";
+  static const functionHealCheckId = "64bd17cb01945b3b1071";
+  static const commentsId = "641973bf22324957e59c";
 
   static const requestStatus = {
     "new": "ใหม่",
@@ -71,7 +75,18 @@ class Constants {
       "value": "นาง",
     }
   ];
-  static const BusinessTypes = [
+  static const openBusinessType = [
+    {
+      "name": "แบบคำขอรับใบอนุญาต",
+      "value": "แบบคำขอรับใบอนุญาต",
+    },
+    {
+      "name": "แบบคำขอต่อใบอนุญาต",
+      "value": "แบบคำขอต่อใบอนุญาต",
+    }
+  ];
+
+  static const businessTypes = [
     {
       "name": "สถานที่จำหน่ายอาหารหรือสะสมอาหาร",
       "value": "สถานที่จำหน่ายอาหารหรือสะสมอาหาร",
@@ -81,8 +96,8 @@ class Constants {
       "value": "กิจการที่เป็นอันตรายต่อสุขภาพ",
     },
     {
-      "name": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า",
-      "value": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า",
+      "name": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ",
+      "value": "กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ",
     },
     {
       "name": "กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย",

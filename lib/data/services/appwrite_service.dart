@@ -13,7 +13,7 @@ import 'package:uuid/uuid.dart';
 import '../../constants/constants.dart';
 
 const secureStorage = FlutterSecureStorage();
-Dio dio = Dio();
+Dio dio = Dio(BaseOptions(connectTimeout: const Duration(seconds: 30)));
 
 class Appwrite {
   static final Appwrite instance = Appwrite._internal();
@@ -159,6 +159,21 @@ class AppwriteService {
     return appealData;
   }
 
+  Future<model.Document?> createContinueBussinessRequest(data) async {
+    try {
+      var emsData = await databases.createDocument(
+        collectionId: Constants.continueBusinessId,
+        databaseId: Constants.databseId,
+        documentId: ID.unique(),
+        data: data,
+      );
+      return emsData;
+    } catch (e) {
+      debugPrint('ems create error: ${e.toString()}');
+      return null;
+    }
+  }
+
   Future<model.Document?> createEMSRequest(data) async {
     try {
       var emsData = await databases.createDocument(
@@ -226,13 +241,15 @@ class AppwriteService {
     );
 
     // create notification here too
-
+    debugPrint(
+        'requestData ${requestData.data.toString()} ${values.toString()}');
     // create user request notification
     createUserRequestNotification(
       {
-        "name": '${values.name} ใหม่',
+        "name": '${values["name"]} ใหม่',
         "source": requestData.$id,
-        "unitId": values.unitId
+        "type": requestData.data["type"],
+        "unitId": values["unitId"]
       },
     );
     return requestData;
@@ -309,7 +326,7 @@ class AppwriteService {
               "role": "mobile",
               "online": true,
               "email": '${user?.phoneNumber!}@appwrite.io', //
-              "name": '$title $firstname $lastname',
+              "name": '$firstname $lastname',
               "userId": response.userId,
               "title": title,
               "firstname": firstname,
@@ -374,6 +391,27 @@ class AppwriteService {
       documentId: id,
     );
     return appealData;
+  }
+
+  Future<model.DocumentList?> getComments(id) async {
+    var commentData = await databases.listDocuments(
+      databaseId: Constants.databseId,
+      collectionId: Constants.commentsId,
+      queries: [Query.equal('reqId', id), Query.orderDesc("\$createdAt")],
+    );
+    if (commentData.total != 0) {
+      return commentData;
+    }
+    return null;
+  }
+
+  Future<model.Document?> getContinueBusiness(id) async {
+    var trashData = await databases.getDocument(
+      databaseId: Constants.databseId,
+      collectionId: Constants.continueBusinessId,
+      documentId: id,
+    );
+    return trashData;
   }
 
   Future<model.Document?> getEms(id) async {
@@ -479,6 +517,7 @@ class AppwriteService {
     try {
       model.Session session = await account.getSession(sessionId: 'current');
       await account.deleteSession(sessionId: session.$id);
+      await FirebaseAuth.instance.signOut();
       Get.snackbar(
         "ออกจากระบบ",
         "เรียบร้อยแล้ว",
@@ -543,7 +582,21 @@ class AppwriteService {
         queries: [Query.equal('nationalId', int.parse(nationalId))],
       );
 
-      if (trashTaxData1.total != 0) {
+      if (trashTaxData1.total == 0) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "ไม่เจอบัตรประจำตัวนี้",
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+          ),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        );
+        return null;
+      }
+      if (trashTaxData1.total > 1) {
         Get.snackbar(
           "ข้อผิดพลาด",
           "มี บัตรประจำตัวประชาชนซ้ำ",
@@ -553,7 +606,7 @@ class AppwriteService {
             color: Colors.green,
           ),
           duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
         return null;
       }
@@ -572,7 +625,21 @@ class AppwriteService {
         collectionId: Constants.taxTrashId,
         queries: [Query.equal('address', address)],
       );
-      if (trashTaxData2.total != 0) {
+      if (trashTaxData2.total == 0) {
+        Get.snackbar(
+          "ข้อผิดพลาด",
+          "ไม่พบที่อยู่นี้",
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+          ),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.TOP,
+        );
+        return null;
+      }
+      if (trashTaxData2.total > 1) {
         Get.snackbar(
           "ข้อผิดพลาด",
           "มีที่อยู่ซ้ำ",
@@ -582,7 +649,7 @@ class AppwriteService {
             color: Colors.green,
           ),
           duration: const Duration(seconds: 1),
-          snackPosition: SnackPosition.BOTTOM,
+          snackPosition: SnackPosition.TOP,
         );
         return null;
       }
@@ -610,59 +677,58 @@ class AppwriteService {
     }
   }
 
-  Future<Object?> tryLogin() async {
+  Future<Object?> tryLogin(phoneNum) async {
     // phone number get from firebase
-    final user = FirebaseAuth.instance.currentUser;
-    print('user $user');
-    if (user?.phoneNumber != null) {
-      var phoneNumber = user?.phoneNumber!;
-      try {
-        // try login
-        Future result = account.createEmailSession(
-          email: '${phoneNumber!}@appwrite.io',
-          password: phoneNumber,
-        );
+    print('user $phoneNum');
+    try {
+      var phoneNumber = phoneNum.toString();
 
-        return result.then((response) async {
-          // check use in the list
-          try {
-            await databases.getDocument(
-              databaseId: Constants.databseId,
-              collectionId: Constants.userId,
-              documentId: response.userId,
-            );
-          } catch (e) {
-            return null;
-            // debugPrint('erro not user fount ${e.toString()}');
-          }
-          debugPrint('userID ${response.userId.toString()}');
-          // store user data in storage
-          secureStorage.write(key: 'userID', value: response.userId.toString());
-          secureStorage.write(key: 'email', value: '$phoneNumber@appwrite.io');
-          secureStorage.write(key: 'password', value: phoneNumber);
+      // try login
+      Future result = account.createEmailSession(
+        email: '$phoneNumber@appwrite.io',
+        password: phoneNumber,
+      );
 
-          Get.snackbar(
-            "สำเร็จ",
-            "คุณมีบัญชีอยู่แล้ว",
-            colorText: Colors.white,
-            icon: const Icon(
-              Icons.check_circle_rounded,
-              color: Colors.green,
-            ),
-            duration: const Duration(seconds: 1),
-            snackPosition: SnackPosition.BOTTOM,
+      print('result $phoneNumber');
+      return result.then((response) async {
+        // check use in the list
+        try {
+          await databases.getDocument(
+            databaseId: Constants.databseId,
+            collectionId: Constants.userId,
+            documentId: response.userId,
           );
-          print('login sucess 1 $response');
-          return response;
-        }).catchError((error) async {
-          print(error.response);
+        } catch (e) {
           return null;
-        });
-      } catch (e) {
+          // debugPrint('erro not user fount ${e.toString()}');
+        }
+        debugPrint('userID ${response.userId.toString()}');
+        // store user data in storage
+        secureStorage.write(key: 'userID', value: response.userId.toString());
+        secureStorage.write(key: 'email', value: '$phoneNumber@appwrite.io');
+        secureStorage.write(key: 'password', value: phoneNumber);
+
+        Get.snackbar(
+          "สำเร็จ",
+          "คุณมีบัญชีอยู่แล้ว",
+          colorText: Colors.white,
+          icon: const Icon(
+            Icons.check_circle_rounded,
+            color: Colors.green,
+          ),
+          duration: const Duration(seconds: 1),
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        print('login sucess 1 $response');
+        return response;
+      }).catchError((error) async {
+        print(error.response);
         return null;
-      }
+      });
+    } catch (e) {
+      debugPrint('error ${e.toString()}');
+      return null;
     }
-    return null;
   }
 
   Future<void> updateMessageCount(unit$Id, data) async {

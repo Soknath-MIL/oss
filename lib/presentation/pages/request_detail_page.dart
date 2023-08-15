@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:appwrite/models.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +22,8 @@ class RequestDetailPage extends StatefulWidget {
 
 class _RequestDetailPageState extends State<RequestDetailPage> {
   var data = Get.arguments[0];
-
   Map<String, dynamic>? detail;
+  List<Document>? commentData;
   int current = 0;
   final CarouselController controller = CarouselController();
 
@@ -50,14 +51,64 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
               'หมายเลขเอกสาร: ${data['docSeq']}',
             ),
             data["status"] != "reject"
-                ? Container(
-                    margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
-                    padding: const EdgeInsets.only(top: 10),
-                    color: Colors.white,
-                    height: 150,
-                    child: ProcessTimelinePage(processIndex),
+                ? Column(
+                    children: [
+                      Container(
+                        margin:
+                            const EdgeInsets.only(top: 10, left: 10, right: 10),
+                        padding: const EdgeInsets.only(top: 10),
+                        color: Colors.white,
+                        height: 150,
+                        child: ProcessTimelinePage(processIndex),
+                      ),
+                    ],
                   )
                 : Container(),
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                color: data["status"] == 'reject'
+                    ? Colors.redAccent.shade100
+                    : Colors.grey,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(10),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'สถานะ: ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Text(
+                        '${Constants.requestStatus[data["status"]]}',
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'ความคิดเห็นล่าสุด: ',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      commentData != null
+                          ? Text(
+                              commentData?[0].data["comment"],
+                              style: const TextStyle(color: Colors.white),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             data["type"] == "appeal"
                 ? Column(
                     children: [
@@ -181,10 +232,10 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
                                           'เมื่อ ${DateFormat.yMMMMEEEEd('th').format(DateTime.fromMillisecondsSinceEpoch(data["requestedAt"] * 1000).toLocal())}'),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                    children: [
                                       Text(
                                         'หัวข้อ:',
                                       ),
@@ -309,10 +360,10 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
                                           'เมื่อ ${DateFormat.yMMMMEEEEd('th').format(DateTime.fromMillisecondsSinceEpoch(data["requestedAt"] * 1000).toLocal())}'),
                                     ],
                                   ),
-                                  Row(
+                                  const Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
+                                    children: [
                                       Text(
                                         'หัวข้อ:',
                                       ),
@@ -398,7 +449,7 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
                     ],
                   )
                 : Container(),
-            data["type"] == "openBusiness"
+            data["type"] == "openBusiness" || data["type"] == "continueBusiness"
                 ? Column(
                     children: [
                       detail != null
@@ -426,12 +477,24 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: const [
-                                      Text(
+                                    children: [
+                                      const Text(
                                         'หัวข้อ:',
                                       ),
                                       Text(
-                                        '',
+                                        data["name"],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        'ประเภทธุรกิจ:',
+                                      ),
+                                      Text(
+                                        '${detail!["type"]}',
                                       ),
                                     ],
                                   ),
@@ -491,6 +554,7 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
       return;
     }
     if (data["type"] == "ems") {
+      debugPrint(data.toString());
       var detailData = await AppwriteService().getEms(data["docId"]);
       debugPrint('detail data ${detailData?.data}');
       setState(() {
@@ -508,6 +572,15 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
     }
     if (data["type"] == "openBusiness") {
       var detailData = await AppwriteService().getOpenBusiness(data["docId"]);
+      debugPrint('detail data ${detailData?.data}');
+      setState(() {
+        detail = detailData?.data;
+      });
+      return;
+    }
+    if (data["type"] == "continueBusiness") {
+      var detailData =
+          await AppwriteService().getContinueBusiness(data["docId"]);
       debugPrint('detail data ${detailData?.data}');
       setState(() {
         detail = detailData?.data;
@@ -588,9 +661,20 @@ class _RequestDetailPageState extends State<RequestDetailPage> {
     }).toList();
   }
 
+  void getCommentData() async {
+    var comments = await AppwriteService().getComments(data["\$id"]);
+    debugPrint('comments ${comments.toString()}');
+    if (comments != null) {
+      setState(() {
+        commentData = comments.documents;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getAppealDetailData();
+    getCommentData();
   }
 }

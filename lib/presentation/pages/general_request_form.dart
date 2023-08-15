@@ -351,11 +351,20 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
                                 maintainState: true,
                                 builder: (context) {
                                   return MapLocationPicker(
+                                    language: "th",
                                     apiKey:
                                         "AIzaSyBB2X6grO8t8zyW6cktVqBs7duJP0mqN3A",
                                     canPopOnNextButtonTaped: false,
                                     currentLatLng: const LatLng(14, 100),
                                     mapType: MapType.satellite,
+                                    onCurrentLocation: (LatLng currentLatLng) {
+                                      setState(() {
+                                        location = Location(
+                                          lat: currentLatLng.latitude,
+                                          lng: currentLatLng.longitude,
+                                        );
+                                      });
+                                    },
                                     onTap: (LatLng selectedLatLng) {
                                       setState(() {
                                         location = Location(
@@ -464,9 +473,9 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
               );
             });
           },
-          onLoading: Center(
+          onLoading: const Center(
               child: Column(
-            children: const [
+            children: [
               ListTileShimmer(),
               ListTileShimmer(),
               ListTileShimmer(),
@@ -636,7 +645,10 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
 
   Future pickImageCamera(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.camera);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {
@@ -654,7 +666,10 @@ class _GeneralRequestPageState extends State<GeneralRequestPage> {
 
   Future pickImageGallery(String type) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 25,
+      );
       if (image == null) return;
       if (type == "ID") {
         setState(() {

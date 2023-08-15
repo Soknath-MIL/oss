@@ -15,6 +15,8 @@ import flutter_web_auth_2
 import geolocator_apple
 import package_info_plus
 import path_provider_foundation
+import rive_common
+import shared_preferences_foundation
 import sqflite
 import thai_id_card_numbers
 import url_launcher_macos
@@ -31,6 +33,8 @@ func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
   GeolocatorPlugin.register(with: registry.registrar(forPlugin: "GeolocatorPlugin"))
   FLTPackageInfoPlusPlugin.register(with: registry.registrar(forPlugin: "FLTPackageInfoPlusPlugin"))
   PathProviderPlugin.register(with: registry.registrar(forPlugin: "PathProviderPlugin"))
+  RivePlugin.register(with: registry.registrar(forPlugin: "RivePlugin"))
+  SharedPreferencesPlugin.register(with: registry.registrar(forPlugin: "SharedPreferencesPlugin"))
   SqflitePlugin.register(with: registry.registrar(forPlugin: "SqflitePlugin"))
   ThaiIdCardNumbersPlugin.register(with: registry.registrar(forPlugin: "ThaiIdCardNumbersPlugin"))
   UrlLauncherPlugin.register(with: registry.registrar(forPlugin: "UrlLauncherPlugin"))

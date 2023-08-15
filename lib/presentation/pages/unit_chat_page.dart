@@ -145,7 +145,9 @@ class _UnitSelectionPageState extends State<UnitSelectionPage> {
   @override
   void dispose() {
     super.dispose();
-    _subscription!.close();
+    if (_subscription != null) {
+      _subscription!.close();
+    }
   }
 
   @override

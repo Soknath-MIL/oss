@@ -9,18 +9,20 @@ import '../../data/services/firebase_service.dart';
 class LoginController extends GetxController {
   final FirebaseService _firebaseService = FirebaseService();
 
-  final phoneNumber = '+66830232090'.obs;
+  final phoneNumber = ''.obs;
 
   void onPhoneNumberChanged(String value) {
-    phoneNumber.value = value;
+    debugPrint(value);
+    phoneNumber.value =
+        value.replaceAll("+660", "+66"); // remove 0 from phone number
   }
 
   void signInWithCredential(String verificationId, smsCode) async {
     PhoneAuthCredential credential = PhoneAuthProvider.credential(
         verificationId: verificationId, smsCode: smsCode);
     try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      debugPrint('Credential $credential');
       Get.snackbar(
         "สำเร็จ",
         "OTP ถูกต้อง",
@@ -30,7 +32,7 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
       // validate account
-      var user = await AppwriteService().tryLogin();
+      var user = await AppwriteService().tryLogin(phoneNumber);
       await EasyLoading.show(
         status: 'ตรวจสอบผู้ใช้...',
         maskType: EasyLoadingMaskType.black,
@@ -49,7 +51,7 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
       Get.toNamed('validate-account', arguments: [phoneNumber]);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       // Handle authentication failed error
       Get.snackbar(
         "ข้อผิดพลาด",
@@ -59,7 +61,6 @@ class LoginController extends GetxController {
         duration: const Duration(seconds: 1),
         snackPosition: SnackPosition.BOTTOM,
       );
-      print(e.message);
     }
   }
 

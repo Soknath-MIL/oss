@@ -15,15 +15,16 @@ import 'package:oss/presentation/controllers/message_controller.dart';
 import '../../constants/constants.dart';
 import '../../data/services/appwrite_service.dart';
 
-class OpenBusinessRequestPage extends StatefulWidget {
-  const OpenBusinessRequestPage({super.key});
+class ContinueBusinessRequestPage extends StatefulWidget {
+  const ContinueBusinessRequestPage({super.key});
 
   @override
-  State<OpenBusinessRequestPage> createState() =>
-      _OpenBusinessRequestPageState();
+  State<ContinueBusinessRequestPage> createState() =>
+      _ContinueBusinessRequestPageState();
 }
 
-class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
+class _ContinueBusinessRequestPageState
+    extends State<ContinueBusinessRequestPage> {
   int currentStep = 0;
   bool showRoom = false;
   bool showDetail = false;
@@ -38,15 +39,15 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
   Color step1 = Colors.black;
   Color step2 = Colors.black;
   Color step3 = Colors.black;
-  final _formKeyGeneral = GlobalKey<FormBuilderState>();
-  final _formKeyDetail = GlobalKey<FormBuilderState>();
-  final _formKeyUpload = GlobalKey<FormBuilderState>();
-  final String docName = 'openBusiness';
+  final _formKeyGeneralCont = GlobalKey<FormBuilderState>();
+  final _formKeyDetailCont = GlobalKey<FormBuilderState>();
+  final _formKeyUploadCont = GlobalKey<FormBuilderState>();
+  final String docName = 'continueBusiness';
   String address = "null";
   Location? location;
   String autocompletePlace = "null";
   String type = 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร';
-  String title = "mr";
+  String title = 'mr';
 
   @override
   Widget build(BuildContext context) {
@@ -85,14 +86,14 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
           bool isLastStep = (currentStep == getSteps().length - 1);
           if (isLastStep) {
             //Do something with this information
-            var isGeneralError = _formKeyGeneral.currentState?.validate();
+            var isGeneralError = _formKeyGeneralCont.currentState?.validate();
             debugPrint('general $isGeneralError');
 
             if (isGeneralError!) {
               setState(() {
                 step1 = Colors.black;
               });
-              _formKeyGeneral.currentState?.save();
+              _formKeyGeneralCont.currentState?.save();
             } else {
               Get.snackbar(
                 "ข้อผิดพลาด",
@@ -106,12 +107,12 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
               });
               return;
             }
-            var isDetailError = _formKeyDetail.currentState?.validate();
+            var isDetailError = _formKeyDetailCont.currentState?.validate();
             if (isDetailError!) {
               setState(() {
                 step2 = Colors.black;
               });
-              _formKeyDetail.currentState?.save();
+              _formKeyDetailCont.currentState?.save();
             } else {
               Get.snackbar(
                 "ข้อผิดพลาด",
@@ -125,20 +126,20 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
               });
               return;
             }
-            var isUploadError = _formKeyUpload.currentState?.validate();
+            var isUploadError = _formKeyUploadCont.currentState?.validate();
             if (isUploadError!) {
               setState(() {
                 step3 = Colors.black;
               });
-              _formKeyUpload.currentState?.save();
+              _formKeyUploadCont.currentState?.save();
             } else {
               setState(() {
                 step3 = Colors.red;
               });
               return;
             }
-            var generalData = _formKeyGeneral.currentState?.value;
-            var detailData = _formKeyDetail.currentState?.value;
+            var generalData = _formKeyGeneralCont.currentState?.value;
+            var detailData = _formKeyDetailCont.currentState?.value;
 
             handleSubmit(generalData!, detailData!);
           } else {
@@ -199,16 +200,17 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
             return Obx(() {
               return Column(
                 children: [
+                  const SizedBox(
+                    height: 10,
+                  ),
                   FormBuilder(
-                    key: _formKeyGeneral,
+                    key: _formKeyGeneralCont,
                     initialValue: {
                       "title": _messageConroller.accountData["data"]["title"],
                       "firstname": _messageConroller.accountData["data"]
                           ["firstname"],
                       "lastname": _messageConroller.accountData["data"]
                           ["lastname"],
-                      // "address": _messageConroller.accountData["data"]
-                      //     ["address"],
                       "address": _messageConroller.accountData["data"]
                           ["address"],
                       // "moo": _messageConroller.accountData["data"]["moo"],
@@ -225,39 +227,35 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                     },
                     child: Column(
                       children: [
+                        SizedBox(
+                          child: FormBuilderDropdown<String>(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            name: 'title',
+                            decoration: customInputDecoration('คำนำหน้า'),
+                            validator: FormBuilderValidators.required(
+                                errorText: 'กรุณากรอกข้อมูล'),
+                            items: Constants.titleOptions
+                                .map((item) => DropdownMenuItem(
+                                      alignment:
+                                          AlignmentDirectional.centerStart,
+                                      value: item["name"],
+                                      child: Text(
+                                        item["value"].toString(),
+                                        style: const TextStyle(
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                            valueTransformer: (val) => val?.toString(),
+                          ),
+                        ),
                         const SizedBox(
-                          height: 16,
+                          height: 8,
                         ),
                         Row(
                           children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 4,
-                              child: FormBuilderDropdown<String>(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                name: 'title',
-                                decoration: customInputDecoration('คำนำหน้า'),
-                                validator: FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล'),
-                                items: Constants.titleOptions
-                                    .map((item) => DropdownMenuItem(
-                                          alignment:
-                                              AlignmentDirectional.centerStart,
-                                          value: item["name"],
-                                          child: Text(
-                                            item["value"].toString(),
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ))
-                                    .toList(),
-                                valueTransformer: (val) => val?.toString(),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
                             SizedBox(
                               width: MediaQuery.of(context).size.width / 4,
                               child: FormBuilderTextField(
@@ -474,36 +472,20 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
           ),
         ),
         content: FormBuilder(
-          key: _formKeyDetail,
+          key: _formKeyDetailCont,
           initialValue: {
             'title': title,
             'firstname': '',
             'lastname': '',
-            'age': '',
             'houseNo': '',
             'moo': '',
             'soi': '',
             'road': '',
             'nationality': '',
-            'corporation': '',
-            'typeB1': '',
-            'areaB1': '',
-            'totalPersonB1': '',
-            'nameB1': '',
-            'addressB1': '',
-            'typeB2': '',
-            'totalPersonB2': '',
-            'machineSizeB2': '',
-            'nameB2': '',
-            'totalRoomB2': '',
-            'addressB2': '',
-            'typeB3': '',
-            'addressB3': '',
-            'methodB3': '',
-            'nameB4_1': '',
-            'nameB4_2': '',
-            'nameB4_3': '',
-            'nameB4_4': '',
+            'permissionBookNo': '',
+            'permissionNo': '',
+            'permissionDate': DateTime.now(),
+            'officer': '',
             'type': type
           },
           child: Column(
@@ -632,26 +614,14 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                 ],
               ),
               const SizedBox(
-                height: 8,
+                height: 10,
               ),
               Row(
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
+                  Expanded(
                     child: FormBuilderTextField(
                       name: 'nationality',
                       decoration: customInputDecoration('สัญชาติ'),
-                      validator: FormBuilderValidators.required(
-                          errorText: 'กรุณากรอกข้อมูล'),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Expanded(
-                    child: FormBuilderTextField(
-                      name: 'corporation',
-                      decoration: customInputDecoration('กรณีเป็นนิติบุคคล'),
                       validator: FormBuilderValidators.required(
                           errorText: 'กรุณากรอกข้อมูล'),
                     ),
@@ -661,352 +631,72 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
               const SizedBox(
                 height: 10,
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                child: FormBuilderDropdown<String>(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  name: 'type',
-                  decoration: customInputDecoration('ประเภทธุรกิจ'),
-                  validator: FormBuilderValidators.required(
-                    errorText: 'กรุณากรอกข้อมูล',
-                  ),
-                  onChanged: (value) {
-                    setState(() {
-                      type = value!;
-                    });
-                  },
-                  items: Constants.businessTypes
-                      .map((item) => DropdownMenuItem(
-                            alignment: AlignmentDirectional.centerStart,
-                            value: item["name"],
-                            child: Text(
-                              item["value"].toString(),
-                              style: const TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                          ))
-                      .toList(),
-                  valueTransformer: (val) => val?.toString(),
+              FormBuilderDropdown<String>(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                name: 'type',
+                decoration: customInputDecoration('ประเภทธุรกิจ'),
+                validator: FormBuilderValidators.required(
+                  errorText: 'กรุณากรอกข้อมูล',
                 ),
+                onChanged: (value) {
+                  setState(() {
+                    type = value!;
+                  });
+                },
+                items: Constants.businessTypes
+                    .map((item) => DropdownMenuItem(
+                          alignment: AlignmentDirectional.centerStart,
+                          value: item["name"],
+                          child: Text(
+                            item["value"].toString(),
+                            style: const TextStyle(
+                              fontSize: 13,
+                            ),
+                          ),
+                        ))
+                    .toList(),
+                valueTransformer: (val) => val?.toString(),
               ),
               const SizedBox(
                 height: 10,
               ),
-              const Divider(),
-              type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                  ? Column(
-                      children: [
-                        const Text(
-                          'สถานที่จำหน่ายอาหารหรือสะสมอาหาร',
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'typeB1',
-                            decoration: customInputDecoration('ประเภท'),
-                            validator:
-                                type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: FormBuilderTextField(
-                            name: 'areaB1',
-                            decoration: customInputDecoration(
-                                'โดยมีพื้นที่ประกอบการ (ตารางเมตร)'),
-                            validator:
-                                type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: FormBuilderTextField(
-                                name: 'totalPersonB1',
-                                decoration: customInputDecoration(
-                                    'มีบุคคลที่เกี่ยวข้องรวม (คน)'),
-                                validator:
-                                    type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                                        ? FormBuilderValidators.required(
-                                            errorText: 'กรุณากรอกข้อมูล')
-                                        : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'nameB1',
-                            decoration: customInputDecoration('โดยใช้ชื่อว่า'),
-                            validator:
-                                type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'addressB1',
-                            decoration: customInputDecoration('ตั้งอยู่เลขที่'),
-                            validator:
-                                type == 'สถานที่จำหน่ายอาหารหรือสะสมอาหาร'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
-              type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                  ? Column(
-                      children: [
-                        const Text(
-                          'กิจการที่เป็นอันตรายต่อสุขภาพ',
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'typeB2',
-                            decoration: customInputDecoration('ประเภท'),
-                            validator: type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: FormBuilderTextField(
-                                name: 'totalPersonB2',
-                                decoration:
-                                    customInputDecoration('มีคนงาน (คน)'),
-                                validator:
-                                    type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                        ? FormBuilderValidators.required(
-                                            errorText: 'กรุณากรอกข้อมูล')
-                                        : null,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: FormBuilderTextField(
-                                name: 'machineSizeB2',
-                                decoration: customInputDecoration(
-                                    'ใช้เครื่องจักรขนาด (แรงม้า)'),
-                                validator:
-                                    type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                        ? FormBuilderValidators.required(
-                                            errorText: 'กรุณากรอกข้อมูล')
-                                        : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: FormBuilderTextField(
-                                name: 'nameB2',
-                                decoration:
-                                    customInputDecoration('โดยใช้ชื่อว่า'),
-                                validator:
-                                    type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                        ? FormBuilderValidators.required(
-                                            errorText: 'กรุณากรอกข้อมูล')
-                                        : null,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: FormBuilderTextField(
-                                name: 'totalRoomB2',
-                                decoration:
-                                    customInputDecoration('จำนวน(ห้อง)'),
-                                validator:
-                                    type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                        ? FormBuilderValidators.required(
-                                            errorText: 'กรุณากรอกข้อมูล')
-                                        : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'addressB2',
-                            decoration: customInputDecoration('ตั้งอยู่เลขที่'),
-                            validator: type == 'กิจการที่เป็นอันตรายต่อสุขภาพ'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
-              type == 'กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า'
-                  ? Column(
-                      children: [
-                        const Text(
-                          'กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า',
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'typeB3',
-                            decoration: customInputDecoration('ประเภท'),
-                            validator: type ==
-                                    'กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width / 3,
-                              child: FormBuilderTextField(
-                                name: 'addressB3',
-                                decoration: customInputDecoration('ณ บริเวณ'),
-                                validator: type ==
-                                        'กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Expanded(
-                              child: FormBuilderTextField(
-                                name: 'methodB3',
-                                decoration: customInputDecoration('โดยวิธีการ'),
-                                validator: type ==
-                                        'กิจกรรมจำหน่ายสินค้าในที่ / ทางสาธารณะ จำหน่ายสินค้า'
-                                    ? FormBuilderValidators.required(
-                                        errorText: 'กรุณากรอกข้อมูล')
-                                    : null,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  : Container(),
-              type == 'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย'
-                  ? Column(
-                      children: [
-                        const Text(
-                          'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอยโดยทำเป็นธุรกิจ ประเภท',
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'nameB4_1',
-                            decoration: customInputDecoration(
-                                'เก็บขนสิ่งปฏิกูล โดยมีแหล่งจำกัดที่'),
-                            validator: type ==
-                                    'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'nameB4_2',
-                            decoration: customInputDecoration(
-                                'เก็บขนและกำจัดสิ่งปฏิกูล โดยมีระบบกำจัดอยู่ที่'),
-                            validator: type ==
-                                    'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'nameB4_3',
-                            decoration: customInputDecoration(
-                                'เก็บขนขยะมูลฝอย โดยมีแหล่งกำจัดที่'),
-                            validator: type ==
-                                    'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        SizedBox(
-                          child: FormBuilderTextField(
-                            name: 'nameB4_4',
-                            decoration: customInputDecoration(
-                                'เก็บขนและกำจัดมูลฝอย โดยมีระบบกำจัดอยู่ที่'),
-                            validator: type ==
-                                    'กิจการรับทำการเก็บ ขนหรือกำจัดสิ่งปฏิกูลมูลฝอย'
-                                ? FormBuilderValidators.required(
-                                    errorText: 'กรุณากรอกข้อมูล')
-                                : null,
-                          ),
-                        ),
-                      ],
-                    )
-                  : Container(),
+              FormBuilderTextField(
+                name: 'permissionBookNo',
+                decoration: customInputDecoration('ตามใบอนุญาตเล่มที่'),
+                validator: FormBuilderValidators.required(
+                    errorText: 'กรุณากรอกข้อมูล'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FormBuilderTextField(
+                name: 'permissionNo',
+                decoration: customInputDecoration('เลขที่'),
+                validator: FormBuilderValidators.required(
+                    errorText: 'กรุณากรอกข้อมูล'),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FormBuilderDateTimePicker(
+                name: 'permissionDate',
+                initialEntryMode: DatePickerEntryMode.calendar,
+                // initialValue: DateTime.now(),
+                inputType: InputType.date,
+                firstDate: DateTime.now(),
+                decoration: customInputDecoration('ออกให้เมื่อวันที่'),
+                validator: FormBuilderValidators.required(),
+                // initialTime: const TimeOfDay(hour: 8, minute: 0),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              FormBuilderTextField(
+                name: 'officer',
+                decoration: customInputDecoration('ต่อ (เจ้าพนักงานท้องถิ่น)'),
+                validator: FormBuilderValidators.required(
+                    errorText: 'กรุณากรอกข้อมูล'),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -1024,7 +714,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
           ),
         ),
         content: FormBuilder(
-          key: _formKeyUpload,
+          key: _formKeyUploadCont,
           child: Column(
             children: [
               Row(
@@ -1235,7 +925,8 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
                       location != null
                           ? Text(
                               'ละติจูดและลองจิจูด:  ${location!.lat.toStringAsFixed(6)}, ${location!.lng.toStringAsFixed(6)}',
-                              style: const TextStyle(fontSize: 10))
+                              style: const TextStyle(fontSize: 10),
+                            )
                           : Container(),
                     ],
                   ),
@@ -1373,7 +1064,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
     } else {
       String filesArrayIDCard;
       var result = await AppwriteService().uploadPicture(
-          imageIDCard!.path, imageIDCard!.name, Constants.openBusinessBucketId);
+          imageIDCard!.path, imageIDCard!.name, Constants.conBusinessBucketId);
 
       var fileMap = result?.toMap();
       // remove permission from image
@@ -1412,7 +1103,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
         var resultOldCertUpload = await AppwriteService().uploadPicture(
           imageOldCert!.path,
           imageOldCert!.name,
-          Constants.openBusinessBucketId,
+          Constants.conBusinessBucketId,
         );
 
         var fileMap = resultOldCertUpload?.toMap();
@@ -1436,7 +1127,7 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
           var result = await AppwriteService().uploadPicture(
             item.path,
             item.name,
-            Constants.openBusinessBucketId,
+            Constants.conBusinessBucketId,
           );
 
           var fileMap = result?.toMap();
@@ -1463,9 +1154,10 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
       });
 
       // create appeal record
-      var openBusinessData =
-          await AppwriteService().createOpenBussinessRequest({
+      var continueBusinessData =
+          await AppwriteService().createContinueBussinessRequest({
         ...detail,
+        "permissionDate": detail['permissionDate'].millisecondsSinceEpoch,
         "coordinates":
             jsonEncode([location?.lng.toString(), location?.lat.toString()]),
         "nationalIdImg": filesArrayIDCard,
@@ -1475,7 +1167,9 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
         "otherImages": filesArray
       });
 
-      // create request
+      debugPrint('continueBusinessData ${continueBusinessData.toString()}');
+
+      // // create request
       var accunt = await AppwriteService().getAccount();
       DateTime now = DateTime.now();
       var epochTime = (now.millisecondsSinceEpoch / 1000).round();
@@ -1487,13 +1181,13 @@ class _OpenBusinessRequestPageState extends State<OpenBusinessRequestPage> {
       AppwriteService().createRequest({
         "docSeq":
             '${unitDetail?.data["unit_id"]}-B-${lastTotal?.total.toString().padLeft(4, '0')}/${currentYear.substring(currentYear.length - 2)}', // "E"
-        "name": 'คำขอใบอนุญาตประกอบกิจการ',
+        "name": 'คำขอต่อใบอนุญาตประกอบกิจการ',
         "docCode": docExist.documents[0].data["\$id"].toString(),
         "userId": accunt?.$id,
         "status": "new",
         "requestedAt": epochTime,
         "type": docName,
-        "docId": openBusinessData?.data["\$id"].toString(),
+        "docId": continueBusinessData?.data["\$id"].toString(),
         "unitId": docExist.documents[0].data["docOwner"].toString(),
       });
       await EasyLoading.dismiss();
